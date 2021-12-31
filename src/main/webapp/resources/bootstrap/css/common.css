@@ -1,0 +1,114 @@
+@charset "UTF-8";
+#background {
+	content: "";
+	background-image: url('/project/resources/images/community.jpg');
+	background-size: 120%;
+	background-position: center bottom;
+	opacity: 0.15;
+	background-repeat: no-repeat;
+	position:absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	z-index: -1;
+	animation: mymove 120s infinite;
+}
+@keyframes mymove {
+	25% {background-position: 90% bottom;}
+	75% {background-position: 20% bottom;}
+}
+
+.bounce {
+	padding-bottom: 0;
+	animation: bounce 1.2s infinite;
+}
+@keyframes bounce {
+	50% {	padding-bottom: 15px; }
+}
+
+.head {
+	height: 120px;
+	margin-bottom: 50px;
+}
+#logo {
+	cursor: pointer;
+}
+.shadow {
+	box-shadow: 0 0 5px #a0a0a0;
+	border-radius: 10px;
+	border: 1px solid #808080;
+	outline: #808080;
+}
+.box {
+	box-shadow: 0 0 5px #a0a0a0;
+	border-radius: 10px;
+	border: 1px solid #808080;
+	outline: #808080;
+	padding: 20px 25px; 
+	background-color: #fff;
+}
+
+.shadow-bottom {
+	box-shadow: 0 0.1px 2px #000000;
+}
+.form-control:focus {
+	box-shadow: 0 0 2px #808080;
+	border: 1px solid #808080;
+	outline: #808080;
+}
+.pd-0 { padding: 0;}
+.pd-1 {	padding: 0 1px;}
+.pd-2 {	padding: 0 2px;}
+.pd-3 {	padding: 0 3px;}
+.pd-5 {	padding: 0 5px;}
+.pd-10 { padding: 0 10px;}
+
+.pd-auto { padding: auto;}
+
+.mg-auto {margin: 0 auto;}
+
+.container {
+	width: 86vw;
+	height: 100vh;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.flex {	display: flex;}
+.flex-column {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+}
+.align-end {
+	display: flex;
+	align-items: flex-end;
+}
+.align-center {
+	display: flex;
+	align-items: center;
+}
+.j-start{ display: flex; justify-content:  flex-start;}
+.j-center { display: flex; justify-content: center;}
+.j-end { display: flex; justify-content:  flex-end;}
+.j-between { display: flex; justify-content:  space-between;}
+.j-around { display: flex; justify-content:  space-around;}
+
+.f-1 {	flex: 1;}
+.f-2 {	flex: 2;}
+.f-3 {	flex: 3;}
+.f-4 {	flex: 4;}
+.f-5 {	flex: 5;}
+
+.msg {
+	font-weight: bold;
+	margin-top: 5px;	
+}
+
+.err {color: #d9534f;}
+.ok {color: #337ab7;}
+
+
+.v-middle { vertical-align: middle !important;}
