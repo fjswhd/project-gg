@@ -19,7 +19,27 @@
 	75% {background-position: 20% bottom;}
 }
 
+.container {
+	width: 86vw;
+	height: 100vh;
+	margin: 0 auto;
+	padding: 0;
+	overflow: hidden; 
+	position: relative;
+}
+.head {
+	z-index: 10; 
+	background: #fff;
+	height: 15%;
+	margin-bottom: 30px;
+}
+#logo {
+	cursor: pointer;
+}
+
 .bounce {
+	margin-top: 10px;
+	height: 50px;
 	padding-bottom: 0;
 	animation: bounce 1.2s infinite;
 }
@@ -27,16 +47,9 @@
 	50% {	padding-bottom: 15px; }
 }
 
-.head {
-	height: 120px;
-	margin-bottom: 50px;
-}
-#logo {
-	cursor: pointer;
-}
+
 .shadow {
-	box-shadow: 0 0 5px #a0a0a0;
-	border-radius: 10px;
+	box-shadow: 0 0 2px #808080;
 	border: 1px solid #808080;
 	outline: #808080;
 }
@@ -67,13 +80,10 @@
 .pd-auto { padding: auto;}
 
 .mg-auto {margin: 0 auto;}
+.mg-r-5 {margin-right: 5px;}
+.mg-b-5 {margin-bottom: 5px;}
 
-.container {
-	width: 86vw;
-	height: 100vh;
-	margin: 0 auto;
-	padding: 0;
-}
+.fade-out {opacity: 0;  padding-top: 20px;}
 
 .flex {	display: flex;}
 .flex-column {
@@ -101,6 +111,8 @@
 .f-3 {	flex: 3;}
 .f-4 {	flex: 4;}
 .f-5 {	flex: 5;}
+.f-s { 	flex: 0 1 auto; }
+.f-g { 	flex: 1 0 auto; }
 
 .msg {
 	font-weight: bold;
@@ -110,5 +122,7 @@
 .err {color: #d9534f;}
 .ok {color: #337ab7;}
 
-
-.v-middle { vertical-align: middle !important;}
+.editor {
+	width: 100%;
+	border-radius: 3px;
+}

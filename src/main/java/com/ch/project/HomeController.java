@@ -34,6 +34,7 @@ public class HomeController {
 		return "user/profileForm";
 	}
 	
+	
 	@RequestMapping(value = "join")
 	public String join(@RequestParam Map<String, String> param, Model model) {
 		int result = 0;
