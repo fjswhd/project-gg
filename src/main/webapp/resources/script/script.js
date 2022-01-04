@@ -14,7 +14,7 @@ async function login(event) {
 	var msg = document.querySelectorAll('.msg')[0];
 	
 	//ajax로 로그인 확인하자
-	var result = await fetch('/project/login', {
+	var result = await fetch ('/project/login', {
 		method :'POST',
 		body: sendData,
 		headers: {

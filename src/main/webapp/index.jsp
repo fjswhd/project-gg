@@ -8,7 +8,7 @@
 </head>
 <body>
 	<script type="text/javascript">
-		location.href = '/project/home';
+		location.href ='requestList.do?b_no=1';
 	</script>
 </body>
 </html>
