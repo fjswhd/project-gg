@@ -1,4 +1,4 @@
-.classpath
+
 
 # Created by https://www.toptal.com/developers/gitignore/api/windows,java,eclipse
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,java,eclipse
@@ -16,7 +16,8 @@ local.properties
 .loadpath
 .recommenders
 .classpath
-
+pom.xml
+*/target
 # External tool builders
 .externalToolBuilders/
 
