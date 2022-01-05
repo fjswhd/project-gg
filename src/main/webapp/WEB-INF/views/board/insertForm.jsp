@@ -26,20 +26,20 @@
 		
 		<!-- body -->
 		<div class="col-md-9 mg-auto box flex" style="height: 75%;">
-			<form action="${_board}/insert" method="post" name="frm" class="flex-column f-1">
+			<form action="${_board}/insert.do" method="post" name="frm" class="flex-column f-1">
 				<!-- 활동 일시 -->
 				<div class="align-center f-s mg-b-5">
 					<span class="col-md-2 j-center">
 						<label>활동 일시</label>					
 					</span>
-					<span class="col-md-3 pd-0">
-						<input type="date" name="s_date" class="form-control input-sm" required="required">
+					<span class="col-md-2 pd-0">
+						<input type="date" name="s_date" class="form-control input-sm" required="required" min="${today}" max="${lastday}">
 					</span>
 					<span class="col-md-1 j-center pd-0">
 						~
 					</span>
-					<span class="col-md-3 pd-0">
-						<input type="date" name="e_date" class="form-control input-sm" required="required">
+					<span class="col-md-2 pd-0">
+						<input type="date" name="e_date" class="form-control input-sm" required="required" max="${lastday}">
 					</span>
 				</div>
 				
@@ -49,7 +49,7 @@
 						<label>모집 인원</label>					
 					</span>
 					<span class="col-md-2 pd-0">
-						<input type="number" name="m_count" class="form-control input-sm" placeholder="00명" required="required">
+						<input type="number" id="m_count" name="m_count" class="form-control input-sm" placeholder="00명" required="required">
 					</span>
 				</div>
 				
@@ -60,10 +60,9 @@
 					</span>
 					<span class="col-md-10 pd-0">
 						<span class="input-group input-group-sm">
-							<input type="text" name="address" class="form-control input-sm" placeholder="주소" required="required">
-							<span class="input-group-btn">
-								<button id="placeSearch" type="button" class="btn btn-primary btn-sm">위치 검색</button>													
-							</span>
+							<input type="hidden" name="address">
+							<span id="searchResult" class="mg-r-5">장소를 검색해주세요. </span>
+							<button id="placeSearch" type="button" class="btn btn-primary btn-sm">위치 검색	</button>							
 						</span>
 					</span>
 				</div>
@@ -73,7 +72,9 @@
 					<span class="col-md-2">
 						<select name="category" class="form-control input-sm" required="required">
 							<option value="">카테고리</option>
-							<option value="10">여행</option>
+							<c:forEach var="category" items="${categoryList}">
+								<option value="${category.c_no}">${category.c_name}</option>
+							</c:forEach>
 						</select>					
 					</span>
 					<span class="col-md-10 pd-0">
@@ -102,12 +103,18 @@
 			el: document.querySelector('#text-editor'),
 			height: '100%',
 			language: 'ko-KR',
+			toolbarItems: [
+				['heading', 'bold', 'italic', 'strike'],
+			    ['hr', 'quote'],
+			    ['ul', 'ol', 'task', 'indent', 'outdent'],
+			    ['table', 'link']
+			  ],
 			placeholder: '내용을 입력하세요.',
 			hideModeSwitch: true,
 			initialEditType: 'wysiwyg'
 		});
 		//form안에서 키다운 이벤트가 발생했을 때 그 키의 key code가 13(enter)이면 이벤트 진행(submit)막기, 현재 커서부분 블러 처리 >> onchange 이벤트 발생
-		document.querySelectorAll('input').forEach((element) => {
+		document.querySelectorAll('input').forEach(function(element) {
 			element.addEventListener("keydown", function(event) {
 			    if ((event.keyCode || event.which) === 13) {
 			    	event.target.blur();
@@ -115,12 +122,58 @@
 			    }
 			});
 		})
+		
+		
 		document.querySelector('#placeSearch').onclick = function() {
 			window.open('/project/board/placeSearch', '장소검색', 'width=1300, height=700, scrollbars=no, resizable=no, left=100, top=50');
 		}
+		//submit할 때 에디터의 값을 content로 보내기
 		document.querySelector('#submit').onclick = function() {
 			var html = editor.getHTML();
 			document.querySelector('input[name="content"]').value = html;
+		}
+		//end_date 제한
+		document.querySelector('input[name="s_date"]').onchange = function() {
+			var val = document.querySelector('input[name="s_date"]').value;
+			document.querySelector('input[name="e_date"]').setAttribute('min', val);
+			document.querySelector('input[name="e_date"]').value = '';
+		}
+		
+		frm.onsubmit = function(event) {
+			var m_count = parseInt(frm.m_count.value);
+			
+			if(m_count < 2) {
+				event.preventDefault();
+				
+				$('[name="m_count"]').popover({
+					html: true,
+					content: '모집인원은 <b>2명 이상</b>이어야합니다.',
+					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="white-space: nowrap;"></div></div>'
+				});
+				$('[name="m_count"]').popover('show');
+				$('[name="m_count"]').focus();
+				$('[name="m_count"]').on('blur', function() {
+					$('[name="m_count"]').popover('destroy');
+				})
+				return;	
+			}
+			
+			var address = $('[name="address"]');
+			
+			if(address.val() == '') {
+				event.preventDefault();
+				
+				$('#placeSearch').popover({
+					html: true,
+					content: '모집 기준이 될 장소를 정해주세요.',
+					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="white-space: nowrap;"></div></div>'
+				});
+				
+				$('#placeSearch').popover('show');
+				setTimeout(() => {
+					$('#placeSearch').popover('destroy');
+				}, 2000);
+			}
 		}
 	</script>
 </body>

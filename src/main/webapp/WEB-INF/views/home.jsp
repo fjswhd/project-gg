@@ -18,9 +18,9 @@
 		
 			<div class="j-end align-end f-1" style="margin-bottom: 15px;">
 				<div class="pd-3">
-					<a href="${_}/loginForm" class="btn btn-link"><b>공지사항</b></a>				
-					<a href="${_}/loginForm" class="btn btn-primary">로그인</a>				
-					<a href="${_}/joinForm" class="btn btn-default">회원가입</a>
+					<a href="${_}/loginForm.do" class="btn btn-link"><b>공지사항</b></a>				
+					<a href="${_}/loginForm.do" class="btn btn-primary">로그인</a>				
+					<a href="${_}/joinForm.do" class="btn btn-default">회원가입</a>
 				</div>
 			</div>
 		
@@ -89,7 +89,6 @@
 				</div>
 			</div>
 		</div>
-		
 	</div>
 	
 	<div id="background"></div>
@@ -107,24 +106,6 @@
 				}, index*400)
 			});
 		}
-	
 	</script>
 </body>
 </html>
-
-	<!-- <div class="container flex">
-		<div id="map" style="width: 70%; background: red;"></div>
-	</div>
-	<script>
-		navigator.geolocation.getCurrentPosition(function(pos) {
-			let latitude, longitude;
-		    latitude = pos.coords.latitude;
-		    longitude = pos.coords.longitude;
-		    
-		   
-			var map = new kakao.maps.Map(document.querySelector('#map'), {
-			    level: 3,
-			    center: new kakao.maps.LatLng(latitude, longitude),
-			});
-		});
-	</script> -->

@@ -81,6 +81,8 @@
 
 .mg-auto {margin: 0 auto;}
 .mg-r-5 {margin-right: 5px;}
+.mg-t-5 {margin-top: 5px;}
+.mg-l-5 {margin-left: 5px;}
 .mg-b-5 {margin-bottom: 5px;}
 
 .fade-out {opacity: 0;  padding-top: 20px;}
@@ -125,4 +127,34 @@
 .editor {
 	width: 100%;
 	border-radius: 3px;
+}
+#searchAgain {
+	position: absolute;
+	left: 50%; 
+	top: 90%; 
+	z-index: 4;
+	transform: translate(-50%, 0);
+	background-color: #0475f4;
+	border-radius: 30px;
+	box-shadow: 0 0 2px #000;
+}
+.mapSearch {
+	position: absolute; 
+	width: 101%; 
+	height: 100%; 
+	left: -1%; 
+	border-bottom-left-radius: 8px; 
+	border-top-left-radius: 8px; 
+	background: #fff; 
+	padding: 15px; 
+	box-shadow: 0 0 3px #000; 
+	z-index: 1;
+}
+.cursor:hover {
+	text-decoration: underline;
+	color: #23527c;
+	cursor: pointer;
+}
+.popover-content {
+	white-space: nowrap;
 }

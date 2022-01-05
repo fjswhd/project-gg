@@ -31,3 +31,10 @@ CREATE TABLE board (
 	readcount	number			default 0		not null,
 	reg_date	date			default sysdate	not null
 )
+
+--카테고리 데이터 입력
+INSERT INTO CATEGORY VALUES (10, '여행')
+INSERT INTO CATEGORY VALUES (20, '식사')
+INSERT INTO CATEGORY VALUES (30, '취미')
+INSERT INTO CATEGORY VALUES (40, '스터디')
+INSERT INTO CATEGORY VALUES (90, '기타')

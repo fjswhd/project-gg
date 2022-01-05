@@ -14,6 +14,7 @@
 <c:url value="/resources/images/logo.jpg" 		var="logo" />
 
 <c:url value="/resources/script/script.js" 	var="script" />
+<c:url value="/resources/script" 			var="_script"/>
 
 <c:url value="/board" 				var="_board" />
 
@@ -28,8 +29,3 @@
 
 <script type="text/javascript" src="${bootstrap}/js/jquery.js"></script>
 <script type="text/javascript" src="${bootstrap}/js/bootstrap.min.js"></script>
-
-
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<spring:eval expression="@api['map.api']" />&libraries=services"></script>
-
-
