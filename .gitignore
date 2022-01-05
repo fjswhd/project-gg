@@ -16,8 +16,7 @@ local.properties
 .loadpath
 .recommenders
 .classpath
-pom.xml
-*/target
+target
 # External tool builders
 .externalToolBuilders/
 
