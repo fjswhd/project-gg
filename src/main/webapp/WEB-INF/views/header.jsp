@@ -8,15 +8,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initialscale=1">
 
-<c:url value="/resources/bootstrap"			var="bootstrap" />
-<c:url value="/resources/images"			var="images" />
-<c:url value="/resources/images/community.jpg" var="community" />
-<c:url value="/resources/images/logo.jpg" 	var="logo" />
+<c:url value="/resources/bootstrap"				var="bootstrap" />
+<c:url value="/resources/images"				var="images" />
+<c:url value="/resources/images/community.jpg" 	var="community" />
+<c:url value="/resources/images/logo.jpg" 		var="logo" />
 
 <c:url value="/resources/script/script.js" 	var="script" />
+<c:url value="/resources/script" 			var="_script"/>
+
+<c:url value="/board" 				var="_board" />
 
 <c:set var="_" value="<%= pageContext.getServletContext().getContextPath() %>" />
-
 
 <link rel="stylesheet" type="text/css" href="${bootstrap}/css/reset.css">
 <link rel="stylesheet" type="text/css" href="${bootstrap}/css/bootstrap.min.css">
@@ -27,7 +29,3 @@
 
 <script type="text/javascript" src="${bootstrap}/js/jquery.js"></script>
 <script type="text/javascript" src="${bootstrap}/js/bootstrap.min.js"></script>
-
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=61546a9327e94c9b061195b34fd0bf4c&libraries=services"></script>
-
-

@@ -3,43 +3,45 @@ $('#background').css('background-position', randNum+'% bottom');
 
 //로고 누르면 홈 화면으로
 document.querySelector('#logo').onclick = function() {
-	location.href = '/project/home';
+	location.href = '/project/home.do';
 }
 
 //로그인
-async function login(event) {
+function login(event) {
 	//submit막기
 	event.preventDefault();
-	var sendData = $('form[name=frm]').serialize()
-	var msg = document.querySelectorAll('.msg')[0];
+	var sendData = $('form[name=frm]').serialize(),
+		msg = document.querySelectorAll('.msg')[0];
 	
 	//ajax로 로그인 확인하자
-	var result = await fetch('/project/login', {
+	fetch('/project/login', {
 		method :'POST',
 		body: sendData,
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		}
-	}).then(response => {
+	}).then((response) => {
 		return response.text();
+	}).then((result) => {
+		
+		//아이디 없음
+		if(result < 0) {
+			msg.innerHTML = '존재하지 않는 아이디입니다.';
+			msg.classList.replace('ok','err');
+			//아이디 있음, 비밀번호 틀림
+		} else if (result == 0) {
+			msg.innerHTML = '잘못된 비밀번호입니다.';
+			msg.classList.replace('ok','err');
+			//로그인 성공
+		} else if (result > 0) {
+			msg.innerHTML = '로그인 성공';
+			msg.classList.replace('err','ok');
+		} 
+		
+		//메시지 부분 열기
+		$('#mCollapse').collapse('show');
 	});
 	
-	//아이디 없음
-	if(result < 0) {
-		msg.innerHTML = '존재하지 않는 아이디입니다.';
-		msg.classList.replace('ok','err');
-		//아이디 있음, 비밀번호 틀림
-	} else if (result == 0) {
-		msg.innerHTML = '잘못된 비밀번호입니다.';
-		msg.classList.replace('ok','err');
-		//로그인 성공
-	} else if (result > 0) {
-		msg.innerHTML = '로그인 성공';
-		msg.classList.replace('err','ok');
-	} 
-	
-	//메시지 부분 열기
-	$('#mCollapse').collapse('show');
 }
 
 //아이디 중복 체크

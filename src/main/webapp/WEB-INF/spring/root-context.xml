@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	
@@ -11,10 +17,13 @@
 	<!-- 비밀번호 암호화를 위한 인코더 -->
 	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 	
-	<!-- db connection pool을 위한 프로퍼티 파일 찾기 
+	<!-- api키를 받아올 프로퍼티 파일 -->
+	<util:properties id="api" location="classpath:api.properties" />
+	
+	<!-- db connection pool을 위한 프로퍼티 파일 찾기 --> 
 	<context:property-placeholder location="classpath:db.properties" />
 	
-	mybatis 사용을 위한 SqlSessionFactory파트
+	<!-- mybatis 사용을 위한 SqlSessionFactory파트 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:configuration.xml" />
@@ -23,7 +32,7 @@
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 	
-	DataBase Connection Pool
+	<!-- DataBase Connection Pool -->
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName" value="${driver}" />
 		<property name="jdbcUrl" value="${url}" />
@@ -32,6 +41,6 @@
 	</bean>
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 		<constructor-arg ref="hikariConfig" />
-	</bean> -->
+	</bean>
 		
 </beans>
