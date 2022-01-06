@@ -30,7 +30,7 @@ td, th {
 				<td class="inputUnderLine">
 					<input type="tel" name="MB_tel" id="tel" required="required"
 						   title="형식 010-0000-0000" 	pattern="\d{3}-\d{4}-\d{4}" 
-						   placeholder="가입휴대폰번호" class="inputLine">
+						   placeholder="가입휴대폰" class="inputLine">
 				 </td>
 			</tr>
 			<tr>
