@@ -11,6 +11,7 @@
 <c:url value="/resources/bootstrap"				var="bootstrap" />
 <c:url value="/resources/images"				var="images" />
 <c:url value="/resources/images/logo.jpg" 		var="logo" />
+<c:url value="/resources/images/community.jpg" 		var="community" />
 
 <c:url value="/resources/script" 			var="_script"/>
 <c:url value="/resources/script/script.js" 	var="script" />

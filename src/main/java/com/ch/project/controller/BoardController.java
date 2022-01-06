@@ -46,7 +46,7 @@ public class BoardController {
 	}
 	@RequestMapping("/detail")
 	public String detail(Model model) {
-		Board board = bs.getBoard(1);
+		Board board = bs.getBoard(2);
 		String address = board.getAddress();
 		String place = address.substring(0, address.lastIndexOf("("));
 		address = address.substring(address.lastIndexOf("(") + 1, address.lastIndexOf(")"));
@@ -63,6 +63,10 @@ public class BoardController {
 	@RequestMapping("/parti")
 	public String parti() {
 		return "board/fragment/parti";
+	}
+	@RequestMapping("/reply")
+	public String reply() {
+		return "board/fragment/reply";
 	}
 	@RequestMapping("/insert")
 	public String insert(Board board) {

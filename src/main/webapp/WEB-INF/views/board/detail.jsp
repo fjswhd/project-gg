@@ -41,29 +41,22 @@
 			</div>
 			
 			<div class="flex f-g mg-t-5" style="overflow: hidden;">
-				<!-- 내용, 참여자,  -->
+				<!-- 내용, 참여자 -->
 				<div class="f-2 mg-r-5 scroll" style="overflow: auto; position: relative;">
-					<div class="flex-column" style="position: absolute; width: 100%; padding-right: 5px;">
+					<div class="flex-column pd-b-5 pd-r-5" style="position: absolute; width: 100%;">
 						<!-- 내용 -->
 						<div id="viewer" class="shadow-bottom mg-b-5 pd-10"></div>
 						
-						<!-- 참여자, 신청자 패널 -->
-						<div class="shadow-bottom mg-b-5">
-							<div id="request"></div>
-							<div id="parti"></div>
-						</div>
-						
 						<!-- 댓글 -->
-						<div class="shadow-bottom">
-							안녕하세요
-						</div>
-						
+						<div id="reply"></div>
 					</div>
 				</div>
 				
 				<!-- 활동일, 장소 -->
-				<div class="f-1">
-					<ul class="list-group" style="height: 100%;">
+				<div class="f-1 pd-r-5 scroll" style="overflow: auto;">
+					<div id="request"></div>
+					<div id="parti"></div>
+					<ul class="list-group mg-b-5">
 						<li class="list-group-item align-center" style="font-size: 16px;">
 							<span class="col-md-1 j-center pd-0"><i class="far fa-calendar-check fa-lg"></i></span>
 							${board.s_date} ~ ${board.e_date}
@@ -74,10 +67,10 @@
 						</li>
 						<li class="list-group-item align-center" style="font-size: 16px;">
 							<span class="col-md-1 j-center pd-0"><i class="fas fa-map-marked-alt fa-lg"></i></span>
-							${address}
+							${address}							
 						</li>
 						<li class="list-group-item" style="padding: 0;">
-							<div id="map" style="width: 100%; height: 72%; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;"></div>
+							<div id="map" style="width: 100%; height: 72.2%; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;"></div>
 						</li>
 					</ul>
 				</div>
@@ -89,8 +82,9 @@
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
 		
-		$('#request').load('${_board}/request');
-		$('#parti').load('${_board}/parti');
+		$('#request').load('${_board}/request.do');
+		$('#parti').load('${_board}/parti.do');
+		$('#reply').load('${_board}/reply.do');
 		
 		var geocoder = new kakao.maps.services.Geocoder(),
 		address = '${address}';
@@ -111,7 +105,7 @@
 		    }
 		});
 		
-		const viewer = toastui.Editor.factory({
+		var viewer = toastui.Editor.factory({
 			el: document.querySelector('#viewer'),
 			viewer: true,
 			initialValue: '${board.content}'
