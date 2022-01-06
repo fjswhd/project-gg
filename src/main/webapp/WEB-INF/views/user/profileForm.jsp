@@ -22,30 +22,58 @@
 		
 		<!-- body -->
 		<div class="col-md-4 mg-auto box">
-			<form action="${_}/login" method="post" name="frm">
-				<div class="form-group">
-					<label for="id">아이디를 입력하세요.</label>
-					<input type="text" id="id" name="id" class="form-control" required="required" placeholder="아이디">
+			<form action="${_}/join" method="post" name="frm">
+				<div class="j-center mg-b-10" style="color: #808080; position: relative;">
+					<label class="btn btn-sm img-btn" for="picture">
+						<i class="far fa-images mg-r-5"></i><strong>등록</strong>
+					</label>
+					<input type="file" id="picture" name="picture" class="hide">
+					<div id="image"><i class="fas fa-user-circle fa-10x"></i></div>
+				</div>
+				<div class="form-group mg-t-5">
+					<label for="birthday">레벨 측정을 위해 생일을 입력해주세요.</label>
+					<input type="date" id="birthday" name="birthday" class="form-control">
 				</div>
 				<div class="form-group">
-					<label for="password">비밀번호를 입력하세요.</label>
-					<input type="password" id="password" name="password" class="form-control" required="required" placeholder="비밀번호">
-				</div>
-				<div class="j-between">
-					<a href="#" class="btn btn-link" style="padding-left: 0;">비밀번호를 잊으셨나요?</a>
-					<button type="submit" class="btn btn-primary">로그인</button>						
+					<label for="place">주요 출몰지(활동 지역)를 알려주세요.</label>
+					<input type="text" id="place" name="place" class="form-control" placeholder="주요 출몰지">
+					<div class="msg err"></div>
 				</div>				
-				<div id="mCollapse" class="msg err flex collapse" style="margin-top: 10px">
+				<div class="form-group">
+					<label for="tag">당신의 관심사를 알려주세요.</label>
+					<input type="text" id="tag" name="tag" class="form-control" placeholder="#관심사" required="required">
 				</div>
+				<div class="j-end">
+					<button type="submit" class="btn btn-primary mg-r-5">작성 완료</button>						
+					<button type="button" class="btn btn-default">건너뛰기</button>						
+				</div>
+				
 			</form>
 		</div>
-		
+	
 	</div>
 	
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
-		frm.addEventListener('submit', login);
+		document.querySelector("#picture").onchange = function (event) {
+			var image = event.target.files[0],
+			reader = new FileReader();
+				
+			reader.onload = function(event){
+				var img = document.createElement("img");
+				img.setAttribute("src", event.target.result);
+				img.setAttribute("class", "img-circle");
+				img.setAttribute("height", "140");
+				img.setAttribute("width", "140");
+				document.querySelector("div#image").innerHTML = '';
+				document.querySelector("div#image").appendChild(img);
+			};
+				
+			console.log(image);
+			reader.readAsDataURL(image);
+			
+		}
 	</script>
 </body>
 </html>

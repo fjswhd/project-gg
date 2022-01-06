@@ -25,25 +25,25 @@
 		<div class="col-md-5 mg-auto box">
 			<form action="${_}/join" method="post" name="frm">
 				<div class="form-group">
-					<label for="id">사용하실 아이디를 입력하세요.</label>
-					<input type="text" id="id" name="id" class="form-control" required="required" placeholder="아이디">
+					<label for="id">이메일을 입력하세요</label>
+					<input type="email" id="id" name="m_id" class="form-control" required="required" placeholder="이메일">
 					<div class="msg err"></div>
 				</div>
 				<div id="pCollapse" class="collapse">
 					<div class="form-group">
-						<label for="password">비밀번호를 입력하세요.</label>
+						<label for="password">비밀번호를 입력하세요</label>
 						<input type="password" id="password" name="password" class="form-control" required="required" placeholder="비밀번호">
 					</div>
 					<div class="form-group">
-						<label for="passwordChk">비밀번호를 확인해주세요.</label>
+						<label for="passwordChk">비밀번호를 확인해주세요</label>
 						<input type="password" id="passwordChk" name="passwordChk" class="form-control" required="required" placeholder="비밀번호 확인">
 						<div class="msg err"></div>
 					</div>				
 				</div>
 				<div id="eCollapse" class="collapse">
 					<div class="form-group">
-						<label for="email">이메일을 입력하세요.</label>
-						<input type="email" id="email" name="email" class="form-control" required="required">
+						<label for="email">사용하실 별명을 입력하세요</label>
+						<input type="text" id="nickname" name="nickname" class="form-control" placeholder="별명" required="required">
 					</div>
 					<div class="flex" style="justify-content: flex-end;">
 						<button type="submit" class="btn btn-primary">가입하기</button>						
@@ -59,7 +59,7 @@
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
 	
-		frm.id.addEventListener('change', idChk)
+		frm.m_id.addEventListener('change', idChk)
 		frm.password.addEventListener('change', passwordChk)
 		frm.passwordChk.addEventListener('change', passwordChk)
 		

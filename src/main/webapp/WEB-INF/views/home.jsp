@@ -23,7 +23,6 @@
 					<a href="${_}/joinForm.do" class="btn btn-default">회원가입</a>
 				</div>
 			</div>
-		
 		</div>
 		
 		<!-- body -->
@@ -121,6 +120,7 @@
 						<a href="${_board}/insertForm" class="btn btn-primary">새 글 쓰기</a>
 					</div>
 				</div>
+				
 			</div>
 		</div>
 	</div>

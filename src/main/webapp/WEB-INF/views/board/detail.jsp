@@ -29,14 +29,13 @@
 			<!-- 제목, 닉네임, 등록일, 조회수-->
 			<div class="align-center j-between shadow-bottom" style="height: 10%; padding: 10px;">
 				<span class="h3">
-					[${board.c_no}] ${board.subject}
-					<small>${board.m_id} | ${board.reg_date} | 조회 : ${board.readcount }</small>
+					[${board.c_no}] ${board.subject} <small>${board.m_id} | ${board.reg_date} | 조회 : ${board.readcount }</small>
 				</span>
 				<span>
 					<button class="btn btn-primary btn-sm">참가 신청</button>
 					<button class="btn btn-warning btn-sm">수정<i class="fas fa-undo-alt mg-l-5"></i></button>
 					<button class="btn btn-danger btn-sm">삭제<i class="fas fa-trash-alt mg-l-5"></i></button>
-					<button class="btn btn-link btn-sm">목록<i class="fas fa-list mg-l-5"></i></button>
+					<button class="btn btn-default btn-sm">목록<i class="fas fa-list mg-l-5"></i></button>
 				</span>
 			</div>
 			
@@ -52,10 +51,12 @@
 					</div>
 				</div>
 				
-				<!-- 활동일, 장소 -->
+				<!-- 신청자, 참여자, 활동일, 장소 -->
 				<div class="f-1 pd-r-5 scroll" style="overflow: auto;">
+					<!-- 신청, 참여  -->
 					<div id="request"></div>
 					<div id="parti"></div>
+					
 					<ul class="list-group mg-b-5">
 						<li class="list-group-item align-center" style="font-size: 16px;">
 							<span class="col-md-1 j-center pd-0"><i class="far fa-calendar-check fa-lg"></i></span>

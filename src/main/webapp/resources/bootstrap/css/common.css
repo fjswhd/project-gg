@@ -82,7 +82,12 @@
 .list {
 	display: inline-block; padding: 5px; padding-left: 15px; box-shadow: -1px 0 1px -1px #000;	
 }
-
+.img-btn {
+	position: absolute; left: 53%; top: 73%; border-radius: 20px; border-color: #444; background: #222; color: #fff;
+}
+.img-btn:hover {
+	color: #fff;
+}
 .pd-t-5 {padding-top: 5px;}
 .pd-r-5 {padding-right: 5px;}
 .pd-b-5 {padding-bottom: 5px;}
@@ -93,6 +98,7 @@
 .mg-t-5 {margin-top: 5px;}
 .mg-l-5 {margin-left: 5px;}
 .mg-b-5 {margin-bottom: 5px;}
+.mg-b-10 {margin-bottom: 10px;}
 .mg-b-0 {margin-bottom: 0;}
 
 .scroll::-webkit-scrollbar {

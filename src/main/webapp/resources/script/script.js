@@ -75,9 +75,9 @@ function idChk(event) {
 	}
 	
 	//이메일 부분이 열려있으면 이메일 input의 값을 지우고 닫음
-	if ($('#eCollapse').hasClass('in') ) {
-		$('#eCollapse').collapse('hide');
-		document.querySelector('#email').value = '';
+	if ($('#nCollapse').hasClass('in') ) {
+		$('#nCollapse').collapse('hide');
+		document.querySelector('#nickname').value = '';
 	}
 }
 
@@ -111,15 +111,15 @@ function passwordChk(event) {
 				msg.innerHTML = '비밀번호가 일치합니다.';
 				
 				//이메일 부분 열기
-				$('#eCollapse').collapse('show');
+				$('#nCollapse').collapse('show');
 				return;
 			}
 		}
 	}
 	
 	//이메일 부분이 열려있으면 이메일 input의 값을 지우고 닫음
-	if ($('#eCollapse').hasClass('in') ) {
-		$('#eCollapse').collapse('hide');
-		document.querySelector('#email').value = '';
+	if ($('#nCollapse').hasClass('in') ) {
+		$('#nCollapse').collapse('hide');
+		document.querySelector('#nickname').value = '';
 	}
 }
