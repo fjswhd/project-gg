@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ch.project.dao.RequestDao;
+import com.ch.project.model.Parti;
 import com.ch.project.model.Request;
 
 @Service
@@ -25,8 +26,13 @@ public class RequestServiceImpl implements RequestService{
 	public int accept(Map<String, Object> accept) {
 		return rd.accept(accept);
 	}
+	public void insertParti(Map<String, Object> accept) {
+		rd.insertParti(accept);
+	}
 	public int reject(Map<String, Object> reject) {
 		return rd.reject(reject);
 	}
-	
+	public int cancel(Map<String, Object> cancel) {
+		return rd.cancel(cancel);
+	}
 }

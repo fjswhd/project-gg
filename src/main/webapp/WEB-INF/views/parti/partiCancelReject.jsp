@@ -10,11 +10,11 @@
 <body>
 	<c:if test="${result > 0 }">
 		<script type="text/javascript">
-			alert("취소 신청을 거절하였습니다")
-			location.href = "/requestForm?b_no = ${b_no}";
+			alert("탈퇴 취소 신청을 거절 하였습니다")
+			location.href = "partiList.do?b_no=1";
 		</script>
 	</c:if>
-	<c:if test="${result = 0 }">
+	<c:if test="${result == 0 }">
 		<script type="text/javascript">
 			alert("거절 실패")
 			history.go(-1);

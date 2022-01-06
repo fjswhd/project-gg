@@ -11,10 +11,10 @@
 	<c:if test="${result > 0 }">
 		<script type="text/javascript">
 			alert("강퇴 되었습니다")
-			location.href = "/requestForm?b_no = ${b_no}";
+			location.href = "partiList.do?b_no=1";
 		</script>
 	</c:if>
-	<c:if test="${result = 0 }">
+	<c:if test="${result == 0 }">
 		<script type="text/javascript">
 			alert("강퇴 실패")
 			history.go(-1);

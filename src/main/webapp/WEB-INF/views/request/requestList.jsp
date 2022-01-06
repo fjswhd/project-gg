@@ -10,13 +10,13 @@
 <body>
 	<div align="center">
 		<div>
-			<label for="">신청자 현황</label>
+			<label for="">신청자 목록</label>
 			<!--신청자가 없을 때-->
 			<c:if test="${empty rqList }">
 				<div>신청자가 없습니다.</div>
 					<div>
 						<!-- b_no에 board.b_no /m_id는 세션아이디값 -->
-						<a href="request.do?b_no=1&m_id=e" class="btn btn-success">신청하기</a>
+						<a href="request.do?b_no=1&m_id=b" class="btn btn-success">신청하기</a>
 					</div> 
 			</c:if>
 			<!--신청자가 있을 때 기본 페이지-->
@@ -28,10 +28,19 @@
 						</div>
 					</c:forEach>  
 					<div>
-						<!-- b_no에 board.b_no /m_id는 세션아이디값 -->
-						<a href="request.do?b_no=1&m_id=b"class="btn btn-success">신청하기</a>
-					</div>  
-				</c:if>
+						<!--  -->
+						<%-- <c:if test="f==${request.m_id }">
+							<a href="requestCancel.do?b_no=1&m_id=f"class="btn btn-success">신청 취소하기</a>
+						</c:if>
+						<c:if test="세션아이디!=${request.m_id }">
+							<a href="request.do?b_no=1&m_id=f"class="btn btn-success">신청하기</a>
+						</c:if>
+						 --%>
+						<a href="request.do?b_no=1&m_id=f"class="btn btn-success">신청하기</a>
+						<a href="requestCancel.do?b_no=1&m_id=d"class="btn btn-success">신청 취소하기</a>
+					</div>
+				  
+				</c:if>   
 			<%-- </c:if> --%>
 			<!--신청자가 있을 때 작성자 페이지-->
 			<%-- <c:if test="${세션아이디 == 작성자 아이디 }"> --%>
@@ -39,7 +48,7 @@
 					<c:forEach var="request" items="${rqList }">
 						<div>
 							<div>
-								${request.m_id }님이 모임에 들어오기를 원합니다. 
+								${request.m_id }
 								           <!--  int b_no은 board의 b_no --> 
 								<a href="requestAccept.do?b_no=1&m_id=${request.m_id }" class="btn btn-primary">수락</a> 
 								<a href="requestReject.do?b_no=1&m_id=${request.m_id }" class="btn btn-danger">거절</a>

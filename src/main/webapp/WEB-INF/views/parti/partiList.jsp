@@ -10,32 +10,34 @@
 <body>
 	<div align="center">
 		<div>
-			<label for="">참여자 현황</label>
-			<c:if test="${empty rqList }">
-				<div>작성자 아이디</div>
+			<label for="">참여자 목록</label>
+			<c:if test="${empty ptList }">
+				<div>a</div>
 			</c:if>
-			<c:if test="${not empty rqList }">
-				<c:if test="${empty 신청 수락여부y &&신청 취소여부가 y인 리스트 }">
-					<c:forEach var="parti" items="${rqList }">
+			<c:if test="${not empty ptList }">
+				<div>
+					a
+					<!-- 작성자 아이디 -->
+				</div>
+				<c:forEach var="parti" items="${ptList }">
+					<div>
+						${parti.m_id } <a href="partiOut.do?b_no=1&m_id=${parti.m_id }"
+							class="btn btn-danger">강퇴</a>
+					</div>
+				</c:forEach>
+					<a href="partiCancel.do?b_no=1&m_id=c"class="btn btn-danger">탈퇴 신청</a>
+					<a href="partiReCancel.do?b_no=1&m_id=c"class="btn btn-danger">탈퇴 신청 취소</a>
+			</c:if>
+				<c:if test="${not empty ptCancelList }">
+					<c:forEach var="parti" items="${ptCancelList }">
 						<div>
-							${parti.id } <a href="partiOut.do?m_id=${parti.id }" class="btn btn-danger">강퇴</a>
-						</div>
+						${parti.m_id }님이 탈퇴 신청하였습니다. 
+						<a href="partiCancelAccess.do?b_no=1&m_id=${parti.m_id }" class="btn btn-primary">수락</a>
+						<a href="partiCancelReject.do?b_no=1&m_id=${parti.m_id }" class="btn btn-danger">거절</a>
+					</div>
 					</c:forEach>
 				</c:if>
-				<c:if test="${not empty 신청 수락여부y &&신청 취소여부가 y인 리스트 }">
-					<c:forEach var="yy참여자" items="${yy참여자자리스트 }">
-						<div>
-							${yy참여자.id } 
-							<a href="/partiCancelAccess?m_id=${yy참여자.id }" class="btn btn-primary">수락</a>
-							<a href="/partiCancelReject?m_id=${yy참여자.id }" class="btn btn-danger">거절</a>
-						</div>
-					</c:forEach>
-				</c:if>
-				
-			</c:if>
-
 		</div>
 	</div>
-
 </body>
 </html>

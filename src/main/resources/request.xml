@@ -18,17 +18,24 @@
 		insert into request values(#{b_no}, #{m_id}, sysdate,'n','n')
 	</insert>
 	
-	<!-- 참여 수락 -->
+	<!-- 참여 신청 수락 -->
 	<update id = "accept" parameterType="Map">
-		DECLARE
-    	BEGIN 
-		update request set accept = 'y' where b_no = #{b_no} and m_id = #{m_id};
-		insert into parti values(#{b_no}, #{m_id}, sysdate,'n','n');
-		END;
-	</update> 
+		update request set accept = 'y' where b_no = #{b_no} and m_id = #{m_id}
+	</update>   
 	
-	<!-- 참여 거절 -->
+	<!-- 참여자 리스트에 추가-->
+	<insert id = "insertParti" parameterType="Map">
+		insert into parti values(#{b_no}, #{m_id}, sysdate,'n','n')
+	</insert>
+	
+	<!-- 참여  신청 거절 -->
 	<update id = "reject" parameterType="Map">
 		update request set cancel = 'y' where b_no = #{b_no} and m_id = #{m_id}
 	</update> 
+	
+	<!-- 참여  신청 취소 -->
+	<update id = "cancel" parameterType="Map">
+		update request set cancel = 'y' where b_no = #{b_no} and m_id = #{m_id}
+	</update>                    
+
 </mapper>

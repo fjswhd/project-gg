@@ -5,9 +5,11 @@
 	<typeAliases>
 		<!-- 			별명                                         실제 객체 -->
 		<typeAlias alias="request" type="com.ch.project.model.Request"/>
+		<typeAlias alias="Parti" type="com.ch.project.model.Parti"/>
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="request.xml"/>
+		<mapper resource="parti.xml"/>
 	</mappers>
 </configuration>

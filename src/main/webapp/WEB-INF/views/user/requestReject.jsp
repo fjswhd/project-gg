@@ -10,13 +10,13 @@
 <body>
 	<c:if test="${result > 0 }">
 		<script type="text/javascript">
-			alert("신청을 수락하였습니다.")
-			location.href = "requestList.do?b_no=1"; /*  b_no에 board.b_no  */
+			alert("신청을 거절하였습니다")
+			location.href = "requestList.do?b_no=1";  /* b_no에 board.b_no */ 
 		</script>
 	</c:if>
 	<c:if test="${result == 0 }">
 		<script type="text/javascript">
-			alert("수락 실패")
+			alert("거절 실패")
 			history.go(-1);
 		</script>
 	</c:if>

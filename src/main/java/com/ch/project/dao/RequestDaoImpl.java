@@ -6,6 +6,8 @@ import java.util.Map;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.ch.project.model.Parti;
 import com.ch.project.model.Request;
 
 
@@ -26,8 +28,14 @@ public class RequestDaoImpl implements RequestDao{
 	public int accept(Map<String, Object> accept) {
 		return sst.update("requestns.accept", accept);
 	}
+	public void insertParti(Map<String, Object> accept) {
+		sst.insert("requestns.insertParti",accept);
+	}
 	public int reject(Map<String, Object> reject) {
 		return sst.update("requestns.reject", reject);
+	}
+	public int cancel(Map<String, Object> cancel) {
+		return sst.update("requestns.cancel", cancel);
 	}
 	
 }

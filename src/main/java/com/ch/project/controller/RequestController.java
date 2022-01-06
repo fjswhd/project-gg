@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ch.project.model.Board;
+import com.ch.project.model.Parti;
 import com.ch.project.model.Request;
 import com.ch.project.service.RequestService;
 
@@ -35,9 +36,8 @@ public class RequestController {
 		request.put("b_no",b_no);
 		request.put("m_id",m_id);
 		Request rq = rs.select(request);
-		if(rq.getM_id().equals(m_id)) {
-			result = -1;
-		}else result = rs.insert(request);
+		if(rq==null) result = rs.insert(request);
+		else result = -1;
 		model.addAttribute("result",result);
 		model.addAttribute("request",request);
 		return "request/request";
@@ -49,9 +49,9 @@ public class RequestController {
 		accept.put("b_no",b_no);
 		accept.put("m_id",m_id);
 		result = rs.accept(accept);
+		if(result > 0) rs.insertParti(accept);
 		model.addAttribute("result",result);
 		model.addAttribute("accept",accept);
-		System.out.println( "result : " + result);
 		return "request/requestAccept";
 	}
 	@RequestMapping ("requestReject")
@@ -64,5 +64,16 @@ public class RequestController {
 		model.addAttribute("result",result);
 		model.addAttribute("reject",reject);
 		return "request/requestReject";
+	}
+	@RequestMapping("requestCancel")
+	public String requestCancel (int b_no,String m_id, Model model) {
+		int result = 0; //  신청 취소 실패
+		Map<String, Object> cancel = new HashMap<String, Object>();
+		cancel.put("b_no",b_no);
+		cancel.put("m_id",m_id);
+		result = rs.cancel(cancel);
+		model.addAttribute("result",result);
+		model.addAttribute("cancel",cancel);
+		return "request/requestCancel";
 	}
 }
