@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ch.project.model.Board;
 import com.ch.project.model.Category;
 import com.ch.project.service.BoardService;
 
@@ -43,14 +44,35 @@ public class BoardController {
 	public String placeSearch() {
 		return "board/placeSearch";
 	}
-	@RequestMapping("/insert")
-	public String insert(@RequestParam Map<String, String> param) {
-		int result = 0;
-		for(Map.Entry<String, String> entry : param.entrySet()) {
-			System.out.println(entry.getKey() +" : "+ entry.getValue());
-		}
-		result = 1;
+	@RequestMapping("/detail")
+	public String detail(Model model) {
+		Board board = bs.getBoard(1);
+		String address = board.getAddress();
+		String place = address.substring(0, address.lastIndexOf("("));
+		address = address.substring(address.lastIndexOf("(") + 1, address.lastIndexOf(")"));
 		
+		model.addAttribute("board", board);
+		model.addAttribute("place", place);
+		model.addAttribute("address", address);
+		return "board/detail";
+	}
+	@RequestMapping("/request")
+	public String request() {
+		return "board/fragment/request";
+	}
+	@RequestMapping("/parti")
+	public String parti() {
+		return "board/fragment/parti";
+	}
+	@RequestMapping("/insert")
+	public String insert(Board board) {
+		//현재 게시글 개수 구해서 다음 게시글의 글 번호 설정
+		int boardCount = bs.getBoardCount();
+		board.setB_no(boardCount + 1);
+		
+		//게시글 DB에 넣기
+		int result = bs.insertBoard(board);
+		System.out.println(result);
 		return "home";
 	}
 }

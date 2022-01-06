@@ -5,4 +5,20 @@
 	<select id="selectCategories" resultType="category">
 		SELECT * FROM CATEGORY
 	</select>
+	
+	<select id="selectBoardCount" resultType="int">
+		SELECT COUNT(b_no) FROM BOARD
+	</select>
+	
+	<select id="selectBoard" parameterType="int" resultType="board">
+		SELECT * FROM BOARD WHERE b_no = #{b_no}
+	</select>
+	
+	<!-- 번호, 작성자아이디, 카테고리 번호, 제목, 시작일, 종료일, 주소, 내용, 멤버 수, 조회수, 작성일, 모집종료여부, 삭제 -->
+	<insert id="insertBoard" parameterType="board">
+		INSERT INTO BOARD
+		VALUES ( #{b_no}, #{m_id}, #{c_no}, #{subject}, #{s_date}, #{e_date}, #{address}, #{content}, #{m_count}, #{readcount}, sysdate, 'n', 'n')
+	</insert>
+	
+	
 </mapper>
