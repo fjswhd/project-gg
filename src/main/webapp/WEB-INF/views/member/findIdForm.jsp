@@ -23,7 +23,7 @@ td, th {
 			<tr>
 				<td class="inputUnderLine">
 					<input type="text" name="MB_name" required="required" autofocus="autofocus" 
-					       placeholder="이름" class="inputLine">
+					       placeholder="바보" class="inputLine">
 				</td>
 			</tr>
 			<tr>
