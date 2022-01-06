@@ -26,11 +26,11 @@
 						<div>
 							<div>${request.m_id }</div>
 						</div>
-					</c:forEach> 
+					</c:forEach>  
 					<div>
 						<!-- b_no에 board.b_no /m_id는 세션아이디값 -->
-						<a href="request.do?b_no=1&m_id=k" class="btn btn-success">신청하기</a>
-					</div> 
+						<a href="request.do?b_no=1&m_id=b"class="btn btn-success">신청하기</a>
+					</div>  
 				</c:if>
 			<%-- </c:if> --%>
 			<!--신청자가 있을 때 작성자 페이지-->

@@ -11,7 +11,7 @@
 	<c:if test="${result > 0 }">
 		<script type="text/javascript">
 			alert("신청을 수락하였습니다.")
-			location.href = "/requestForm?b_no =1"; <!-- b_no에 board.b_no -->
+			location.href = "requestForm.do?b_no =1"; /*  b_no에 board.b_no  */
 		</script>
 	</c:if>
 	<c:if test="${result == 0 }">

@@ -29,12 +29,15 @@ public class RequestController {
 	}
 	@RequestMapping ("request") 
 	// int b_no은 board의 b_no  / String m_id는 세션 아이디
-	public String request (int b_no,String m_id, Model model) {
+	public String request (int b_no, String m_id, Model model) {
 		int result = 0; // 신청실패
 		Map<String, Object> request = new HashMap<String, Object>();
 		request.put("b_no",b_no);
 		request.put("m_id",m_id);
-		result  = rs.insert(request);
+		Request rq = rs.select(request);
+		if(rq.getM_id().equals(m_id)) {
+			result = -1;
+		}else result = rs.insert(request);
 		model.addAttribute("result",result);
 		model.addAttribute("request",request);
 		return "request/request";
@@ -48,6 +51,7 @@ public class RequestController {
 		result = rs.accept(accept);
 		model.addAttribute("result",result);
 		model.addAttribute("accept",accept);
+		System.out.println( "result : " + result);
 		return "request/requestAccept";
 	}
 	@RequestMapping ("requestReject")

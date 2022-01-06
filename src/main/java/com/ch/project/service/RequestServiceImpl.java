@@ -16,6 +16,9 @@ public class RequestServiceImpl implements RequestService{
 	public List<Request> rqList(int b_no) {
 		return rd.rqList(b_no);
 	}
+	public Request select(Map<String, Object> request) {
+		return rd.select(request);
+	}
 	public int insert(Map<String, Object> request) {
 		return rd.insert(request);
 	}
@@ -25,4 +28,5 @@ public class RequestServiceImpl implements RequestService{
 	public int reject(Map<String, Object> reject) {
 		return rd.reject(reject);
 	}
+	
 }

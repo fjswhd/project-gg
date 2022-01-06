@@ -17,6 +17,9 @@ public class RequestDaoImpl implements RequestDao{
 	public List<Request> rqList(int b_no) {
 		return sst.selectList("requestns.rqList",b_no);
 	}
+	public Request select(Map<String, Object> request) {
+		return sst.selectOne("requestns.select", request);
+	}
 	public int insert(Map<String, Object> request) {
 		return sst.insert("requestns.insert", request);
 	}
@@ -26,4 +29,5 @@ public class RequestDaoImpl implements RequestDao{
 	public int reject(Map<String, Object> reject) {
 		return sst.update("requestns.reject", reject);
 	}
+	
 }
