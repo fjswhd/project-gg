@@ -10,7 +10,7 @@
 <body>
 	<div align="center">
 		<div>
-			<label for="">참여자 목록</label>
+			<div>참여자 목록</div>
 			<c:if test="${empty ptList }">
 				<div>a</div>
 			</c:if>

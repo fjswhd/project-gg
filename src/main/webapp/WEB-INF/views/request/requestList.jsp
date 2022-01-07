@@ -10,7 +10,7 @@
 <body>
 	<div align="center">
 		<div>
-			<label for="">신청자 목록</label>
+			<div>신청자 목록<div>
 			<!--신청자가 없을 때-->
 			<c:if test="${empty rqList }">
 				<div>신청자가 없습니다.</div>
@@ -29,7 +29,7 @@
 					</c:forEach>  
 					<div>
 						<!--  -->
-						<%-- <c:if test="f==${request.m_id }">
+						<%-- <c:if test="세션아이디==${request.m_id }">
 							<a href="requestCancel.do?b_no=1&m_id=f"class="btn btn-success">신청 취소하기</a>
 						</c:if>
 						<c:if test="세션아이디!=${request.m_id }">
