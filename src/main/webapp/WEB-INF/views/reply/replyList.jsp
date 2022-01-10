@@ -27,12 +27,19 @@
 			</c:if>
 		</div>
 		<div>
+			<!-- b_no는 현재게시글 번호 m_id는 세션아이디값 -->
+			<form action ="replyInsert.do?b_no=1&m_id=" method="post">
 			<textarea rows="5" cols="100" placeholder="댓글 달기 ..."></textarea>
+			<button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" name>
+  				비밀댓글
+			</button>
+			<button type="submit" class="btn btn-info">게시</button>
+			</form>
 		</div>
 		<div>
 			<a href = "replySecret.do?re_no=${reply.re_no}" class="btn btn-info">비밀댓글</a>
 			<a href = "replySecretCancel.do?re_no=${reply.re_no}" class="btn btn-info">공개댓글</a>
-			<a href="replyInsert.do?mbo_no=${mbo_no }&id=${id}" class="btn btn-info">게시</a>
+			<a href= class="btn btn-info">게시</a>
 		</div>
 	</div>
 </body>
