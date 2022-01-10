@@ -22,9 +22,12 @@ public class ReplyController {
 		return "reply/replyList";
 	}
 	@RequestMapping("replyInsert")
-	public String replyInsert (int b_no, Model model) {
+	public String replyInsert (Reply reply, String pageNum, Model model) {
 		int result = 0; //댓글 게시 실패
-		result = rs.insert(b_no);
+		int re_no = rs.maxNo();
+		reply.setRe_no(re_no);
+		result = rs.insert(reply);
+		model.addAttribute("reply", reply);
 		model.addAttribute("result",result);
 		return "reply/replyInsert";
 	}

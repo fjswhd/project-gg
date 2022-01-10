@@ -9,9 +9,14 @@
 		 <!-- where rn between #{startRow} and #{endRow} -->
 	</select>
 	
+	<!-- 새댓글 번호 구하기 -->
+	<select id="maxNum" resultType="integer">
+		select nvl(max(re_no),0) + 1 from board2
+	</select>
+	
 	<!-- 댓글 입력 -->
-	<insert id="insert">
-		insert into reply values()
+	<insert id="insert" parameterType="integer">
+		insert into reply values( #{re_no},#{b_no},#{m_id}, #{content}, 0, 0, sysdate, , 'n' )
 	</insert>
 
 </mapper>

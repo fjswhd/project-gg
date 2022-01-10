@@ -14,8 +14,11 @@ public class ReplyServiceImpl implements ReplyService{
 	public List<Reply> rpList(int b_no) {
 		return rd.rpList(b_no);
 	} 
-	public int insert(int b_no) {
-		return rd.insert(b_no);
+	public int maxNo() {
+		return rd.maxNo();
 	}
-
+	public int insert(Reply reply) {
+		return rd.insert(reply);
+	}
+	
 }

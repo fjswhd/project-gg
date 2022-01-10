@@ -7,7 +7,9 @@ import com.ch.project.model.Reply;
 public interface ReplyService {
 
 	List<Reply> rpList(int b_no);			// 댓글 불러오기
-	int insert(int b_no);					// 댓글 게시
+	int maxNo();							// 새 댓글 번호
+	int insert(Reply reply);					// 댓글 게시
+	
 	
 
 }

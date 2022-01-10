@@ -16,8 +16,12 @@ public class ReplyDaoImpl implements ReplyDao{
 	public List<Reply> rpList(int b_no) {
 		return sst.selectList("replyns.rpList",b_no);
 	}
-	public int insert(int b_no) {
-		return sst.insert("replyns.insert",b_no);
+	public int maxNo() {
+		return sst.selectOne("replyns.maxNo");
 	}
+	public int insert(Reply reply) {
+		return sst.insert("replyns.insert",reply);
+	}
+
 		
 }
