@@ -22,6 +22,9 @@ public class ReplyDaoImpl implements ReplyDao{
 	public int insert(Reply reply) {
 		return sst.insert("replyns.insert",reply);
 	}
+	public int update(Reply reply) {
+		return sst.update("replyns.update",reply);
+	}
 
 		
 }

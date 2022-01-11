@@ -15,7 +15,7 @@
 	</c:if>
 	<c:if test="${result == 0 }">
 		<script type="text/javascript">
-			alert("댓글 작성 실패")
+			alert("댓글 수정 실패")
 			history.go(-1);
 		</script>
 	</c:if>

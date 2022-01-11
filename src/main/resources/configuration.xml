@@ -7,11 +7,13 @@
 		<typeAlias alias="request" type="com.ch.project.model.Request"/>
 		<typeAlias alias="parti" type="com.ch.project.model.Parti"/>
 		<typeAlias alias="reply" type="com.ch.project.model.Reply"/>
+		<typeAlias alias="member" type="com.ch.project.model.Member"/>
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="request.xml"/>
 		<mapper resource="parti.xml"/>
 		<mapper resource="reply.xml"/>
+		
 	</mappers>
 </configuration>

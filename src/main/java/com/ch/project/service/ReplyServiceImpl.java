@@ -20,5 +20,8 @@ public class ReplyServiceImpl implements ReplyService{
 	public int insert(Reply reply) {
 		return rd.insert(reply);
 	}
+	public int update(Reply reply) {
+		return rd.update(reply);
+	}
 	
 }

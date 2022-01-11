@@ -10,5 +10,6 @@ public interface ReplyDao {
 	List<Reply> rpList(int b_no);
 	int maxNo();
 	int insert(Reply reply);
+	int update(Reply reply);
 
 }

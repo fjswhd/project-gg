@@ -15,6 +15,9 @@ public class Reply {
 	private Date reg_date;			// 작성일
 	private String secret;			// 비밀댓글 여부
 	private String del;				// 삭제 여부
+	private String nickname;		// 닉네임
+	
+	
 	
 	// paging용
     private int startRow;
