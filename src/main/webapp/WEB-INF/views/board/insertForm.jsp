@@ -27,6 +27,10 @@
 		<!-- body -->
 		<div class="col-md-9 mg-auto box flex" style="height: 75%;">
 			<form action="${_board}/insert.do" method="post" name="frm" class="flex-column f-1">
+				<!-- 조회수, 작성자(세션의 유저)  -->
+				<input type="hidden" name="readcount" value="0">
+				<input type="hidden" name="m_id" value="dlwhdals">
+				
 				<!-- 활동 일시 -->
 				<div class="align-center f-s mg-b-5">
 					<span class="col-md-2 j-center">
@@ -39,7 +43,7 @@
 						~
 					</span>
 					<span class="col-md-2 pd-0">
-						<input type="date" name="e_date" class="form-control input-sm" required="required" max="${lastday}">
+						<input type="date" name="e_date" class="form-control input-sm" required="required" min="${today}" max="${lastday}">
 					</span>
 				</div>
 				
@@ -70,7 +74,7 @@
 				<!-- 카테고리, 제목 -->
 				<div class="align-center f-s mg-b-5">
 					<span class="col-md-2">
-						<select name="category" class="form-control input-sm" required="required">
+						<select name="c_no" class="form-control input-sm" required="required">
 							<option value="">카테고리</option>
 							<c:forEach var="category" items="${categoryList}">
 								<option value="${category.c_no}">${category.c_name}</option>

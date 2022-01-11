@@ -12,7 +12,9 @@
 	<div class="flex f-1" style="height: 100%;">
 		<div id="map" style="width: 70%; position: relative;">
 			<button id="searchAgain" class="btn btn-primary btn-lg collapse">
-				<i class="fas fa-redo"></i>  현 지도에서 재검색
+				<span class="align-center">
+					<i class="fas fa-redo"></i>&nbsp;현 지도에서 재검색
+				</span>
 			</button>
 		</div>
 		<div style="width: 30%; overflow: visible; position: relative;">

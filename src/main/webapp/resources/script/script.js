@@ -14,7 +14,7 @@ function login(event) {
 		msg = document.querySelectorAll('.msg')[0];
 	
 	//ajax로 로그인 확인하자
-	fetch('/project/login', {
+	fetch('/project/login.do', {
 		method :'POST',
 		body: sendData,
 		headers: {

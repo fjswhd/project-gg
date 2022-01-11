@@ -10,11 +10,10 @@
 
 <c:url value="/resources/bootstrap"				var="bootstrap" />
 <c:url value="/resources/images"				var="images" />
-<c:url value="/resources/images/community.jpg" 	var="community" />
 <c:url value="/resources/images/logo.jpg" 		var="logo" />
 
-<c:url value="/resources/script/script.js" 	var="script" />
 <c:url value="/resources/script" 			var="_script"/>
+<c:url value="/resources/script/script.js" 	var="script" />
 
 <c:url value="/board" 				var="_board" />
 
@@ -23,9 +22,8 @@
 <link rel="stylesheet" type="text/css" href="${bootstrap}/css/reset.css">
 <link rel="stylesheet" type="text/css" href="${bootstrap}/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="${bootstrap}/css/common.css">
+<script type="text/javascript" src="${bootstrap}/js/jquery.js"></script>
+<script type="text/javascript" src="${bootstrap}/js/bootstrap.min.js"></script>
 
 <!-- font awsome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
-
-<script type="text/javascript" src="${bootstrap}/js/jquery.js"></script>
-<script type="text/javascript" src="${bootstrap}/js/bootstrap.min.js"></script>
