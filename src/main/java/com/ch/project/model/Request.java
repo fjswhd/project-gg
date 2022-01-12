@@ -10,4 +10,5 @@ public class Request {
 	private Date reg_date;			// 신청 요청 시각
 	private String cancel;			// 취소 여부
 	private String accept;			// 수락 여부
+	private String nickname;		// 닉네임
 }

@@ -53,8 +53,8 @@
 					<div class="align-center j-end">
 						<div class="btn-group mg-r-5" data-toggle="buttons">
 							<label id="secret" class="btn btn-default btn-sm"> 
-							<span id="secretMsg"> <i class="fas fa-lock-open mg-r-5">
-								</i>공개 댓글입니다.
+							<span id="secretMsg"> <i class="fas fa-lock-open mg-r-5"></i>
+								공개 댓글입니다.
 							</span> <input type="checkbox" name="secret">
 							</label>
 						</div>
@@ -75,7 +75,8 @@
 		} else {
 			msg.innerHTML = '<i class="fas fa-lock-open mg-r-5"></i>공개 댓글입니다.';
 		}
-	};		
+	}	
+	
 </script>
 </body>
 </html>

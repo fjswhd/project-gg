@@ -17,8 +17,6 @@ public class Reply {
 	private String del;				// 삭제 여부
 	private String nickname;		// 닉네임
 	
-	
-	
 	// paging용
     private int startRow;
     private int endRow;
