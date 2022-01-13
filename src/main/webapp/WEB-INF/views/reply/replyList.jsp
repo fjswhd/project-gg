@@ -16,6 +16,13 @@
 			</c:if>
 			<c:if test="${not empty rpList }">
 				<c:forEach var="reply" items="${rpList}">
+					<c:if test="${reply.secret == 'y' }"> <%--조건 추가 && 세션아이디 !=reply.m_id && 세션아이디 != board.m_id --%>
+						<div><i class="fas fa-lock mg-r-5"></i>비밀 댓글입니다.</div>
+						<a href="replyUpdateForm.do?re_no=${reply.re_no}" class="btn btn-info">수정</a>
+						<a href="replyDelete.do?re_no=${reply.re_no}"
+							class="btn btn-danger">삭제</a>
+					</c:if>
+					<c:if test="${reply.secret == 'n' }"> <%--조건 추가  || 세션아이디 ==reply.m_id && 세션아이디 == board.m_id --%>
 					<div>
 						<div>${reply.nickname }</div>
 						<div>${reply.content }</div>
@@ -24,20 +31,12 @@
 						<a href="replyDelete.do?re_no=${reply.re_no}"
 							class="btn btn-danger">삭제</a>
 					</div>
+					</c:if>
 				</c:forEach>
 			</c:if>
 		</div>
 		<div>
 			<!-- b_no는 현재게시글 번호 m_id는 세션아이디값 -->
-		<!-- 	<form action="replyInsert.do?b_no=1&m_id=" method="post"
-				name="replyfrm">
-				<input type="hidden" name="" value="">
-				<textarea rows="5" cols="100" placeholder="댓글 달기 ..."></textarea>
-				<input type="button" class="btn btn-primary" data-toggle="button"
-					aria-pressed="false" name> 비밀댓글
-				</button>
-				<button type="submit" class="btn btn-info">게시</button>
-			</form> -->
 			<form action="replyInsert.do?b_no=1&m_id=b" class="align-center">
 				<div class="col-md-2 pd-0 j-center">
 					<%-- <input type="hidden" name="b_no" value="${board.b_no }">

@@ -30,7 +30,6 @@ public class ReplyController {
 			reply.setSecret("n"); // 체크하지 않으면 secret 칼럼이 'n'으로 설정
 		else
 			reply.setSecret("y"); // 비밀댓글 눌렀을 때 secret 칼럼이 'y'으로 설정
-		// 안눌렀을 때는 null -> secret칼럼이 'n'으로 설정
 		result = rs.insert(reply);
 		model.addAttribute("reply", reply);
 		model.addAttribute("result", result);
@@ -43,15 +42,16 @@ public class ReplyController {
 		Reply reply = rs.select(re_no);
 		model.addAttribute("reply", reply);
 		model.addAttribute("pageNum", pageNum);
-		System.out.println("reply.getSecret()1 :" + reply.getSecret());
 		return "reply/replyUpdateForm";
 	}
 
 	@RequestMapping ("replyUpdate")
 	public String replyUpdate (Reply reply, String pageNum, Model model) {
 		int result=0; // 댓글 수정 실패			
-		
-		System.out.println("reply.getSecret()2:" + reply.getSecret());
+		if (reply.getSecret() == null || reply.getSecret().equals("null"))
+			reply.setSecret("n"); // 체크하지 않으면 secret 칼럼이 'n'으로 설정
+		else
+			reply.setSecret("y"); // 비밀댓글 눌렀을 때 secret 칼럼이 'y'으로 설정
 		result = rs.update(reply);
 		model.addAttribute("reply",reply);
 		model.addAttribute("result",result);

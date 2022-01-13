@@ -13,10 +13,11 @@
 
 		<div>
 			<!-- b_no는 현재게시글 번호 m_id는 세션아이디값 -->
-			<form action="replyUpdate.do?re_no=${reply.re_no }" class="align-center">
+			<form action="replyUpdate.do" class="align-center">
 				<div class="col-md-2 pd-0 j-center">
-					<input type="hidden" name="b_no" value="${reply.b_no }"> <input
-						type="hidden" name="m_id" value="${reply.m_id }">
+					<input type="hidden" name="re_no" value="${reply.re_no }"> 
+					<input type="hidden" name="b_no" value="${reply.b_no }"> 
+					<input type="hidden" name="m_id" value="${reply.m_id }">
 					<h4> ${reply.nickname }</h4>
 				</div>
 				<div class="col-md-10 list">
@@ -69,7 +70,6 @@
 		var secret = '${reply.secret}',
 		checked = document.querySelector('input[name="secret"]').checked, 
 		msg = document.querySelector('#secretMsg');
-		alert(secret);
 		if(secret == 'y') {
 			msg.innerHTML =  '<i class="fas fa-lock mg-r-5"></i>비밀댓글입니다.'
 			checked = true;
@@ -77,7 +77,6 @@
 		
 		document.querySelector('#secret').onclick = function() {
 			checked = document.querySelector('input[name="secret"]').checked;
-				alert(checked);
 			if (checked) {
 				msg.innerHTML = '<i class="fas fa-lock-open mg-r-5"></i>공개댓글입니다.';
 			} else {
