@@ -1,0 +1,16 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/url.jsp" %>
+<div class="align-end head">
+	<div class="col-md-7">
+		<img id="logo" alt="" src="${logo}" height="100">
+	</div>
+
+	<div class="j-end align-end f-1" style="margin-bottom: 15px;">
+		<div class="pd-3">
+			<a href="${_member}/loginForm.do" class="btn btn-link"><b>공지사항</b></a>				
+			<a href="${_member}/loginForm.do" class="btn btn-primary">로그인</a>				
+			<a href="${_member}/joinForm.do" class="btn btn-default">회원가입</a>
+		</div>
+	</div>
+</div>

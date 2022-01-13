@@ -152,7 +152,7 @@
 				$('[name="m_count"]').popover({
 					html: true,
 					content: '모집인원은 <b>2명 이상</b>이어야합니다.',
-					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="white-space: nowrap;"></div></div>'
+					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>'
 				});
 				$('[name="m_count"]').popover('show');
 				$('[name="m_count"]').focus();
@@ -164,13 +164,13 @@
 			
 			var address = $('[name="address"]');
 			
-			if(address.val() == '') {
+			if(!address) {
 				event.preventDefault();
 				
 				$('#placeSearch').popover({
 					html: true,
 					content: '모집 기준이 될 장소를 정해주세요.',
-					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="white-space: nowrap;"></div></div>'
+					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>'
 				});
 				
 				$('#placeSearch').popover('show');

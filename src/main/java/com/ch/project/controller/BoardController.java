@@ -2,15 +2,12 @@ package com.ch.project.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ch.project.model.Board;
 import com.ch.project.model.Category;
@@ -45,8 +42,10 @@ public class BoardController {
 		return "board/placeSearch";
 	}
 	@RequestMapping("/detail")
-	public String detail(Model model) {
-		Board board = bs.getBoard(2);
+	public String detail(Integer b_no, Model model) {
+		
+		Board board = bs.getBoard(b_no);
+		
 		String address = board.getAddress();
 		String place = address.substring(0, address.lastIndexOf("("));
 		address = address.substring(address.lastIndexOf("(") + 1, address.lastIndexOf(")"));
@@ -64,10 +63,7 @@ public class BoardController {
 	public String parti() {
 		return "board/fragment/parti";
 	}
-	@RequestMapping("/reply")
-	public String reply() {
-		return "board/fragment/reply";
-	}
+	
 	@RequestMapping("/insert")
 	public String insert(Board board) {
 		//현재 게시글 개수 구해서 다음 게시글의 글 번호 설정
@@ -77,6 +73,13 @@ public class BoardController {
 		//게시글 DB에 넣기
 		int result = bs.insertBoard(board);
 		System.out.println(result);
-		return "home";
+		return "redirect:/board/detail.do?b_no="+board.getB_no();
+	}
+	
+	@RequestMapping("/search")
+	public String search(Board board, String keyword, Model model) {
+		System.out.println(board);
+		System.out.println(keyword);
+		return "board/searchList";
 	}
 }

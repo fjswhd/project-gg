@@ -194,3 +194,22 @@
 .popover-content {
 	white-space: nowrap;
 }
+.popper {
+	animation: fadeout 5s 1;
+}
+@keyframes fadeout {
+	0%{
+		background-image: url('/project/resources/images/popper.gif');
+		background-size: 100% 40%;
+		background-position: center top;
+		opacity: 0.15;
+		background-repeat: no-repeat;
+	}
+	100% {	
+		background-image: url('/project/resources/images/popper.gif');
+		background-size: 100% 40%;
+		background-position: center top;
+		opacity: 0;
+		background-repeat: no-repeat;
+	}
+}

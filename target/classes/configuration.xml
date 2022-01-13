@@ -5,8 +5,12 @@
 	<typeAliases>
 		<typeAlias alias="board" type="com.ch.project.model.Board" />
 		<typeAlias alias="category" type="com.ch.project.model.Category" />
+		<typeAlias alias="reply" type="com.ch.project.model.Reply" />
+		<typeAlias alias="member" type="com.ch.project.model.Member" />
 	</typeAliases>
 	<mappers>
 		<mapper resource="board.xml" />
+		<mapper resource="reply.xml" />
+		<mapper resource="member.xml" />
 	</mappers>
 </configuration>

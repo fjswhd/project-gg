@@ -29,7 +29,7 @@
 			<!-- 제목, 닉네임, 등록일, 조회수-->
 			<div class="align-center j-between shadow-bottom" style="height: 10%; padding: 10px;">
 				<span class="h3">
-					[${board.c_no}] ${board.subject} <small>${board.m_id} | ${board.reg_date} | 조회 : ${board.readcount }</small>
+					[${board.category.c_name}] ${board.subject} <small>${board.m_id} | ${board.reg_date} | 조회 : ${board.readcount }</small>
 				</span>
 				<span>
 					<button class="btn btn-primary btn-sm">참가 신청</button>
@@ -85,7 +85,7 @@
 		
 		$('#request').load('${_board}/request.do');
 		$('#parti').load('${_board}/parti.do');
-		$('#reply').load('${_board}/reply.do');
+		$('#reply').load('${_reply}/list.do?', 'b_no=${board.b_no}');
 		
 		var geocoder = new kakao.maps.services.Geocoder(),
 		address = '${address}';

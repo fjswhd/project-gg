@@ -10,8 +10,11 @@
 		SELECT COUNT(b_no) FROM BOARD
 	</select>
 	
-	<select id="selectBoard" parameterType="int" resultType="board">
-		SELECT * FROM BOARD WHERE b_no = #{b_no}
+	<select id="selectBoard" parameterType="int" resultMap="boardResultMap">
+		SELECT b.*, c.* 
+		FROM BOARD b, CATEGORY c 
+		WHERE b.c_no = c.c_no 
+		AND b.b_no = #{b_no}
 	</select>
 	
 	<!-- 번호, 작성자아이디, 카테고리 번호, 제목, 시작일, 종료일, 주소, 내용, 멤버 수, 조회수, 작성일, 모집종료여부, 삭제 -->
@@ -20,5 +23,27 @@
 		VALUES ( #{b_no}, #{m_id}, #{c_no}, #{subject}, #{s_date}, #{e_date}, #{address}, #{content}, #{m_count}, #{readcount}, sysdate, 'n', 'n')
 	</insert>
 	
+	<!-- join을 위한 resultMap -->
+	<resultMap type="board" id="boardResultMap">
+		<id 	column="b_no" 		property="b_no" />
+		<result column="m_id" 		property="m_id" />
+		<result column="c_no" 		property="c_no" />
+		<result column="subject" 	property="subject" />
+		<result column="s_date" 	property="s_date" />
+		<result column="e_date" 	property="e_date" />
+		<result column="address" 	property="address" />
+		<result column="content" 	property="content" />
+		<result column="m_count" 	property="m_count" />
+		<result column="readcount" 	property="readcount" />
+		<result column="reg_date" 	property="reg_date" />
+		<result column="end"		property="end" />
+		<result column="del" 		property="del" />
+		<association property="category" javaType="category" resultMap="categoryResultMap" />
+	</resultMap>
+	
+	<resultMap type="category" id="categoryResultMap">
+		<id 	column="c_no" 	property="c_no" />
+		<result	column="c_name" property="c_name" />
+	</resultMap>
 	
 </mapper>

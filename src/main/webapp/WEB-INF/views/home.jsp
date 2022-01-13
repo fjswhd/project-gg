@@ -6,24 +6,46 @@
 <head>
     <meta charset="UTF-8">
     <title>같이 가치</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<style type="text/css">
+		.ui-menu-item {
+			border-bottom: 1px solid gray;
+			padding: 10px;
+		}
+		.ui-menu-item:last-of-type {
+			border-bottom: none;
+		}
+		.ui-menu-item:hover {
+			background-color: #f0f0f0;
+			font-weight: bold;
+			text-decoration: underline;
+		}
+		.ui-state-active {
+			background: inherit !important;
+			border: none !important;
+			font-weight: inherit !important;
+			text-decoration: inherit;
+			margin: 0 !important;
+		}
+		.ui-autocomplete {
+			max-height: 300px;
+			overflow-y: auto;
+			/* prevent horizontal scrollbar */
+			overflow-x: hidden;
+		}
+	</style>
 </head>
 <body>
 
-	<div class="container flex-column" style="">
+	<div class="container flex-column">
 		<!-- head -->
-		<div class="align-end head">
-			<div class="col-md-7">
-				<img id="logo" alt="" src="${logo}" height="100">
-			</div>
-		
-			<div class="j-end align-end f-1" style="margin-bottom: 15px;">
-				<div class="pd-3">
-					<a href="${_}/loginForm.do" class="btn btn-link"><b>공지사항</b></a>				
-					<a href="${_}/loginForm.do" class="btn btn-primary">로그인</a>				
-					<a href="${_}/joinForm.do" class="btn btn-default">회원가입</a>
-				</div>
-			</div>
-		</div>
+		<c:if test="${ empty sessionScope.member }">
+			<jsp:include page="/WEB-INF/views/common/header_home.jsp" />		
+		</c:if>
+		<c:if test="${ not empty sessionScope.member }">
+			<jsp:include page="/WEB-INF/views/common/header_loggedIn.jsp" />		
+		</c:if>
 		
 		<!-- body -->
 		<div id="body" style="height: 160%; position:absolute; width: 100%; top: 20%;">
@@ -81,33 +103,35 @@
 			<!-- 하단 -->
 			<div class="flex-column" style="height: 50%;">
 				<!-- 검색 -->
-				<form action="" class="col-md-10 mg-auto">
+				<form action="${_board}/search.do" class="col-md-10 mg-auto" name="frm">
 					<div class="form-group align-center fade-out">
 						<label class="col-md-2">언제 떠나시나요?</label>
 						<span class="col-md-3">
-							<input type="date" name="s_date" class="form-control">
+							<input type="date" name="s_date" class="form-control" min="${today}" max="${lastday}">
 						</span>
+						~
 						<span class="col-md-3">
-							<input type="date" name="e_date" class="form-control" placeholder="언제까지">
+							<input type="date" name="e_date" class="form-control"  min="${today}" max="${lastday}">
 						</span>
 					</div>
 					<div class="form-group align-center fade-out">
 						<label class="col-md-2">어디로 떠나시나요?</label>
 						<span class="col-md-6">
-							<input type="text" class="form-control">										
+							<input type="text" name="address" class="form-control" placeholder="장소를 검색해주세요.">	
 						</span>
 					</div>
 					<div class="form-group align-center fade-out">
 						<label class="col-md-2">무엇을 하실건가요?</label>
 						<span class="col-md-2">
-							<select name="category" class="form-control">
-								<option value="10">여행</option>
-								<option value="20">맛집</option>
-								<option value="30">스터디</option>
+							<select name="c_no" class="form-control" required="required">
+								<option value="">카테고리 선택</option>
+								<c:forEach var="category" items="${categoryList}">
+									<option value="${category.c_no}">${category.c_name}</option>
+								</c:forEach>
 							</select>				
 						</span>
 						<span class="col-md-4">
-							<input type="text" class="form-control">
+							<input type="text" name="keyword" class="form-control">
 						</span>					
 						<button class="btn btn-primary">검색하기</button>
 					</div>
@@ -127,6 +151,7 @@
 	
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
+	<script type="text/javascript" src="${_script}/list.js"></script>
 	<script type="text/javascript">
 		function scrollDown() {
 			$('#body').animate({top: '-60%'}, 800, fadeIn);
@@ -140,6 +165,53 @@
 				}, index*400)
 			});
 		}
+		
+		//end_date 제한
+		document.querySelector('input[name="s_date"]').onchange = function() {
+			var val = document.querySelector('input[name="s_date"]').value;
+			document.querySelector('input[name="e_date"]').setAttribute('min', val);
+			document.querySelector('input[name="e_date"]').value = '';
+		}
+		
+		//엔터키 submit막기
+		frm.addEventListener('keydown', function(e) {
+			if((e.keyCode || e.which) === 13) {
+				e.preventDefault();
+			}
+		})
+		//블러되면 값을 초기화?
+		frm.address.onblur = function() {
+			frm.address.value = '';
+		}
+		
+		frm.address.addEventListener('keyup', function() {
+			$('[name="address"]').autocomplete({  //오토 컴플릿트 시작
+	            source : list
+	            /* function(request, response) {
+	                var results = $.ui.autocomplete.filter(list, request.term);
+	                response(results.slice(0, 5));
+	            } */,    // source 는 자동 완성 대상
+	            select : function(event, ui) {    //아이템 선택시
+					frm.address.blur();
+	           		frm.address.value = ui.item.value;
+	            },
+	            open : function(event, ui) {
+	            	$(this).autocomplete('widget')
+	            		.css('box-shadow', '0 0 4px #808080')
+	            		.css('border-radius', '5px')
+	            },
+	            focus : function(event, ui) {    //포커스 가면
+	            	return false;
+	            },
+	            classes : {
+	            	"ui-autocomplete": "scroll"
+	            },
+	            minLength: 1,// 최소 글자수
+	            autoFocus: false, //첫번째 항목 자동 포커스 기본값 false
+	            delay: 500,    //검색창에 글자 써지고 나서 autocomplete 창 뜰 때 까지 딜레이 시간(ms)
+	            position: { my : "right top", at: "right bottom" }    
+	        });
+		})
 	</script>
 </body>
 </html>

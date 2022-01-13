@@ -10,7 +10,7 @@
 	<div class="panel-collapse collapse" id="collapseReq">
 		<ul class="list-group">
 			<li class="list-group-item">
-				<a href="#" title="프로필 확인">신청자 1</a>님이 <strong>참가를 신청</strong>하셨습니다.
+				<a href="#" title="프로필 확인">신청자 1</a>님이 <strong class="text-success">참가를 신청</strong>하셨습니다.
 				<a href="#" class="text-success cursor-no-line" title="신청 수락">
 					<i class="fas fa-check-circle"></i>																		
 				</a>

@@ -17,6 +17,8 @@
 <c:url value="/resources/script/script.js" 	var="script" />
 
 <c:url value="/board" 				var="_board" />
+<c:url value="/member" 				var="_member" />
+<c:url value="/reply" 				var="_reply" />
 
 <c:set var="_" value="<%= pageContext.getServletContext().getContextPath() %>" />
 

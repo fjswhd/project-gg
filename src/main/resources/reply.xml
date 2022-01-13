@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="replyns">
+	<select id="selectReplyList" parameterType="int" resultMap="replyResultMap">
+		SELECT re.*, b.*
+		FROM REPLY re, BOARD b
+		WHERE re.b_no = #{b_no}
+		AND re.b_no = b.b_no
+	</select>
+	
+	
+	
+	<!-- join을 위한 resultMap -->
+	<resultMap type="reply" id="replyResultMap">
+		<id	column="re_no"			property="re_no" />
+		<result	column="b_no"		property="b_no" />
+		<result	column="m_id"		property="m_id" />
+		<result	column="content"	property="content" />
+		<result	column="re_ref"		property="re_ref" />
+		<result	column="re_step"	property="re_step" />
+		<result	column="reg_date"	property="reg_date" />
+		<result	column="secret"		property="secret" />
+		<result	column="del"		property="del" />
+		<association property="board" javaType="board" resultMap="boardResultMap" />
+	</resultMap>
+	
+	<resultMap type="board" id="boardResultMap">
+		<id column="b_no" 			property="b_no" />
+		<result column="m_id" 		property="m_id" />
+	</resultMap>
+	
+</mapper>
