@@ -5,6 +5,8 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import com.ch.project.model.Board;
 import com.ch.project.model.Reply;
 
 
@@ -13,8 +15,11 @@ public class ReplyDaoImpl implements ReplyDao{
 	@Autowired
 	private SqlSessionTemplate sst;
 	
-	public List<Reply> rpList(int b_no) {
-		return sst.selectList("replyns.rpList",b_no);
+	public List<Reply> rpList(Reply reply) {
+		return sst.selectList("replyns.rpList",reply);
+	}
+	public int getTotal(Reply reply) {
+		return sst.selectOne("replyns.getTotal",reply);
 	}
 	public int maxNo() {
 		return sst.selectOne("replyns.maxNo");

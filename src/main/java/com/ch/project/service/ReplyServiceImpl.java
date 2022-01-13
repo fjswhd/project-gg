@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ch.project.dao.ReplyDao;
+import com.ch.project.model.Board;
 import com.ch.project.model.Reply;
 
 @Service
@@ -11,9 +12,12 @@ public class ReplyServiceImpl implements ReplyService{
 	@Autowired
 	private ReplyDao rd;
 
-	public List<Reply> rpList(int b_no) {
-		return rd.rpList(b_no);
+	public List<Reply> rpList(Reply reply) {
+		return rd.rpList(reply);
 	} 
+	public int getTotal(Reply reply) {
+		return rd.getTotal(reply);
+	}
 	public int maxNo() {
 		return rd.maxNo();
 	}

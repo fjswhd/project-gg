@@ -1,12 +1,18 @@
 package com.ch.project.controller;
 
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import com.ch.project.model.Board;
 import com.ch.project.model.Reply;
+import com.ch.project.service.PagingBean;
 import com.ch.project.service.ReplyService;
+
 
 @Controller
 public class ReplyController {
@@ -14,9 +20,19 @@ public class ReplyController {
 	private ReplyService rs;
 
 	@RequestMapping("replyList")
-	public String replyList(int b_no, Model model) {
-		List<Reply> rpList = rs.rpList(b_no);
-		model.addAttribute("b_no", b_no);
+	public String replyList(Reply reply, String pageNum, Model model,HttpSession session) {
+		List<Reply> rpList = rs.rpList(reply);
+		// 페이징
+			if (pageNum == null || pageNum.equals("")) {
+				pageNum = "1";
+			}
+			int currentPage = Integer.parseInt(pageNum);
+			int rowPerPage = 10; // 한 화면에 보이는 게시글 수
+			int total = rs.getTotal(reply);
+			int startRow = (currentPage - 1) * rowPerPage + 1;
+			int endRow = startRow + rowPerPage - 1;
+		PagingBean pb = new PagingBean(currentPage, rowPerPage, total);
+		model.addAttribute("reply", reply);
 		model.addAttribute("rpList", rpList);
 		return "reply/replyList";
 	}
