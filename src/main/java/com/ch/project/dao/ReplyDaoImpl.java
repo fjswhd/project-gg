@@ -36,5 +36,8 @@ public class ReplyDaoImpl implements ReplyDao{
 	public int delete(int re_no) {
 		return sst.update("replyns.delete",re_no);
 	}
+	public void autoInsert(Reply reply) {
+		sst.insert("replyns.autoInsert",reply);
+	}
 		
 }

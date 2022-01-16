@@ -15,6 +15,7 @@ public interface ReplyService {
 	Reply select(int re_no);				// 댓글 수정 폼
 	int update(Reply reply);				// 댓글 수정
 	int delete(int re_no);					// 댓글 삭제
+	void autoInsert(Reply reply);			// 댓글 삽입
 	
 	
 	

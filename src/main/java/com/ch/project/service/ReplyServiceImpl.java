@@ -33,6 +33,9 @@ public class ReplyServiceImpl implements ReplyService{
 	public int delete(int re_no) {
 		return rd.delete(re_no);
 	}
+	public void autoInsert(Reply reply) {
+		rd.autoInsert(reply);
+	}
 	
 	
 }

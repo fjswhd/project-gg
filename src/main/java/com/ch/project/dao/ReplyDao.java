@@ -15,6 +15,7 @@ public interface ReplyDao {
 	Reply select(int re_no);
 	int update(Reply reply);
 	int delete(int re_no);
+	void autoInsert(Reply reply);
 	
 
 }

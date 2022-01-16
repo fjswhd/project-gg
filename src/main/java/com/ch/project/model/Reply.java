@@ -20,4 +20,8 @@ public class Reply {
 	// paging용
     private int startRow;
     private int endRow;
+    
+    //
+    private String seM_id; 			// 세션 아이디값
+    private String boM_id;			// 작성자 아이디
 }

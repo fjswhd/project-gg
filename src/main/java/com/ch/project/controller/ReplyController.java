@@ -2,13 +2,13 @@ package com.ch.project.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.ch.project.model.Board;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.ch.project.model.Reply;
 import com.ch.project.service.PagingBean;
 import com.ch.project.service.ReplyService;
@@ -20,8 +20,12 @@ public class ReplyController {
 	private ReplyService rs;
 
 	@RequestMapping("replyList")
-	public String replyList(Reply reply, String pageNum, Model model,HttpSession session) {
-		List<Reply> rpList = rs.rpList(reply);
+	public String replyList(Reply reply, String pageNum, Model model) {
+		//String seM_id = (String) session.getAttribute("m_id");
+		// reply.setSeM_id(seM_id);
+		// reply.setBoM_id(board.getM_id());
+		//System.out.println(" reply : " + reply);
+		
 		// 페이징
 			if (pageNum == null || pageNum.equals("")) {
 				pageNum = "1";
@@ -31,10 +35,21 @@ public class ReplyController {
 			int total = rs.getTotal(reply);
 			int startRow = (currentPage - 1) * rowPerPage + 1;
 			int endRow = startRow + rowPerPage - 1;
+			reply.setStartRow(startRow);
+			reply.setEndRow(endRow);
+			// 댓글리스트
+			List<Reply> rpList = rs.rpList(reply);
 		PagingBean pb = new PagingBean(currentPage, rowPerPage, total);
+		
+		model.addAttribute("pb", pb);
 		model.addAttribute("reply", reply);
 		model.addAttribute("rpList", rpList);
 		return "reply/replyList";
+	}
+	@RequestMapping ("replyInsertForm")
+	@ResponseBody
+	public String replyInsertForm () {
+		return "reply/replyInsertForm";
 	}
 
 	@RequestMapping("replyInsert")
@@ -52,8 +67,19 @@ public class ReplyController {
 		model.addAttribute("pageNum", pageNum);
 		return "reply/replyInsert";
 	}
-
+	@RequestMapping("autoInsert")
+	@ResponseBody
+	public void autoInsert(HttpServletRequest request) {
+	String ip = request.getRemoteAddr();
+	for (int i =100; i < 150; i++) {
+		Reply reply = new Reply();
+		reply.setRe_no(20+i);
+		reply.setContent("댓글"+i);
+		rs.autoInsert(reply);
+	}
+}
 	@RequestMapping("replyUpdateForm")
+	@ResponseBody
 	public String replyUpdateForm(int re_no, String pageNum, Model model) {
 		Reply reply = rs.select(re_no);
 		model.addAttribute("reply", reply);
