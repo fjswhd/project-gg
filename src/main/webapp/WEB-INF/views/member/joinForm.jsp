@@ -16,13 +16,13 @@
 			</div>
 			<div class="align-center" style="margin-bottom: 15px;">
 				<span style="color: gray;"> 이미 가입하셨나요? </span>			
-				<a href="${_}/loginForm" class="btn btn-lg btn-link">로그인하기</a>
+				<a href="${_member}/loginForm.do" class="btn btn-lg btn-link">로그인하기</a>
 			</div>
 		</div>
 		
 		<!-- body -->
 		<div class="col-md-5 mg-auto box">
-			<form action="${_member}/join" method="post" name="frm">
+			<form action="${_member}/join.do" method="post" name="frm">
 				<div class="form-group">
 					<label for="id">이메일을 입력하세요</label>
 					<input type="email" id="m_id" name="m_id" class="form-control" required="required" placeholder="이메일">
@@ -43,10 +43,10 @@
 					<div class="form-group">
 						<label for="email">사용하실 별명을 입력하세요</label>
 						<input type="text" id="nickname" name="nickname" class="form-control" placeholder="별명" required="required">
-						<div class="msg err"></div>
-					</div>
-					<div class="flex" style="justify-content: flex-end;">
-						<button type="submit" class="btn btn-primary" disabled="disabled">가입하기</button>						
+						<div class="j-between">
+							<div class="msg err"></div>
+							<button type="submit" class="btn btn-primary mg-t-5" disabled="disabled">가입하기</button>						
+						</div>
 					</div>
 				</div>
 				

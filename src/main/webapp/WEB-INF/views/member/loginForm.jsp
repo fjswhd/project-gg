@@ -17,7 +17,7 @@
 			</div>
 			<div class="align-center" style="margin-bottom: 15px;">
 				<span style="color: gray;"> 아직 회원이 아니신가요? </span>			
-				<a href="${_}/joinForm" class="btn btn-lg btn-link">가입하기</a>
+				<a href="${_member}/joinForm.do" class="btn btn-lg btn-link">가입하기</a>
 			</div>
 		</div>
 		

@@ -8,33 +8,6 @@
     <title>같이 가치</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-	<style type="text/css">
-		.ui-menu-item {
-			border-bottom: 1px solid gray;
-			padding: 10px;
-		}
-		.ui-menu-item:last-of-type {
-			border-bottom: none;
-		}
-		.ui-menu-item:hover {
-			background-color: #f0f0f0;
-			font-weight: bold;
-			text-decoration: underline;
-		}
-		.ui-state-active {
-			background: inherit !important;
-			border: none !important;
-			font-weight: inherit !important;
-			text-decoration: inherit;
-			margin: 0 !important;
-		}
-		.ui-autocomplete {
-			max-height: 300px;
-			overflow-y: auto;
-			/* prevent horizontal scrollbar */
-			overflow-x: hidden;
-		}
-	</style>
 </head>
 <body>
 
@@ -103,7 +76,8 @@
 			<!-- 하단 -->
 			<div class="flex-column" style="height: 50%;">
 				<!-- 검색 -->
-				<form action="${_board}/search.do" class="col-md-10 mg-auto" name="frm">
+				<form action="${_board}/searchList.do" method="post" class="col-md-10 mg-auto" name="frm">
+					<input type="hidden" name="pageNum" value="1">
 					<div class="form-group align-center fade-out">
 						<label class="col-md-2">언제 떠나시나요?</label>
 						<span class="col-md-3">
@@ -137,13 +111,20 @@
 					</div>
 				</form>
 				
-				<!-- 새글 쓰기 -->
-				<div class="col-md-10 mg-auto">
-					<div class="form-group align-center fade-out">
-						<label class="col-md-4">아니면 새로운 만남을 만들어 볼까요?</label>
-						<a href="${_board}/insertForm" class="btn btn-primary">새 글 쓰기</a>
+				<!-- 새글 쓰기, 로그인해야 글 쓰기 가능 -->
+				
+					<div class="col-md-10 mg-auto">
+						<div class="form-group align-center fade-out">
+							<label class="col-md-4">아니면 새로운 만남을 만들어 볼까요?</label>
+							<c:if test="${empty sessionScope.member}">
+								<a href="${_member}/loginForm.do" class="btn btn-default">로그인</a>
+							</c:if>
+							<c:if test="${not empty sessionScope.member}">
+								<a href="${_board}/insertForm.do" class="btn btn-primary">새 글 쓰기</a>
+							</c:if>
+						</div>
 					</div>
-				</div>
+				
 				
 			</div>
 		</div>

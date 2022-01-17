@@ -29,7 +29,7 @@
 			<!-- 제목, 닉네임, 등록일, 조회수-->
 			<div class="align-center j-between shadow-bottom" style="height: 10%; padding: 10px;">
 				<span class="h3">
-					[${board.category.c_name}] ${board.subject} <small>${board.m_id} | ${board.reg_date} | 조회 : ${board.readcount }</small>
+					[${board.category.c_name}] ${board.subject} <small>${board.member.nickname} | ${board.reg_date} | 조회 : ${board.readcount }</small>
 				</span>
 				<span>
 					<button class="btn btn-primary btn-sm">참가 신청</button>

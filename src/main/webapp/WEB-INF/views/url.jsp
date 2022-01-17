@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<c:url value="/resources/profile"					var="_profile" />
+
 <c:url value="/resources/images"					var="images" />
 <c:url value="/resources/images/logo.jpg" 			var="logo" />
 <c:url value="/resources/images/community.jpg" 		var="community" />

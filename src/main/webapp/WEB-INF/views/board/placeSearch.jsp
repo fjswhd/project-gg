@@ -91,7 +91,7 @@
 		var ps = new kakao.maps.services.Places();
 		
 		// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
-		var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+		var infowindow = new kakao.maps.InfoWindow({zIndex:10});
 		
 		//검색버튼을 누르면 장소 검색
 		document.querySelector('#searchBtn').addEventListener('click', searchPlaces);
@@ -177,7 +177,7 @@
 
 		            itemEl.onclick =  function () {
 		            	resetMarkerZIndex();
-		            	marker.setZIndex(10);
+		            	marker.setZIndex(9);
 		            	//map.setLevel(4);
 		            	panToMarker(marker);
 		                displayInfowindow(marker, title);
@@ -267,7 +267,7 @@
 					
 		            itemEl.onclick =  function () {
 		            	resetMarkerZIndex();
-		            	marker.setZIndex(10);
+		            	marker.setZIndex(9);
 		            	//map.setLevel(4);
 		            	panToMarker(marker);
 		                displayInfowindow(marker, title);
@@ -351,7 +351,7 @@
 		            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
 		        },
 		        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
-		            marker = new kakao.maps.Marker({
+				marker = new kakao.maps.Marker({
 		            position: position, // 마커의 위치
 		            image: markerImage 
 		        });
@@ -417,7 +417,7 @@
 		// 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
 		// 인포윈도우에 장소명을 표시합니다
 		function displayInfowindow(marker, title) {
-		    var content = '<div style="padding:5px;z-index:10; width: 100px; height: 100px;">' + title + '</div>';
+		    var content = '<div style="padding:5px; z-index:10; width:100px; height:100px;">' + title + '</div>';
 
 		    infowindow.setContent(content);
 		    infowindow.open(map, marker);

@@ -215,7 +215,7 @@ public class MemberController {
 	@RequestMapping("logout")
 	public String logout(HttpSession session) {
 		session.invalidate();
-		return "member/logout";
+		return "redirect:/home.do";
 	}
 	
 	
@@ -275,85 +275,85 @@ public class MemberController {
 	}
 	
 	// 마이페이지 메인으로 이동
-		@RequestMapping("myMain")
-		public String myMain(Model model, HttpSession session) {
-			String m_id = (String)session.getAttribute("m_id");
-			Member member = ms.select(m_id);
-			model.addAttribute("member", member);
-			return "myPage/myMain";
-		}
-		
-			// 프로필 상세보기
-			@RequestMapping("profileView")
-			public String profileView(String nickname, HttpSession session, Model model) {
-				int result = 0; 
-				Member member = ms.selectNick(nickname); // 선택한 계정의 정보를 가져옴
-				if (member.getDel() == "y") { // 회원 탈퇴 처리 되어있는지 확인
-					result = 0; // 회원 탈퇴 처리가 되어있음
-				} else {
-					result = 1; // 회원 탈퇴 처리가 안되있을 경우
-				model.addAttribute("result", result); // 회원 탈퇴 여부 확인
-				model.addAttribute("member", member); // 프로필에서 회원정보 입력하기 위해서
-				return "myPage/profileView";
-			}
-		}
-			// 마이페이지 회원정보 수정폼으로 이동
-			@RequestMapping("updateForm")
-			public String updateForm(Model model, HttpSession session) {
-				String m_id = (String)session.getAttribute("m_id");
-				Member member = ms.select(m_id);
-				model.addAttribute("member", member);
-				return "myPage/updateForm";
-			}
-			
-			// 마이페이지 회원정보 수정
-			@RequestMapping("updateResult")
-			public String updateResult(Member member, Model model, HttpSession session) throws IOException {
-				// 사진을 리소스 폴더에 저장하기 위한 로직
-				String fileName1 = member.getFile().getOriginalFilename();
-				if (fileName1 != null && !fileName1.equals("")) {
-					UUID uuid = UUID.randomUUID(); // 파일이름이 겹치지 않게 하기 위함
-					String fileName = uuid+"_"+fileName1;
-					// 파일을 리소스 폴더에 저장
-					String real = session.getServletContext().getRealPath("/resources/memberImg");
-					FileOutputStream fos = new FileOutputStream(new File(real+"/"+fileName));
-					fos.write(member.getFile().getBytes());
-					fos.close();
-					// 정보를 수정
-					member.setM_img(fileName);
-				}	
-				
-				int result = ms.update(member);
-				
-				model.addAttribute("result", result);
-				return "myPage/updateResult";
-			}
-			
-			// 비밀번호 변경 폼으로 이동
-			@RequestMapping("updatePw")
-			public String updatePw(Model model, HttpSession session) {
-				String m_id = (String)session.getAttribute("m_id");
-				Member member = ms.select(m_id);
-				model.addAttribute("member", member);
-				return "myPage/updatePw";
-			}
-			
-			// 비밀번호 변경
-			@RequestMapping("updatePwResult")
-			public String updatePwResult(Member member, Model model) {
-				int result = ms.updatePw(member);
-				model.addAttribute("result", result);
-				return "myPage/updatePwResult";
-			}
+	@RequestMapping("myMain")
+	public String myMain(Model model, HttpSession session) {
+		String m_id = (String)session.getAttribute("m_id");
+		Member member = ms.select(m_id);
+		model.addAttribute("member", member);
+		return "myPage/myMain";
+	}
 	
-			// 마이페이지 회원 탈퇴
-			@RequestMapping("delete")
-			public String delete(HttpSession session, Model model) {
-				String m_id=(String)session.getAttribute("m_id");
-				int result=ms.delete(m_id);
-				if (result>0) session.invalidate();
-				model.addAttribute("result", result);
-				return "myPage/delete";
-			}
+	// 프로필 상세보기
+	@RequestMapping("profileView")
+	public String profileView(String nickname, HttpSession session, Model model) {
+		int result = 0; 
+		Member member = ms.selectNick(nickname); // 선택한 계정의 정보를 가져옴
+		if (member.getDel() == "y") { // 회원 탈퇴 처리 되어있는지 확인
+			result = 0; // 회원 탈퇴 처리가 되어있음
+		} else {
+			result = 1; // 회원 탈퇴 처리가 안되있을 경우
+		model.addAttribute("result", result); // 회원 탈퇴 여부 확인
+		model.addAttribute("member", member); // 프로필에서 회원정보 입력하기 위해서
+		return "myPage/profileView";
+		}
+	}
+	// 마이페이지 회원정보 수정폼으로 이동
+	@RequestMapping("updateForm")
+	public String updateForm(Model model, HttpSession session) {
+		String m_id = (String)session.getAttribute("m_id");
+		Member member = ms.select(m_id);
+		model.addAttribute("member", member);
+		return "myPage/updateForm";
+	}
+		
+	// 마이페이지 회원정보 수정
+	@RequestMapping("updateResult")
+	public String updateResult(Member member, Model model, HttpSession session) throws IOException {
+		// 사진을 리소스 폴더에 저장하기 위한 로직
+		String fileName1 = member.getFile().getOriginalFilename();
+		if (fileName1 != null && !fileName1.equals("")) {
+			UUID uuid = UUID.randomUUID(); // 파일이름이 겹치지 않게 하기 위함
+			String fileName = uuid+"_"+fileName1;
+			// 파일을 리소스 폴더에 저장
+			String real = session.getServletContext().getRealPath("/resources/memberImg");
+			FileOutputStream fos = new FileOutputStream(new File(real+"/"+fileName));
+			fos.write(member.getFile().getBytes());
+			fos.close();
+			// 정보를 수정
+			member.setM_img(fileName);
+		}	
+		
+		int result = ms.update(member);
+		
+		model.addAttribute("result", result);
+		return "myPage/updateResult";
+	}
+		
+	// 비밀번호 변경 폼으로 이동
+	@RequestMapping("updatePw")
+	public String updatePw(Model model, HttpSession session) {
+		String m_id = (String)session.getAttribute("m_id");
+		Member member = ms.select(m_id);
+		model.addAttribute("member", member);
+		return "myPage/updatePw";
+	}
+	
+	// 비밀번호 변경
+	@RequestMapping("updatePwResult")
+	public String updatePwResult(Member member, Model model) {
+		int result = ms.updatePw(member);
+		model.addAttribute("result", result);
+		return "myPage/updatePwResult";
+	}
+
+	// 마이페이지 회원 탈퇴
+	@RequestMapping("delete")
+	public String delete(HttpSession session, Model model) {
+		String m_id=(String)session.getAttribute("m_id");
+		int result=ms.delete(m_id);
+		if (result>0) session.invalidate();
+		model.addAttribute("result", result);
+		return "myPage/delete";
+	}
 }
 	

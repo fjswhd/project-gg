@@ -20,5 +20,6 @@ public class Board {
 	private String	end;
 	private String	del;
 	
-	private Category category;
+	private Category 	category;
+	private Member		member;
 }

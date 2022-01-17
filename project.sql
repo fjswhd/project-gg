@@ -13,9 +13,14 @@ create table member (
 	del			char(1)			default 'n' 	not null
 )
 
-
+select * from BOARD
+delete from board where b_no > 5
+update BOARD set content = '<h2>Hello World!</h2><p>안녕하세요! 저는 이대에서 국비지원 교육을 받고 있는 학생입니다.</p><p>이번 1월 말에 수료를 앞두고 있고 2월부터 본격적으로 취업을 위한 코딩테스트 준비를 생각 중입니다.</p><p>2월뿐 아니라 취업 전까지는 꾸준히 이어갈 생각입니다!</p><ul><li><p>자바, 스프링 우대</p></li><li><p>파이썬 환영</p></li><li><p>자바스크립트도 환영!</p></li></ul><p>관심있으신 분들은 어려워 마시고 댓글 남겨주세요!</p><p><br></p><p><a href="http://www.choongang.co.kr">중앙정보처리학원</a></p>' where b_no = 3;
+update board set content = '<h3>놀러 가실 분!</h3><div contenteditable=\"false\"><hr></div><p>맛집 위주로 갈 겁니다!</p><p><a href=\"http://bootstrapk.com/\">놀러가자!</a></p>' where b_no = 4;
 select * from member
 delete from member where m_id = 'ejm4000@naver.com'
+delete from member where m_id = 'fjswhd93@naver.com'
+delete from member where m_id = 'fjswhd93@gmail.com'
 delete from member where m_id = '123'
 
 insert into MEMBER (m_id, password)
@@ -126,3 +131,22 @@ insert into reply values ('3', '1', 'dlwhdals', '안녕하세요.3', 0, 0, sysda
 insert into reply values ('4', '1', 'dlwhdals', '안녕하세요.3', 0, 0, sysdate, 'n', 'y')
 
 SELECT re.*, b.*   FROM REPLY re, BOARD b   WHERE b_no = '1'   AND re.b_no = b.b_no
+
+select a2.*
+from (
+	select rownum rn, a1.*
+	from (
+		select b.*, c.c_name, m.nickname
+		from board b, CATEGORY c, MEMBER m
+		where b.c_no = c.c_no
+		and b.m_id = m.m_id
+		order by b_no desc
+	) a1
+) a2
+where rn between '1' and '10'
+
+		and s_date <= to_date('2022-02-01', 'yyyy-mm-dd')
+		and to_date('2022-02-01', 'yyyy-mm-dd') <= e_date
+		and b.c_no = '40'
+		and address like '%'||'서울'||'%'
+		and (subject like '%'||'코딩'||'%' or content like '%'||'코딩'||'%')

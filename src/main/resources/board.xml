@@ -11,9 +11,10 @@
 	</select>
 	
 	<select id="selectBoard" parameterType="int" resultMap="boardResultMap">
-		SELECT b.*, c.* 
-		FROM BOARD b, CATEGORY c 
+		SELECT b.*, c.* , m.m_id, m.nickname
+		FROM BOARD b, CATEGORY c, MEMBER m 
 		WHERE b.c_no = c.c_no 
+		AND b.m_id = m.m_id
 		AND b.b_no = #{b_no}
 	</select>
 	
@@ -22,6 +23,62 @@
 		INSERT INTO BOARD
 		VALUES ( #{b_no}, #{m_id}, #{c_no}, #{subject}, #{s_date}, #{e_date}, #{address}, #{content}, #{m_count}, #{readcount}, sysdate, 'n', 'n')
 	</insert>
+	
+	<!-- 게시글 검색 -->
+	<select id="searchBoard" parameterType="map" resultMap="boardResultMap">
+		SELECT a2.*
+		FROM (
+			SELECT ROWNUM rn, a1.*
+			FROM (
+				SELECT b.*, c.c_name, m.nickname
+				FROM BOARD b, CATEGORY c, MEMBER m
+				WHERE b.c_no = c.c_no
+				AND b.m_id = m.m_id
+				AND b.del = 'n'			<!-- 삭제되지 않은 게시글 -->
+				<if test="s_date != null and s_date != ''">
+					AND s_date &lt;= TO_DATE(#{s_date}, 'yyyy-mm-dd')
+				</if>
+				<if test="e_date != null and e_date != ''">
+					AND TO_DATE(#{e_date}, 'yyyy-mm-dd') &lt;= e_date
+				</if>
+				<if test="c_no != null and c_no != ''">
+					AND b.c_no = #{c_no}
+				</if>
+				<if test="address != null and address != ''">
+					AND address like '%'||#{address}||'%'
+				</if>
+				<if test="keyword != null and keyword != ''">
+					AND (subject like '%'||#{keyword}||'%' or content like '%'||#{keyword}||'%')
+				</if>
+				ORDER BY b_no DESC
+			) a1
+		) a2
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<!-- 검색된 게시글 개수 -->
+	<select id="selectSearchBoardCount" parameterType="map" resultType="int">
+		SELECT COUNT(b.b_no)
+		FROM BOARD b
+		WHERE b.del = 'n'
+		<if test="c_no != null and c_no != ''">
+			AND b.c_no = #{c_no}
+		</if>
+		<if test="s_date != null and s_date != ''">
+			AND s_date &lt;= TO_DATE(#{s_date}, 'yyyy-mm-dd')
+		</if>
+		<if test="e_date != null and e_date != ''">
+			AND TO_DATE(#{e_date}, 'yyyy-mm-dd') &lt;= e_date
+		</if>
+		<if test="address != null and address != ''">
+			AND address like '%'||#{address}||'%'
+		</if>
+		<if test="keyword != null and keyword != ''">
+			AND (subject like '%'||#{keyword}||'%' or content like '%'||#{keyword}||'%')
+		</if>
+		
+	</select>
+	
 	
 	<!-- join을 위한 resultMap -->
 	<resultMap type="board" id="boardResultMap">
@@ -38,12 +95,16 @@
 		<result column="reg_date" 	property="reg_date" />
 		<result column="end"		property="end" />
 		<result column="del" 		property="del" />
-		<association property="category" javaType="category" resultMap="categoryResultMap" />
+		<association property="category"	javaType="category" resultMap="categoryResultMap" />
+		<association property="member" 		javaType="member" 	resultMap="memberResultMap" />
 	</resultMap>
-	
 	<resultMap type="category" id="categoryResultMap">
-		<id 	column="c_no" 	property="c_no" />
-		<result	column="c_name" property="c_name" />
+		<id 	column="c_no" 		property="c_no" />
+		<result	column="c_name" 	property="c_name" />
+	</resultMap>
+	<resultMap type="member" id="memberResultMap">
+		<id 	column="m_id" 		property="m_id" />
+		<result	column="nickname"	property="nickname" />
 	</resultMap>
 	
 </mapper>
