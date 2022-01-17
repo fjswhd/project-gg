@@ -32,7 +32,7 @@
 	
 	<!-- 댓글 수정 -->
 	<update id="update" parameterType="reply">
-		update reply set content=#{content}, secret=#{secret} where re_no=#{re_no}
+		update reply set content=#{content} where re_no=#{re_no}
 	</update>
 	
 	<!-- 댓글 삭제 -->

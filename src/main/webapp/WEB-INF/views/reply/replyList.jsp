@@ -9,23 +9,31 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 	function reDelete(re_no){
-		var sendData = 're_no'+re_no;
-		$.post('reply/replyDelete.do',sendData);
+		$.post('replyDelete.do',
+			{re_no : re_no},
+			function(data){
+				$('#replyList').html(data);
+			});
 	};
 	function reUpdate(re_no){
 		var txt = $('#ct_'+re_no).text();
 		$('#ct_'+re_no).html("<textarea rows=rows='3'cols='40' id='ru_"+re_no+"'>"+txt+"</textarea>");
 		$('#btn_'+re_no).html("<input type='button' onclick='up("+re_no+")'"+
 				"class='btn btn-warning' value='수정'>"+
-				"<input type='button' onclick='list("+re_no+")'"+
+				"<input type='button' onclick='list()'"+
 				"class='btn btn-danger' value='취소'>");
 	}
-	 function up(re_no){
-		var sendData = "context="+$('#ru_'+re_no).val()+"&re_no="+re_no;
-		$.post('replyUpdate.do',sendData,function(data){
-			alert("성공");
-		});
+	function list(){
+		$('#replyList').history.back();
 	}
+	function up(re_no){
+		var sendData = $('#ru_'+re_no).val();
+		$.post('replyUpdate.do',
+				{context: sendData, re_no : re_no},
+				function(data){
+				$('#replyList').html(data);
+		});
+	};
 
 
 </script>

@@ -90,10 +90,11 @@ public class ReplyController {
 	@RequestMapping ("replyUpdate")
 	public String replyUpdate (Reply reply, String pageNum, Model model) {
 		int result=0; // 댓글 수정 실패			
-		if (reply.getSecret() == null || reply.getSecret().equals("null"))
-			reply.setSecret("n"); // 체크하지 않으면 secret 칼럼이 'n'으로 설정
-		else
-			reply.setSecret("y"); // 비밀댓글 눌렀을 때 secret 칼럼이 'y'으로 설정
+		/*
+		 * if (reply.getSecret() == null || reply.getSecret().equals("null"))
+		 * reply.setSecret("n"); // 체크하지 않으면 secret 칼럼이 'n'으로 설정 else
+		 * reply.setSecret("y"); // 비밀댓글 눌렀을 때 secret 칼럼이 'y'으로 설정
+		 */		
 		result = rs.update(reply);
 		model.addAttribute("reply",reply);
 		model.addAttribute("result",result);
