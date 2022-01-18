@@ -36,6 +36,9 @@ public class ReplyServiceImpl implements ReplyService{
 	public void autoInsert(Reply reply) {
 		rd.autoInsert(reply);
 	}
+	public int maxStep() {
+		return rd.maxStep();
+	}
 	
 	
 }

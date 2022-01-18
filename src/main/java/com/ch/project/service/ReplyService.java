@@ -16,6 +16,7 @@ public interface ReplyService {
 	int update(Reply reply);				// 댓글 수정
 	int delete(int re_no);					// 댓글 삭제
 	void autoInsert(Reply reply);			// 댓글 삽입
+	int maxStep();							// 대댓글 번호
 	
 	
 	

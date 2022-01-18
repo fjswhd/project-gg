@@ -5,8 +5,9 @@
 
 	<!-- 댓글 리스트 -->
 	<select id="rpList" parameterType="reply" resultType ="reply">
-		select * from (select a.*, rowNum rn, nickname from(select * from reply where b_no=#{b_no} and del='n'order by re_no desc)a 
-		,member m where m.m_id = a.m_id) where rn between #{startRow} and #{endRow} 
+		select * from (select a.*, rowNum rn, nickname from(select * from reply where b_no=#{b_no} and del='n'
+		order by re_ref desc,re_step, re_no desc)a , member m where m.m_id = a.m_id) where rn between #{startRow} and #{endRow}
+		 
 	</select>
 	
 	<!-- 댓글 갯수 구하기 -->
@@ -21,8 +22,8 @@
 	   
 	<!-- 댓글 입력 -->
 	<insert id="insert" parameterType="reply">
-		insert into reply values( #{re_no}, 1, 'b',  #{content}, 0, 0, sysdate, #{secret} , 'n' )
-<!-- 원래 써야할 sql		insert into reply values( #{re_no}, #{b_no}, #{m_id}, #{content}, 0, 0, sysdate, #{secret} , 'n' ) -->
+		insert into reply values( #{re_no},  1, 'b', #{content}, #{re_ref}, #{re_step}, sysdate, #{secret} , 'n' )
+<!-- 원래 써야할 sql		insert into reply values( #{re_no}, #{b_no}, #{m_id}, #{content}, #{re_ref}, #{re_step}, sysdate, #{secret} , 'n' ) -->
 	</insert>
 	
 	<!-- 댓글 수정 폼  -->
@@ -42,6 +43,11 @@
 	
 	<!-- 댓글 50개 입력 -->
 	<insert id="autoInsert" parameterType="reply">
-		insert into reply values( #{re_no}, 1, 'e',  #{content}, 0, 0, sysdate, 'n' , 'n' )
+		insert into reply values( #{re_no}, 1, 'b',  #{content}, #{re_no}, 0, sysdate, 'n' , 'n' )
 	</insert>
+	
+	<!-- 대댓글 번호 구하기 -->
+	<select id="maxStep" resultType="integer">
+		select nvl(max(re_step),0) + 1 from reply
+	</select>
 </mapper>

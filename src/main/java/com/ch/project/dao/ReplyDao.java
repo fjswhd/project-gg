@@ -16,6 +16,7 @@ public interface ReplyDao {
 	int update(Reply reply);
 	int delete(int re_no);
 	void autoInsert(Reply reply);
+	int maxStep();
 	
 
 }

@@ -42,6 +42,7 @@ public class ReplyController {
 		PagingBean pb = new PagingBean(currentPage, rowPerPage, total);
 		
 		model.addAttribute("pb", pb);
+		model.addAttribute("pageNum", pageNum);
 		model.addAttribute("reply", reply);
 		model.addAttribute("rpList", rpList);
 		return "reply/replyList";
@@ -57,10 +58,35 @@ public class ReplyController {
 		int result = 0; // 댓글 게시 실패
 		int re_no = rs.maxNo(); // 새 댓글 번호 구하기
 		reply.setRe_no(re_no);
+		reply.setRe_ref(re_no);
 		if (reply.getSecret() == null || reply.getSecret().equals("null"))
 			reply.setSecret("n"); // 체크하지 않으면 secret 칼럼이 'n'으로 설정
 		else
 			reply.setSecret("y"); // 비밀댓글 눌렀을 때 secret 칼럼이 'y'으로 설정
+		
+		reply.setRe_ref(0);
+		reply.setRe_step(0);
+		result = rs.insert(reply);
+		model.addAttribute("reply", reply);
+		model.addAttribute("result", result);
+		model.addAttribute("pageNum", pageNum);
+		return "reply/replyInsert";
+	}
+	//대댓글 작성
+	@RequestMapping("rereInsert")
+	public String rereInsert(Reply reply, String pageNum, Model model) {
+		int result = 0; // 댓글 게시 실패
+		reply.setRe_ref(reply.getRe_no());
+		int re_no = rs.maxNo(); // 새 댓글 번호 구하기
+		reply.setRe_no(re_no);
+		int re_step = rs.maxStep(); // 대 댓글 번호 구하기
+		reply.setRe_step(re_step);
+		System.out.println("reply.setSecret : "+reply.getSecret());
+		if (reply.getSecret() == null || reply.getSecret().equals("null"))
+			reply.setSecret("n"); // 체크하지 않으면 secret 칼럼이 'n'으로 설정
+		else
+			reply.setSecret("y"); // 비밀댓글 눌렀을 때 secret 칼럼이 'y'으로 설정
+		
 		result = rs.insert(reply);
 		model.addAttribute("reply", reply);
 		model.addAttribute("result", result);
@@ -71,9 +97,9 @@ public class ReplyController {
 	@ResponseBody
 	public void autoInsert(HttpServletRequest request) {
 	String ip = request.getRemoteAddr();
-	for (int i =100; i < 150; i++) {
+	for (int i =101; i <= 150; i++) {
 		Reply reply = new Reply();
-		reply.setRe_no(20+i);
+		reply.setRe_no(i);
 		reply.setContent("댓글"+i);
 		rs.autoInsert(reply);
 	}

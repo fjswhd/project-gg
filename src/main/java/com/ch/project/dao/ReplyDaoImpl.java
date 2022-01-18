@@ -39,5 +39,8 @@ public class ReplyDaoImpl implements ReplyDao{
 	public void autoInsert(Reply reply) {
 		sst.insert("replyns.autoInsert",reply);
 	}
+	public int maxStep() {
+		return sst.selectOne("replyns.maxStep");
+	}
 		
 }
