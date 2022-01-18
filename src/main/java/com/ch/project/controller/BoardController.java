@@ -72,6 +72,7 @@ public class BoardController {
 		model.addAttribute("board", board);
 		model.addAttribute("place", place);
 		model.addAttribute("address", address);
+		
 		return "board/detail";
 	}
 	@RequestMapping("/request")

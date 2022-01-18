@@ -4,12 +4,34 @@
 <mapper namespace="partins">
 	<!-- 참여자 리스트 -->
 	<select id="ptList" parameterType="integer" resultType="parti">
-		select m_id from parti where b_no = #{b_no} and cancel='n'and ban='n' order by reg_date 
+		SELECT p.*, m.nickname 
+		FROM parti p, member m
+		WHERE b_no = #{b_no} 
+		AND cancel != 'y'
+		AND ban = 'n' 
+		AND p.m_id = m.m_id
+		ORDER BY p.reg_date DESC
 	</select>
 	
 	<!-- 참여자 중 신청취소한 유저 리스트 -->
 	<select id="ptCancelList" parameterType="integer" resultType="parti">
-		select m_id from parti where b_no = #{b_no} and cancel='w'and ban='n' order by reg_date 
+		SELECT p.*, m.nickname 
+		FROM parti p, member m
+		WHERE b_no = #{b_no} 
+		AND cancel = 'w'
+		AND ban = 'n' 
+		AND p.m_id = m.m_id
+		ORDER BY p.reg_date DESC
+	</select>
+	
+	<!-- 참여자 중 탈퇴하거나 강퇴당한 사람들 -->
+	<select id="banList" parameterType="integer" resultType="parti">
+		SELECT p.*, m.nickname 
+		FROM parti p, member m
+		WHERE b_no = #{b_no} 
+		AND (cancel = 'y' OR ban = 'y')
+		AND p.m_id = m.m_id
+		ORDER BY p.reg_date DESC
 	</select>
 	
 	<!-- 참여 강퇴 -->

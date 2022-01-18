@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ch.project.model.Board;
 import com.ch.project.model.Member;
@@ -32,7 +33,12 @@ public class MyPageController {
 	
 	// 마이페이지 화면으로 이동
 	@RequestMapping("/main")
-	public String myPage(Model model, HttpSession session) {
+	public String myPage(Model model, HttpSession session, RedirectAttributes ra) {
+		if (session.getAttribute("member") == null) {
+			ra.addFlashAttribute("result", 0);
+			return "redirect:error";
+		}
+		
 		Member member = (Member) session.getAttribute("member");
 		
 		//level 구하기

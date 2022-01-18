@@ -29,11 +29,28 @@
 					[${board.category.c_name}] ${board.subject} <small>${board.member.nickname} | ${board.reg_date} | 조회 : ${board.readcount }</small>
 				</span>
 				<span>
+					<!-- 현재 사용자가 로그인했고, 사용자가 보드의 writer는 아닌 경우 -->
 					<c:if test="${not empty sessionScope.member && sessionScope.member.m_id != board.m_id}">
+						<!-- 활동에 참여했다가 강퇴 || 탈퇴한 경우 재참여 불가능 -->
+						
+						<!-- 이미 활동에 참가 신청한 경우 -->
+						<button id="" class="btn btn-primary btn-sm" disabled="disabled">참가 신청</button>
+						
+						<!-- 참여자가 활동 최대 인원인 경우 -->
+						<!-- 모집 종료한 경우 -->
+						
+						<!-- 활동에 참가 신청되있지 않은 경우 -->
 						<button class="btn btn-primary btn-sm" onclick="makeRequest()">참가 신청</button>
 					</c:if>
+					
+					<!-- 모집 종료하지 않은 경우 && 활동 최대 인원을 못 채운 경우 -->
 					<c:if test="${sessionScope.member.m_id == board.m_id}">
 						<button class="btn btn-success btn-sm">모집 종료</button>
+					</c:if>
+					
+					<!-- 모집 종료한 경우 && 활동 최대 인원을 못 채운 경우 -->
+					<c:if test="${sessionScope.member.m_id == board.m_id}">
+						<button class="btn btn-success btn-sm">모집 재개</button>
 					</c:if>
 					<c:if test="${sessionScope.member.m_id == board.m_id}">
 						<a href="${_board}/updateForm.do?b_no=${board.b_no}" class="btn btn-warning btn-sm">수정<i class="fas fa-undo-alt mg-l-5"></i></a>

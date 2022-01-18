@@ -7,8 +7,14 @@
 			신청자 목록<i class="fas fa-caret-down mg-l-5"></i>
 		</a>
 	</div>
-	<div class="panel-collapse collapse" id="collapseReq">
+	<div class="panel-collapse collapse in" id="collapseReq">
 		<ul class="list-group">
+			<c:if test="${empty requestList}">
+				<li class="list-group-item">
+					아직 신청자가 없습니다. 첫 신청자가 되어보세요!
+				</li>
+			</c:if>
+			
 			<c:if test="${not empty requestList}">
 				<c:forEach var="request" items="${requestList}" varStatus="vs">
 					<c:url var="accept" value="/request/requestAccept.do" >

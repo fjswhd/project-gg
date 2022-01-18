@@ -36,7 +36,7 @@
 	
 	<!-- 참여자 리스트에 추가-->
 	<insert id = "insertParti" parameterType="Map">
-		insert into parti values(#{b_no}, #{m_id}, sysdate, 'n', 'n')
+		insert into parti values( #{b_no}, #{m_id}, sysdate, 'n', 'n')
 	</insert>
 	
 	<!-- 참여  신청 거절 -->
