@@ -18,7 +18,7 @@
 		</c:if>
 		
 		<!-- body -->
-		<div class="col-md-9 mg-auto box flex" style="height: 75%;">
+		<div class="col-md-9 mg-auto box flex" style="height: 75%; top: 20%;">
 			<form action="${_board}/insert.do" method="post" name="frm" class="flex-column f-1">
 				<!-- 조회수, 작성자(세션의 유저)  -->
 				<input type="hidden" name="readcount" value="0">

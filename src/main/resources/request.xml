@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="requestns">
+
+	<!-- 신청자 리스트 -->
+	<select id="rqList" parameterType="integer" resultType="request">
+		select req.*, m.nickname 
+		from request req, member m
+		where b_no = #{b_no} 
+		and accept='w' 
+		and cancel='n'
+		and req.m_id = m.m_id
+		order by req.reg_date 
+	</select>
+	
+	<!-- 신청 가능 여부 (중복 확인) -->
+	<select id="select" parameterType="Map" resultType="request">
+		select * from request where b_no = #{b_no} and m_id = #{m_id}
+	</select>
+	
+	<!-- 참여 신청 -->
+	<insert id = "insert" parameterType="Map">
+		insert into request values(#{b_no}, #{m_id}, sysdate,'n','w')
+	</insert>
+	
+	<!-- 참여 재신청 -->
+	<insert id = "update" parameterType="Map">
+		update request set accept = 'w', cancel = 'n', reg_date = sysdate where b_no = #{b_no} and m_id = #{m_id}
+	</insert>
+	
+	<!-- 참여 신청 수락 -->
+	<update id = "accept" parameterType="Map">
+		update request set accept = 'y' where b_no = #{b_no} and m_id = #{m_id}
+	</update>   
+	
+	<!-- 참여자 리스트에 추가-->
+	<insert id = "insertParti" parameterType="Map">
+		insert into parti values(#{b_no}, #{m_id}, sysdate, 'n', 'n')
+	</insert>
+	
+	<!-- 참여  신청 거절 -->
+	<update id = "reject" parameterType="Map">
+		update request set accept = 'n' where b_no = #{b_no} and m_id = #{m_id}
+	</update> 
+	
+	<!-- 참여  신청 취소 -->
+	<update id = "cancel" parameterType="Map">
+		update request set cancel = 'y' where b_no = #{b_no} and m_id = #{m_id}
+	</update>                    
+	
+	<!-- 신청자 리스트 -->
+	<select id="selectMyRequest" parameterType="string" resultMap="requestResultMap">
+		SELECT req.*, m.nickname, b.*, c.* 
+		from request req, member m, board b, category c
+		where req.m_id = #{m_id} 
+		and accept != 'y' 
+		and req.m_id = m.m_id
+		AND req.b_no = b.b_no
+		AND b.c_no = c.c_no
+		order by req.reg_date desc
+	</select>
+	
+	<resultMap type="request" 	id="requestResultMap">
+		<id 	column="b_no" 		property="b_no" />
+		<id 	column="m_id" 		property="m_id" />
+		<result column="reg_date" 	property="reg_date" />
+		<result column="cancel"		property="cancel" />
+		<result column="accept" 	property="accept" />
+		<result column="nickname" 	property="nickname" />
+		<association property="board"	javaType="board" resultMap="boardResultMap" />
+	</resultMap>
+	<resultMap type="board" id="boardResultMap">
+		<id 	column="b_no" 		property="b_no" />
+		<result column="m_id" 		property="m_id" />
+		<result column="c_no" 		property="c_no" />
+		<result column="subject" 	property="subject" />
+		<result column="end"		property="end" />
+		<result column="del" 		property="del" />
+		<association property="category"	javaType="category" resultMap="categoryResultMap" />
+	</resultMap>
+	<resultMap type="category" id="categoryResultMap">
+		<id 	column="c_no" 		property="c_no" />
+		<result	column="c_name" 	property="c_name" />
+	</resultMap>
+</mapper>

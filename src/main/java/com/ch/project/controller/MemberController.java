@@ -156,7 +156,7 @@ public class MemberController {
 		System.out.println(fileName);
 		//파일 입력하지 않았으면 파일명을 noFile로, 파일을 입력했으면 UUID+파일 확장자로 파일명 변경하고 파일을 저장, 
 		if (fileName.equals("")) {
-			fileName = "noFile";
+			fileName = "user.svg";
 		} else {
 			//파일명을 변경하고 싶을 때 : 날짜(연월일시분초), UUID
 			UUID uuid = UUID.randomUUID();

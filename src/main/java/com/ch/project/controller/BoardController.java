@@ -26,6 +26,7 @@ public class BoardController {
 	@Autowired
 	private BoardService bs;
 	
+	
 	@RequestMapping("/insertForm")
 	public String insertForm(Model model) {
 		List<Category> categoryList = bs.getCategories();
@@ -43,6 +44,17 @@ public class BoardController {
 		model.addAttribute("lastday", lastday);
 		
 		return "board/insertForm";
+	}
+	@RequestMapping("/updateForm")
+	public String updateForm(int b_no, Model model) {
+		List<Category> categoryList = bs.getCategories();
+		
+		Board board = bs.getBoard(b_no);
+
+		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("board", board);
+		
+		return "board/updateForm";
 	}
 	@RequestMapping("/placeSearch")
 	public String placeSearch() {
@@ -101,6 +113,20 @@ public class BoardController {
 //			int result = bs.insertBoard(b);
 //		}
 		
+		
+		return "redirect:/board/detail.do?b_no="+board.getB_no();
+	}
+	
+	@RequestMapping("/update")
+	public String update(Board board) {
+		//나중에 json 객체로 만들때 오류나지 않게 "앞에 \넣어주기
+		String content = board.getContent().replace("\"", "\\\"");
+		board.setContent(content);
+		
+		System.out.println(board);
+		
+		//게시글 DB에 넣기
+		int result = bs.updateBoard(board);
 		
 		return "redirect:/board/detail.do?b_no="+board.getB_no();
 	}
@@ -200,6 +226,4 @@ public class BoardController {
 		
 		return resultMap;
 	}
-	
-	
 }

@@ -56,7 +56,8 @@ public class HomeController {
 		model.addAttribute("result", result);	
 		return "error";
 	}
-
+	
+	
 	/*
 	 * @RequestMapping(value = "joinForm", method = RequestMethod.GET) public String
 	 * joinForm() { return "user/joinForm"; }

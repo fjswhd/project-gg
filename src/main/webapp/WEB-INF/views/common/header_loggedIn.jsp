@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/url.jsp" %>
-<div class="align-end head">
+<div class="align-end head" style="position: fixed; width: 86%;">
 	<div class="col-md-7">
 		<img id="logo" alt="" src="${logo}" height="100">
 	</div>
@@ -30,7 +30,7 @@
 					</c:if>
 				</button>
 				<ul class="dropdown-menu" role="menu" style="position: fixed; top: 13.2%; left: 85%">
-				    <li><a href="#">마이페이지</a></li>
+				    <li><a href="${_myPage}/main.do">마이페이지</a></li>
 				    <li class="divider"></li>
 				    <li><a href="${_member}/logout.do">로그아웃</a></li>
 				</ul>

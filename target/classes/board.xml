@@ -79,6 +79,29 @@
 		
 	</select>
 	
+	<!-- 내가 쓴 게시글 -->
+	<select id="selectMyBoard" parameterType="string" resultMap="boardResultMap">
+		SELECT b.*, c.* , m.m_id, m.nickname
+		FROM BOARD b, CATEGORY c, MEMBER m 
+		WHERE b.c_no = c.c_no 
+		AND b.m_id = m.m_id
+		AND b.m_id = #{m_id}
+		ORDER BY b.reg_date DESC
+	</select>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="board">
+		UPDATE BOARD
+		<set>
+			<if test="subject != null">subject = #{subject},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="content != null">content = #{content},</if>
+			<if test="m_count != null">m_count = #{m_count},</if>
+			<if test="end != null">end = #{end},</if>
+			<if test="del != null">del = #{del},</if>
+		</set>
+		WHERE b_no = #{b_no}
+	</update>
 	
 	<!-- join을 위한 resultMap -->
 	<resultMap type="board" id="boardResultMap">

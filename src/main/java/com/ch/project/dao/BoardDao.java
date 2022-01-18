@@ -19,5 +19,9 @@ public interface BoardDao {
 	List<Board> searchBoard(Map<String, Object> param);
 
 	int getSearchBoardCount(Map<String, Object> param);
+
+	List<Board> getMyBoard(String m_id);
+
+	int updateBoard(Board board);
 	
 }

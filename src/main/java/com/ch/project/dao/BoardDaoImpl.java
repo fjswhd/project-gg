@@ -33,4 +33,10 @@ public class BoardDaoImpl implements BoardDao {
 	public int getSearchBoardCount(Map<String, Object> param) {
 		return sst.selectOne("boardns.selectSearchBoardCount", param);
 	}
+	public List<Board> getMyBoard(String m_id) {
+		return sst.selectList("boardns.selectMyBoard", m_id);
+	}
+	public int updateBoard(Board board) {
+		return sst.update("boardns.updateBoard", board);
+	}
 }

@@ -14,28 +14,33 @@
 	<div class="container flex-column" style="overflow: hidden">
 		
 		<!-- header -->
-		<div class="align-end head">
-			<div class="col-md-9">
-				<img id="logo" alt="" src="${logo}" height="100">
-			</div>
-			<div class="align-center" style="margin-bottom: 15px;">
-				<span style="color: gray;"> 이미 가입하셨나요? </span>			
-				<a href="${_}/loginForm.do" class="btn btn-lg btn-link">로그인하기</a>
-			</div>
-		</div>
+		<c:if test="${ empty sessionScope.member }">
+			<jsp:include page="/WEB-INF/views/common/header_login.jsp" />		
+		</c:if>
+		<c:if test="${ not empty sessionScope.member }">
+			<jsp:include page="/WEB-INF/views/common/header_loggedIn.jsp" />		
+		</c:if>
 		
 		<!-- body -->
-		<div class="box flex-column" style="height: 75%; margin: 0 5px;">
+		<div class="mg-auto box flex-column" style="position: relative; width:99%; height: 75%; top: 20%;">
 			<!-- 제목, 닉네임, 등록일, 조회수-->
 			<div class="align-center j-between shadow-bottom" style="height: 10%; padding: 10px;">
 				<span class="h3">
 					[${board.category.c_name}] ${board.subject} <small>${board.member.nickname} | ${board.reg_date} | 조회 : ${board.readcount }</small>
 				</span>
 				<span>
-					<button class="btn btn-primary btn-sm">참가 신청</button>
-					<button class="btn btn-warning btn-sm">수정<i class="fas fa-undo-alt mg-l-5"></i></button>
-					<button class="btn btn-danger btn-sm">삭제<i class="fas fa-trash-alt mg-l-5"></i></button>
-					<button class="btn btn-default btn-sm">목록<i class="fas fa-list mg-l-5"></i></button>
+					<c:if test="${not empty sessionScope.member && sessionScope.member.m_id != board.m_id}">
+						<button class="btn btn-primary btn-sm" onclick="makeRequest()">참가 신청</button>
+					</c:if>
+					<c:if test="${sessionScope.member.m_id == board.m_id}">
+						<button class="btn btn-success btn-sm">모집 종료</button>
+					</c:if>
+					<c:if test="${sessionScope.member.m_id == board.m_id}">
+						<a href="${_board}/updateForm.do?b_no=${board.b_no}" class="btn btn-warning btn-sm">수정<i class="fas fa-undo-alt mg-l-5"></i></a>
+					</c:if>
+					<c:if test="${sessionScope.member.m_id == board.m_id}">
+						<button class="btn btn-danger btn-sm">삭제<i class="fas fa-trash-alt mg-l-5"></i></button>
+					</c:if>
 				</span>
 			</div>
 			
@@ -54,7 +59,7 @@
 				<!-- 신청자, 참여자, 활동일, 장소 -->
 				<div class="f-1 pd-r-5 scroll" style="overflow: auto;">
 					<!-- 신청, 참여  -->
-					<div id="request"></div>
+					<div id="request"></div>					
 					<div id="parti"></div>
 					
 					<ul class="list-group mg-b-5">
@@ -83,9 +88,11 @@
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
 		
-		$('#request').load('${_board}/request.do');
-		$('#parti').load('${_board}/parti.do');
-		$('#reply').load('${_reply}/list.do?', 'b_no=${board.b_no}');
+		if(document.querySelector('#request')) {
+			$('#request').load('${_request}/list.do', 'b_no=${board.b_no}');			
+		}
+		$('#parti').load('${_parti}/list.do', 'b_no=${board.b_no}');
+		$('#reply').load('${_reply}/list.do', 'b_no=${board.b_no}');
 		
 		var geocoder = new kakao.maps.services.Geocoder(),
 		address = '${address}';
@@ -111,6 +118,16 @@
 			viewer: true,
 			initialValue: '${board.content}'
 		});
+		
+		function makeRequest() {
+			var b_no = '${board.b_no}',
+				m_id = '${sessionScope.member.m_id}';
+			
+			if(confirm('활동에 참가 신청하시겠습니까?')) {
+				//alert(b_no+','+m_id);
+				location.href = '${_request}/requestInsert.do?b_no='+b_no+'&m_id='+m_id;
+			} 
+		}
 	</script>
 </body>
 </html>

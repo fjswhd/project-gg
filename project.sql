@@ -14,6 +14,14 @@ create table member (
 )
 
 select * from BOARD
+select * from REQUEST
+select * from PARTI
+
+update request set accept = 'w'
+
+delete from REQUEST
+delete from Parti
+
 delete from board where b_no > 5
 update BOARD set content = '<h2>Hello World!</h2><p>안녕하세요! 저는 이대에서 국비지원 교육을 받고 있는 학생입니다.</p><p>이번 1월 말에 수료를 앞두고 있고 2월부터 본격적으로 취업을 위한 코딩테스트 준비를 생각 중입니다.</p><p>2월뿐 아니라 취업 전까지는 꾸준히 이어갈 생각입니다!</p><ul><li><p>자바, 스프링 우대</p></li><li><p>파이썬 환영</p></li><li><p>자바스크립트도 환영!</p></li></ul><p>관심있으신 분들은 어려워 마시고 댓글 남겨주세요!</p><p><br></p><p><a href="http://www.choongang.co.kr">중앙정보처리학원</a></p>' where b_no = 3;
 update board set content = '<h3>놀러 가실 분!</h3><div contenteditable=\"false\"><hr></div><p>맛집 위주로 갈 겁니다!</p><p><a href=\"http://bootstrapk.com/\">놀러가자!</a></p>' where b_no = 4;

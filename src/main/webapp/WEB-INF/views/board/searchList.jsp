@@ -14,24 +14,15 @@
 	<div class="container flex-column" style="overflow: visible">
 		<!-- header -->
 		<c:if test="${empty sessionScope.member}">
-			<div class="align-end head">
-				<div class="col-md-9">
-					<img id="logo" alt="" src="${logo}" height="100">
-				</div>
-				<div class="align-center" style="margin-bottom: 15px;">
-					<span style="color: gray;"> 이미 가입하셨나요? </span>			
-					<a href="${_member}/loginForm.do" class="btn btn-lg btn-link">로그인하기</a>
-				</div>
-			</div>
+			<jsp:include page="/WEB-INF/views/common/header_login.jsp" />		
 		</c:if>
-		
 		<!-- header -->
 		<c:if test="${not empty sessionScope.member}">
 			<jsp:include page="/WEB-INF/views/common/header_loggedIn.jsp" />		
 		</c:if>
 		
 		<!-- body -->
-		<div class="col-md-12 mg-auto box flex" style="height: 75%;">
+		<div class="col-md-12 mg-auto box flex" style="height: 75%; top: 20%;">
 			<div id="map" class="shadow" style="height: 100%; width: 50%; border-radius: 5px;"></div>
 			<div class="flex-column f-g" style="position: relative; overflow: hidden; margin-left: 15px;">
 				<!-- 검색 박스 -->
@@ -166,7 +157,7 @@
 		
 		//마커 정보 보여줄 오버레이
 		var overlay = new kakao.maps.CustomOverlay({
-			clickable: false,
+			clickable: true,
 			map: map
 		});
 		
@@ -383,6 +374,9 @@
 			} 
 		}
 		
+		//
+		var markerTitle = '';
+		
 		//마커 만들기
 		function makeMarker(title, position) {
 			var marker = new kakao.maps.Marker({
@@ -412,6 +406,15 @@
 				overlay.setPosition(marker.getPosition());
 				overlay.setContent(div);
 				overlay.setMap(map);
+			});
+			
+	        kakao.maps.event.addListener(marker, 'mouseover', function(event) {
+	        	markerTitle = marker.getTitle();
+	        	marker.setTitle('');
+			});
+	        kakao.maps.event.addListener(marker, 'mouseout', function(event) {
+	        	marker.setTitle(markerTitle);
+	        	markerTitle = '';
 			});
 			
 			return marker;

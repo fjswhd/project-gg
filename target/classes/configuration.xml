@@ -7,10 +7,14 @@
 		<typeAlias alias="category" type="com.ch.project.model.Category" />
 		<typeAlias alias="reply" type="com.ch.project.model.Reply" />
 		<typeAlias alias="member" type="com.ch.project.model.Member" />
+		<typeAlias alias="request" type="com.ch.project.model.Request" />
+		<typeAlias alias="parti" type="com.ch.project.model.Parti" />
 	</typeAliases>
 	<mappers>
 		<mapper resource="board.xml" />
 		<mapper resource="reply.xml" />
 		<mapper resource="member.xml" />
+		<mapper resource="request.xml" />
+		<mapper resource="parti.xml" />
 	</mappers>
 </configuration>
