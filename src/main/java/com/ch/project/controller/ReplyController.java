@@ -48,8 +48,10 @@ public class ReplyController {
 		return "reply/replyList";
 	}
 	@RequestMapping ("replyInsertForm")
-	@ResponseBody
-	public String replyInsertForm () {
+	public String replyInsertForm (Reply reply,String pageNum, Model model) {
+		System.out.println("reply : "+ reply);
+		model.addAttribute("pageNum", pageNum);
+		model.addAttribute("reply", reply);
 		return "reply/replyInsertForm";
 	}
 

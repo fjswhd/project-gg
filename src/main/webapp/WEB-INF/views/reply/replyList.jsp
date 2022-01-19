@@ -10,27 +10,11 @@
 <script type="text/javascript">
 	/* 답글 */
 	function rereInsert(re_no){
-		var html ="";
-/* 		html+= "<input type='hidden' name='b_no' value='1'>"; 
-		html+= "<input type='hidden' name='m_id' value='b'>";
- */		html+= "<textarea rows=rows='3'cols='40' id='rere_"+re_no+"'> </textarea>" ;
-		html+= "<div> <div class='btn-group mg-r-5' data-toggle='buttons'>";
-		html+= "<label id='secret1' class='btn btn-default btn-sm'> ";
-		html+= "<span id='secretMsg1'> <i class='fas fa-lock-open mg-r-5'></i>";
-		html+= "공개 답글입니다.</span> <input type='checkbox' name='secret1'></label>";
-		html+= "<input type='button' onclick='reup("+re_no+")'class='btn btn-sm btn-info' value='쓰기'></div>";
-		html+= "<script type=\"text/javascript\">";
-		html+= "document.querySelector('#secret1').onclick = function() {";
-		html+= "var checked = document.querySelector('input[name=\"secret1\"]').checked,";
-		html+= "msg = document.querySelector('#secretMsg1');";
-		html+= "if (!checked) {";	
-		html+= "msg.innerHTML = '<i class=\"fas fa-lock mg-r-5\"></i>비밀 댓글입니다.';";	
-		html+= "} else { msg.innerHTML = '<i class=\"fas fa-lock-open mg-r-5\"></i>공개 댓글입니다.';";
-		html+= "} } <\/script>";
-		
-		$("#btn_"+re_no).html(html);
-		
+	
+	$('#sf_'+re_no).load("replyInsertForm.do");
+						
 	}
+
 	function reup(re_no){
 		$.post('rereInsert.do',
 				{ content : $('#rere_'+re_no).val(), re_no : re_no, secret : $('input[name="secret1"]').val()},
@@ -67,20 +51,21 @@
 </script>
 </head>
 <body>
+<img alt="" src="/resources/images/rere.jpg" />
 	<div>
-		<div>댓글</div>
+		<div> 댓글 </div>
 		<div id = "replyList">
 			<c:if test="${empty rpList }">
 				<div>댓글이 없습니다.</div>
 			</c:if>
 			<c:if test="${not empty rpList }">
 				<c:forEach var="reply" items="${rpList}">
-					<c:if test="${reply.secret == 'y' && reply.m_id !='b'}"> 
+					<c:if test="${reply.secret == 'y' && reply.m_id !='b'}"> <%--조건 비밀댓글 && 세션아이디 !=reply.m_id )--%>
 					<div id="btn_${reply.re_no }">
 						<div><i class="fas fa-lock mg-r-5"></i>비밀 댓글입니다.</div>
 					</div>
 					</c:if>
-					<c:if test="${reply.secret == 'y' && reply.m_id == 'b'}"> <%--조건 추가 && 세션아이디 ==reply.m_id )--%>
+					<c:if test="${reply.secret == 'y' && reply.m_id == 'b'}"> <%--조건 비밀댓글 && 세션아이디 ==reply.m_id )--%>
 						<div><i class="fas fa-lock mg-r-5"></i>비밀 댓글입니다.</div>
 						<div>${reply.nickname }</div>
 						<div id="ct_${reply.re_no }">${reply.content }</div>
@@ -90,8 +75,9 @@
 							<input type="button" class="btn btn-danger" value="삭제" onclick="reDelete(${reply.re_no})">
 							<input type="button" class="btn btn-info" value="답글" onclick="rereInsert(${reply.re_no})">
 						</div>
+						<div id="sf_${reply.re_no }"></div>
 					</c:if>
-					<c:if test="${reply.secret == 'y' && 'b'=='a'}"> <%--조건 추가 && 세션아이디 == board.m_id )--%>
+					<c:if test="${reply.secret == 'y' && 'b'=='a'}"> <%--조건 비밀댓글 && 세션아이디 == board.m_id )--%>
 						<div><i class="fas fa-lock mg-r-5"></i>비밀 댓글입니다.</div>
 						<div>${reply.nickname }</div>
 						<div>${reply.content }</div>
@@ -99,8 +85,9 @@
 					<div id="btn_${reply.re_no }">
 						<input type="button" class="btn btn-info" value="답글" onclick="rereInsert(${reply.re_no})">
 					</div>
+					<div id="sf_${reply.re_no }"></div>
 					</c:if>
-					<c:if test="${reply.secret == 'n' && reply.m_id !='b'}"> 
+					<c:if test="${reply.secret == 'n' && reply.m_id !='b'}"> <%--조건 공개댓글 && 세션아이디 !=reply.m_id )--%>
 					<div>
 						<div>${reply.nickname }</div>
 						<div>${reply.content }</div>
@@ -109,21 +96,21 @@
 					<div id="btn_${reply.re_no }">
 						<input type="button" class="btn btn-info" value="답글" onclick="rereInsert(${reply.re_no})">
 					</div>
+					<div id="sf_${reply.re_no }"></div>
 					</c:if>
-					<c:if test="${reply.secret == 'n' && reply.m_id == 'b'}"> <%--조건 추가  || 세션아이디 ==reply.m_id  --%>
+					<c:if test="${reply.secret == 'n' && reply.m_id == 'b'}"> <%--조건 공개댓글 &&  세션아이디 ==reply.m_id  --%>
 					<div>
 						<div>${reply.nickname }</div>
 						<div id="ct_${reply.re_no }">${reply.content }</div>
 						<div>${reply.reg_date }</div>
+					</div>
 					<div id="btn_${reply.re_no }">
 						<input type="button" class="btn btn-warning" value="수정" onclick="reUpdate(${reply.re_no})">
 						<input type="button" class="btn btn-danger" value="삭제" onclick="reDelete(${reply.re_no})">
 						<input type="button" class="btn btn-info" value="답글" onclick="rereInsert(${reply.re_no})">
 					</div>
-					</div>
-					<div id="replyForm"></div>
+					<div id="sf_${reply.re_no }"></div>
 					</c:if>
-					
 				</c:forEach>
 			</c:if>
 		</div>
