@@ -26,35 +26,33 @@
 						<strong>마이 프로필</strong>
 						<small><a href="#" class="cursor mg-l-10" style="color: #505050;"><i class="fas fa-user-edit"></i></a></small>
 					</h2>
-					<div id="profile" class="align-end">
+					<div id="profile" class="align-center">
 						<div id="imgContainer" class="col-md-3 j-center" style="">
 							<img class="img-circle" alt="" src="${_profile}/${sessionScope.member.picture}" height="200" width="200">
 						</div>
 						<div id="profileDetail" class="col-md-9">
-							<table class="table table-bordered mg-b-5">
-								<tr>
-									<th class="col-md-3">별명</th>
-									<td>${sessionScope.member.nickname}</td>
-								</tr>
-								<tr>
-									<th>생일 / 레벨</th>
-									<td>${sessionScope.member.birthday} / lv : ${level}</td>
-								</tr>
-								<tr>
-									<th>출몰지</th>
-									<td>${sessionScope.member.place}</td>
-								</tr>
-								<tr>
-									<th>관심사</th>
-									<td>${sessionScope.member.tag}</td>
-								</tr>
-	
-								<tr>
-									<th>평점</th>
-									<td>${sessionScope.member.rating}</td>
-								</tr>
-							</table>
-							
+							<ul class="list-group mg-b-5">
+								<li class="list-group-item">
+									<span class="col-md-3 bold">별명</span>
+									<span>${sessionScope.member.nickname}</span>
+								</li>
+								<li class="list-group-item">
+									<span class="col-md-3 bold">생일 / 레벨</span>
+									<span>${sessionScope.member.birthday} / lv : ${level}</span>
+								</li>
+								<li class="list-group-item">
+									<span class="col-md-3 bold">출몰지</span>
+									<span>${sessionScope.member.place}</span>
+								</li>
+								<li class="list-group-item">
+									<span class="col-md-3 bold">관심사</span>
+									<span>${sessionScope.member.tag}</span>
+								</li>
+								<li class="list-group-item">
+									<span class="col-md-3 bold">평점</span>
+									<span>${sessionScope.member.rating}</span>
+								</li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -98,6 +96,14 @@
 					</h2>
 					<div id="myBoard">
 						<ul class="list-group mg-t-10 mg-b-5">
+							<li class="list-group-item align-center">
+								<span class="col-md-8 bold">
+									활동명											
+								</span>
+								<span class="col-md-4 bold">
+									신청 상태											
+								</span>
+							</li>
 							<c:if test="${empty myRequestList}">
 								<li class="list-group-item align-center">
 									<i class="fas fa-times-circle mg-r-5"></i>신청한 게시글이 없습니다.
@@ -107,18 +113,18 @@
 								<c:forEach var="request" items="${myRequestList}" varStatus="vs">
 									<c:if test="${vs.index < 5}">
 										<li class="list-group-item align-center">
-											<h5 style="margin: 0;">
+											<span class="col-md-8">
 												<a href="${_board}/detail.do?b_no=${request.b_no}" class="cursor">[${request.board.category.c_name}] ${request.board.subject}</a>
-												<c:if test="${request.accept == 'w' && request.cancel == 'n'}">
-													<small class="mg-l-10">신청 대기중</small>												
-												</c:if>
-												<c:if test="${request.accept == 'n'}">
-													<small class="mg-l-10 text-danger"><strong>신청이 거절되었습니다.</strong></small>												
-												</c:if>
-												<c:if test="${request.cancel == 'y'}">
-													<small class="mg-l-10 text-danger"><strong>신청을 취소했습니다.</strong></small>												
-												</c:if>
-											</h5>
+											</span>
+											<c:if test="${request.accept == 'w' && request.cancel == 'n'}">
+												<span class="col-md-4 text-muted">신청 처리 대기 중입니다.</span>								
+											</c:if>
+											<c:if test="${request.accept == 'n'}">
+												<span class="col-md-4 text-danger"><strong>신청이 거절되었습니다.</strong></span>												
+											</c:if>
+											<c:if test="${request.cancel == 'y'}">
+												<span class="col-md-4 text-danger"><strong>신청을 취소했습니다.</strong></span>												
+											</c:if>
 										</li>										
 									</c:if>
 								</c:forEach>
@@ -138,16 +144,16 @@
 					<div id="myBoard">
 						<ul class="list-group mg-t-10 mg-b-5">
 							<li class="list-group-item align-center">
-								<span class="col-md-6">
+								<span class="col-md-6 bold">
 									활동명											
 								</span>
-								<span class="col-md-2">
+								<span class="col-md-2 bold">
 									활동 상태											
 								</span>
-								<span class="col-md-2">
+								<span class="col-md-2 bold">
 									별점											
 								</span>
-								<span class="col-md-2">
+								<span class="col-md-2 bold">
 									상호평가											
 								</span>
 							</li>

@@ -12,8 +12,12 @@ import com.ch.project.model.Reply;
 public class ReplyDaoImpl implements ReplyDao {
 	@Autowired
 	private SqlSessionTemplate sst;
-	@Override
+	
 	public List<Reply> getReplyList(int b_no) {
 		return sst.selectList("replyns.selectReplyList", b_no);
+	}
+	//신규 댓글 입력
+	public int insertReply(Reply reply) {
+		return sst.insert("replyns.insertReply", reply);
 	}
 }

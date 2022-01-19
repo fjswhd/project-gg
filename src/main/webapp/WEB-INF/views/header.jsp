@@ -8,9 +8,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initialscale=1">
 
-<c:url value="/resources/bootstrap"				var="bootstrap" />
-<c:url value="/resources/images"				var="images" />
-<c:url value="/resources/images/logo.jpg" 		var="logo" />
+<c:url value="/resources/bootstrap"					var="bootstrap" />
+<c:url value="/resources/images"					var="images" />
+<c:url value="/resources/images/logo.jpg" 			var="logo" />
 <c:url value="/resources/images/community.jpg" 		var="community" />
 <c:url value="/resources/profile"					var="_profile" />
 

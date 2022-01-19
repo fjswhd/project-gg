@@ -1,17 +1,4 @@
 drop table member;
-create table member (
-	m_id		varchar2(30)	primary key,
-	password	varchar2(100)					not null,
-	reg_date	date			default sysdate	not null,
-	nickname	varchar2(15),
-	birthday	date,
-	place		varchar2(60),
-	tag			varchar2(160),
-	picture		varchar2(100),
-	rating		number			default 0.0 	not null,
-	admin		char(1)			default 'n' 	not null,
-	del			char(1)			default 'n' 	not null
-)
 
 select * from BOARD
 select * from REQUEST
@@ -29,10 +16,10 @@ select * from member
 delete from member where m_id = 'ejm4000@naver.com'
 delete from member where m_id = 'fjswhd93@naver.com'
 delete from member where m_id = 'fjswhd93@gmail.com'
-delete from member where m_id = '123'
+delete from member where m_id = 'dlwhdals'
 
-insert into MEMBER (m_id, password)
-values ('dlwhdals', '1234');
+update member set reg_date = sysdate, nickname = '아빠상어', birthday = sysdate, place = '고양시', tag = '게임', picture = 'user.svg', rating = 0, admin = 'n', del = 'n' where m_id = 'dlwhdals'
+
 
 delete from member where m_id = ''
 create table category (

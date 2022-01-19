@@ -12,8 +12,13 @@ import com.ch.project.model.Reply;
 public class ReplyServiceImpl implements ReplyService {
 	@Autowired
 	private ReplyDao rd;
-	@Override
+	
 	public List<Reply> getReplyList(int b_no) {
 		return rd.getReplyList(b_no);
+	}
+	
+	//신규 댓글 입력
+	public int insertReply(Reply reply) {
+		return rd.insertReply(reply);
 	}
 }

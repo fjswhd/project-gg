@@ -26,7 +26,8 @@
 			<!-- 제목, 닉네임, 등록일, 조회수-->
 			<div class="align-center j-between shadow-bottom" style="height: 10%; padding: 10px;">
 				<span class="h3">
-					[${board.category.c_name}] ${board.subject} <small>${board.member.nickname} | ${board.reg_date} | 모집 현황 : ${partiNum}/${board.m_count}</small>
+					[${board.category.c_name}] ${board.subject} 
+					<small><a href="#myModal" class="text-muted" data-toggle="modal" title="프로필 확인" onclick="getProfile('${board.m_id}')">${board.member.nickname}</a> | ${board.reg_date} | 모집 현황 : ${partiNum}/${board.m_count}</small>
 				</span>
 				<span>
 					<!-- 현재 사용자가 로그인했고, 사용자가 보드의 writer는 아닌 경우 -->
