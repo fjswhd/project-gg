@@ -13,23 +13,16 @@
 <body>
 	<div class="container flex-column" style="overflow: hidden">
 		<!-- header -->
-		
-		<div class="align-end head">
-			<div class="col-md-9">
-				<img id="logo" alt="" src="${logo}" height="100">
-			</div>
-			<div class="align-center" style="margin-bottom: 15px;">
-				<span style="color: gray;"> 이미 가입하셨나요? </span>			
-				<a href="${_}/loginForm" class="btn btn-lg btn-link">로그인하기</a>
-			</div>
-		</div>
+		<c:if test="${ not empty sessionScope.member }">
+			<jsp:include page="/WEB-INF/views/common/header_loggedIn.jsp" />		
+		</c:if>
 		
 		<!-- body -->
-		<div class="col-md-9 mg-auto box flex" style="height: 75%;">
+		<div class="col-md-9 mg-auto box flex" style="height: 75%; top: 20%;">
 			<form action="${_board}/insert.do" method="post" name="frm" class="flex-column f-1">
 				<!-- 조회수, 작성자(세션의 유저)  -->
 				<input type="hidden" name="readcount" value="0">
-				<input type="hidden" name="m_id" value="dlwhdals">
+				<input type="hidden" name="m_id" value="${sessionScope.member.m_id}">
 				
 				<!-- 활동 일시 -->
 				<div class="align-center f-s mg-b-5">
@@ -124,9 +117,8 @@
 			    	event.target.blur();
 			    	event.preventDefault();
 			    }
-			});
+			})
 		})
-		
 		
 		document.querySelector('#placeSearch').onclick = function() {
 			window.open('/project/board/placeSearch', '장소검색', 'width=1300, height=700, scrollbars=no, resizable=no, left=100, top=50');
@@ -152,7 +144,7 @@
 				$('[name="m_count"]').popover({
 					html: true,
 					content: '모집인원은 <b>2명 이상</b>이어야합니다.',
-					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="white-space: nowrap;"></div></div>'
+					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>'
 				});
 				$('[name="m_count"]').popover('show');
 				$('[name="m_count"]').focus();
@@ -164,13 +156,13 @@
 			
 			var address = $('[name="address"]');
 			
-			if(address.val() == '') {
+			if(!address) {
 				event.preventDefault();
 				
 				$('#placeSearch').popover({
 					html: true,
 					content: '모집 기준이 될 장소를 정해주세요.',
-					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content" style="white-space: nowrap;"></div></div>'
+					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>'
 				});
 				
 				$('#placeSearch').popover('show');

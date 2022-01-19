@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberns">
+	 <!-- 아이디로 검색 -->
+	<select id="selectMember" parameterType="string" resultType="member">
+		select * from member where m_id=#{m_id}
+	</select>
+
+	<!-- 닉네임 중복체크 -->
+	<select id="selectMemberWithNick" parameterType="string" resultType="member">
+		select * from member where nickname=#{nickname}
+	</select>
+	
+	<insert id="insert" parameterType="member">
+		INSERT INTO MEMBER
+		VALUES (#{m_id}, #{password}, sysdate, #{nickname}, sysdate, '알 수 없음', '알 수 없음', 'noFile', 0.0, 'n', 'n')
+	</insert>
+	
+	<!-- 회원프로필 수정 -->
+	<update id="updateProfile" parameterType="member">
+		update member set birthday=#{birthday}, place=#{place},tag=#{tag}, picture=#{picture} where m_id=#{m_id} 
+	</update>
+	
+	
+	<!-- 비밀번호 찾기 -->
+	<select id="selectFindPw" parameterType="member" resultType="member">
+		select * from member where m_id=#{m_id}
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="updatePw" parameterType="member">
+		update member set password=#{password} where m_id=#{m_id}
+	</update>
+	
+	<!-- 마이페이지에서 닉네임 중복체크 -->
+	<select id="selectNickMy" parameterType="member" resultType="member">
+		select * from member where nickname=#{nickname} and MB_num=#{MB_num}
+	</select>
+	
+	<update id="delete" parameterType="string">
+		update member set del='y' where m_id=#{m_id}
+	</update>
+	
+	
+</mapper>

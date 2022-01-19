@@ -14,56 +14,89 @@
 	<div class="container flex-column" style="overflow: hidden">
 		
 		<!-- header -->
-		<div class="align-end head">
-			<div class="col-md-9">
-				<img id="logo" alt="" src="${logo}" height="100">
-			</div>
-			<div class="align-center" style="margin-bottom: 15px;">
-				<span style="color: gray;"> 이미 가입하셨나요? </span>			
-				<a href="${_}/loginForm.do" class="btn btn-lg btn-link">로그인하기</a>
-			</div>
-		</div>
+		<c:if test="${ empty sessionScope.member }">
+			<jsp:include page="/WEB-INF/views/common/header_login.jsp" />		
+		</c:if>
+		<c:if test="${ not empty sessionScope.member }">
+			<jsp:include page="/WEB-INF/views/common/header_loggedIn.jsp" />		
+		</c:if>
 		
 		<!-- body -->
-		<div class="box flex-column" style="height: 75%; margin: 0 5px;">
+		<div class="mg-auto box flex-column" style="position: relative; width:99%; height: 75%; top: 20%;">
 			<!-- 제목, 닉네임, 등록일, 조회수-->
 			<div class="align-center j-between shadow-bottom" style="height: 10%; padding: 10px;">
 				<span class="h3">
-					[${board.c_no}] ${board.subject}
-					<small>${board.m_id} | ${board.reg_date} | 조회 : ${board.readcount }</small>
+					[${board.category.c_name}] ${board.subject} <small>${board.member.nickname} | ${board.reg_date} | 모집 현황 : ${partiNum}/${board.m_count}</small>
 				</span>
 				<span>
-					<button class="btn btn-primary btn-sm">참가 신청</button>
-					<button class="btn btn-warning btn-sm">수정<i class="fas fa-undo-alt mg-l-5"></i></button>
-					<button class="btn btn-danger btn-sm">삭제<i class="fas fa-trash-alt mg-l-5"></i></button>
-					<button class="btn btn-link btn-sm">목록<i class="fas fa-list mg-l-5"></i></button>
+					<!-- 현재 사용자가 로그인했고, 사용자가 보드의 writer는 아닌 경우 -->
+					<c:if test="${not empty sessionScope.member && sessionScope.member.m_id != board.m_id}">
+						<!-- 활동에 참여했다가 강퇴 || 탈퇴한 경우 재참여 불가능 -->
+						
+						<!-- 이미 활동에 참가 신청한 경우 -->
+						<!-- 강퇴, 탈퇴한 경우 -->
+						<!-- 참여자가 활동 최대 인원인 경우 -->
+						<!-- 모집 종료한 경우 -->
+						<c:if test="${requestPossible == false || full == true || banned == true || board.end == 'y'}">
+							<button class="btn btn-primary btn-sm" disabled="disabled">참가 신청</button>						
+						</c:if>
+						
+						<!-- 활동에 참가 신청되있지 않은 경우 -->
+						<c:if test="${requestPossible == true && full == false && banned == false && board.end == 'n'}">
+							<button class="btn btn-primary btn-sm" onclick="makeRequest()">참가 신청</button>						
+						</c:if>
+					</c:if>
+					
+					<!-- 현재 사용자가 글 작성자인 경우 -->					
+					<c:if test="${not empty sessionScope.member && sessionScope.member.m_id == board.m_id}">
+						<!-- 모집 종료한 경우 -->
+						<c:if test="${board.end == 'y'}">
+							<!-- 인원을 다 못채움 -->
+							<c:if test="${full == false}">
+								<a href="${_board}/recruitStart.do?b_no=${board.b_no}" class="btn btn-success btn-sm" onclick="startConfirm()">모집 재개</a>
+							</c:if>
+							<!-- 인원을 다 못채움 -->
+							<c:if test="${full == true}">
+								<button class="btn btn-success btn-sm" disabled="disabled">모집 재개</button>
+							</c:if>
+						</c:if>
+						
+						<!-- 모집 종료하지 않은 경우 -->
+						<c:if test="${board.end == 'n'}">
+							<a href="${_board}/recruitEnd.do?b_no=${board.b_no}" class="btn btn-success btn-sm" onclick="endConfirm()">모집 종료</a>
+						</c:if>
+					</c:if>
+					
+					<c:if test="${sessionScope.member.m_id == board.m_id}">
+					</c:if>
+					<c:if test="${sessionScope.member.m_id == board.m_id}">
+						<a href="${_board}/updateForm.do?b_no=${board.b_no}" class="btn btn-warning btn-sm">수정<i class="fas fa-undo-alt mg-l-5"></i></a>
+					</c:if>
+					<c:if test="${sessionScope.member.m_id == board.m_id}">
+						<button class="btn btn-danger btn-sm">삭제<i class="fas fa-trash-alt mg-l-5"></i></button>
+					</c:if>
 				</span>
 			</div>
 			
 			<div class="flex f-g mg-t-5" style="overflow: hidden;">
-				<!-- 내용, 참여자,  -->
+				<!-- 내용, 참여자 -->
 				<div class="f-2 mg-r-5 scroll" style="overflow: auto; position: relative;">
-					<div class="flex-column" style="position: absolute; width: 100%; padding-right: 5px;">
+					<div class="flex-column pd-b-5 pd-r-5" style="position: absolute; width: 100%;">
 						<!-- 내용 -->
 						<div id="viewer" class="shadow-bottom mg-b-5 pd-10"></div>
 						
-						<!-- 참여자, 신청자 패널 -->
-						<div class="shadow-bottom mg-b-5">
-							<div id="request"></div>
-							<div id="parti"></div>
-						</div>
-						
 						<!-- 댓글 -->
-						<div class="shadow-bottom">
-							안녕하세요
-						</div>
-						
+						<div id="reply"></div>
 					</div>
 				</div>
 				
-				<!-- 활동일, 장소 -->
-				<div class="f-1">
-					<ul class="list-group" style="height: 100%;">
+				<!-- 신청자, 참여자, 활동일, 장소 -->
+				<div class="f-1 pd-r-5 scroll" style="overflow: auto;">
+					<!-- 신청, 참여  -->
+					<div id="request"></div>					
+					<div id="parti"></div>
+					
+					<ul class="list-group mg-b-5">
 						<li class="list-group-item align-center" style="font-size: 16px;">
 							<span class="col-md-1 j-center pd-0"><i class="far fa-calendar-check fa-lg"></i></span>
 							${board.s_date} ~ ${board.e_date}
@@ -74,10 +107,10 @@
 						</li>
 						<li class="list-group-item align-center" style="font-size: 16px;">
 							<span class="col-md-1 j-center pd-0"><i class="fas fa-map-marked-alt fa-lg"></i></span>
-							${address}
+							${address}							
 						</li>
 						<li class="list-group-item" style="padding: 0;">
-							<div id="map" style="width: 100%; height: 72%; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;"></div>
+							<div id="map" style="width: 100%; height: 72.2%; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;"></div>
 						</li>
 					</ul>
 				</div>
@@ -85,12 +118,36 @@
 		</div>	
 	</div>
 	
+	<div class="modal fade" id="myModal">
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 id="profileTitle" class="modal-title"></h4>
+				</div>
+				<div class="modal-body flex-column align-center">
+					<img id="profileImg" class="img-circle mg-b-10" alt="" src="" width="200" height="200" style="box-shadow: 0 0 3px #808080;">
+					<ul id="profileContent" class="list-group" style="width: 80%; box-shadow: 0 0 2px #808080; border-radius: 4px;">
+						<li class="list-group-item"></li>				
+						<li class="list-group-item"></li>				
+						<li class="list-group-item"></li>				
+						<li class="list-group-item"></li>				
+						<li class="list-group-item"></li>				
+					</ul>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
 		
-		$('#request').load('${_board}/request');
-		$('#parti').load('${_board}/parti');
+		if(document.querySelector('#request')) {
+			$('#request').load('${_request}/list.do', 'b_no=${board.b_no}');			
+		}
+		$('#parti').load('${_parti}/list.do', 'b_no=${board.b_no}');
+		$('#reply').load('${_reply}/list.do', 'b_no=${board.b_no}');
 		
 		var geocoder = new kakao.maps.services.Geocoder(),
 		address = '${address}';
@@ -111,11 +168,61 @@
 		    }
 		});
 		
-		const viewer = toastui.Editor.factory({
+		var viewer = toastui.Editor.factory({
 			el: document.querySelector('#viewer'),
 			viewer: true,
 			initialValue: '${board.content}'
 		});
+		
+		function makeRequest() {
+			var b_no = '${board.b_no}',
+				m_id = '${sessionScope.member.m_id}';
+			
+			if(confirm('활동에 참가 신청하시겠습니까?')) {
+				//alert(b_no+','+m_id);
+				location.href = '${_request}/requestInsert.do?b_no='+b_no+'&m_id='+m_id;
+			} 
+		}
+		function getProfile(m_id) {
+			var sendData = '{"m_id":"'+m_id+'"}';
+			
+			var title = document.querySelector('#profileTitle'),
+				img = document.querySelector('#profileImg'),
+				li = document.querySelectorAll('#profileContent > li');
+			
+			fetch('${_member}/getProfile.do', {
+				method: 'POST',
+				body: sendData,
+				headers: {
+					'Content-Type':'application/json;charset=utf-8'
+				}
+			}).then(function(response) {
+				return response.json();
+			}).then(function(data) {
+				//닉네임 픽쳐 플레이스 레이팅 가입일 태그
+				title.textContent = data.nickname + '님의 프로필';
+				img.src = '${_profile}/' + data.picture;
+				
+				li[0].innerHTML = '<span class="col-md-3 bold">레벨</span>' + data.level;				
+				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span>' + data.reg_date;				
+				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span>' + data.place;				
+				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
+				li[4].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
+				
+			})
+			
+		}
+		
+		function endConfirm() {
+			if(!confirm('모집을 종료하시겠습니까?')) {
+				event.preventDefault();
+			}
+		}
+		function startConfirm() {
+			if(!confirm('다시 모집을 시작하시겠습니까?')) {
+				event.preventDefault();
+			}			
+		}
 	</script>
 </body>
 </html>

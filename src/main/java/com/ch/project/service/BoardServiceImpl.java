@@ -1,6 +1,7 @@
 package com.ch.project.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,17 @@ public class BoardServiceImpl implements BoardService {
 	}
 	public Board getBoard(int b_no) {
 		return bd.getBoard(b_no);
+	}
+	public List<Board> searchBoard(Map<String, Object> param) {
+		return bd.searchBoard(param);
+	}
+	public int getSearchBoardCount(Map<String, Object> param) {
+		return bd.getSearchBoardCount(param);
+	}
+	public List<Board> getMyBoard(String m_id) {
+		return bd.getMyBoard(m_id);
+	}
+	public int updateBoard(Board board) {
+		return bd.updateBoard(board);
 	}
 }
