@@ -17,5 +17,6 @@ public class Reply {
 	private String 	secret;
 	private String 	del;
 	
-	private Board board;
+	private Board 	board;
+	private Member 	member;
 }

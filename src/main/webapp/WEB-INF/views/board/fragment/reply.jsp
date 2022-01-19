@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%-- <%@ include file="/WEB-INF/views/header.jsp" %> --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="/WEB-INF/views/url.jsp" %>
 <div class="panel panel-default mg-b-0">
 	<div class="panel-heading j-center">
 		<a href="#collapseReply" class="h3 panel-title align-center" data-toggle="collapse">
@@ -39,18 +38,18 @@
 				
 				<!-- 비밀댓글 no || (세션아이디 == 글아이디 || 세션아이디 == 댓글아이디) -->
 				<c:if test="${reply.del == 'n' && (reply.secret == 'n' || (sessionScope.member.m_id == reply.board.m_id || sessionScope.member.m_id == reply.m_id))}">
-					<li class="list-group-item pd-t-5" style="word-break: break-all;">
+					<li id="re_${reply.re_no}" class="list-group-item pd-t-5" style="word-break: break-all;">
 						<div class="align-center">
 							<span class="h4 mg-r-5">
 								<a href="#myModal" class="h4" data-toggle="modal" title="프로필 확인" onclick="getProfile('${reply.m_id}')">
-									${reply.m_id}
+									${reply.member.nickname}
 								</a>
 								<small class="mg-l-5">
 									${reply.reg_date}
 								</small>
 							</span>
 							<c:if test="${not empty sessionScope.member}">
-								<a class="cursor-no-line mg-r-5" title="답글">
+								<a class="cursor-no-line mg-r-5" title="답글" onclick="replyToReply('${reply.re_no}')">
 									<i class="fas fa-comment-dots"></i>																		
 								</a>							
 							</c:if>
@@ -69,23 +68,28 @@
 		
 		<!-- 로그인 한 경우에만 댓글 허용 -->
 		<c:if test="${not empty sessionScope.member}">
-			<li class="list-group-item">
-				<form action="/project/reply/insert.do" method="post" class="align-center">
+			<li id="writeReply" class="list-group-item">
+				<form action="${_reply}/insert.do" method="post" name="frm" class="align-center">
+					<input type="hidden" name="b_no" value="${b_no}">
+					<input type="hidden" name="m_id" value="${sessionScope.member.m_id}">
+					<input type="hidden" name="re_ref" value="0">
+					<input type="hidden" name="re_step" value="0">
 					<div class="col-md-2 pd-0 j-center">
 						<h4>${sessionScope.member.nickname}</h4>
 					</div>
 					<div class="col-md-10 list">
 						<textarea name="content" class="form-control mg-b-5" rows="3" cols="40"></textarea>
-						<div class="align-center j-end">
+						<div id="buttons" class="align-center j-end">
 							<div class="btn-group mg-r-5" data-toggle="buttons"> 
 								<label id="secret" class="btn btn-default btn-sm ">
-									<span id="secretMsg">
+									<span class="secretMsg">
 										<i class="fas fa-lock-open mg-r-5"></i>공개 댓글입니다.																
 									</span>
 									<input type="checkbox" name="secret">
 								</label>
 							</div>
-							<button type="submit" class="btn btn-primary btn-sm">쓰기</button>													
+							<button type="submit" class="btn btn-primary btn-sm">쓰기</button>
+							<button id="cancelReToRe" type="button" class="btn btn-danger btn-sm mg-l-5 hide">대댓글 취소</button>													
 						</div>
 					</div>
 				</form>
@@ -100,18 +104,43 @@
 	//웃긴건 값은 잘 넘어감..
 	//왜 checked로 쓰는걸 알게 됐더라? >> input checkbox를 검색하다가 알게된 듯 하다.
 	//bootstrap에서 버튼 토글의 문구 교체를 고민하다가 고안한 방법
-	if(document.querySelector('#secret')) {
-		document.querySelector('#secret').addEventListener('click', function() {
-			var checked = document.querySelector('input[name="secret"]').checked,
-			msg = document.querySelector('#secretMsg');
-			console.log(checked);
-			
-			if (!checked) {
-				msg.innerHTML = '<i class="fas fa-lock mg-r-5"></i>비밀 댓글입니다.';
-			} else {
-				msg.innerHTML = '<i class="fas fa-lock-open mg-r-5"></i>공개 댓글입니다.';
-			}
-		});		
+	if(document.querySelectorAll('label')) {
+		var labels = document.querySelectorAll('label');
+		labels.forEach(function(element, index) {
+			element.addEventListener('click', function() {
+				
+				var checked = document.querySelectorAll('input[name="secret"]')[index].checked,
+					msg = document.querySelectorAll('.secretMsg')[index];
+				
+				if (!checked) {
+					msg.innerHTML = '<i class="fas fa-lock mg-r-5"></i>비밀 댓글입니다.';
+				} else {
+					msg.innerHTML = '<i class="fas fa-lock-open mg-r-5"></i>공개 댓글입니다.';
+				}
+			})
+		})
+	}
+	
+	var button = document.querySelector('#cancelReToRe');
+	
+	var writeForm = document.querySelector('#writeReply');
+	
+	button.addEventListener('click', function() {
+		document.querySelector('ul.list-group').appendChild(writeForm);
+		
+		button.classList.add('hide');
+		
+		frm.re_ref.value = '0';
+	});
+	
+	function replyToReply(re_no) {
+		
+		var target = document.querySelector('#re_'+re_no);
+		frm.re_ref.value = re_no;
+		
+		document.querySelector('ul.list-group').insertBefore(writeForm, target.nextSibling);
+		
+		button.classList.remove('hide');
 		
 	}
 </script>
