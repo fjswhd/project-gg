@@ -25,4 +25,7 @@ public interface RequestDao {
 	int cancel(Map<String, Object> cancel);
 
 	List<Request> getMyRequest(String m_id);
+
+	Request selectRequest(Map<String, Object> request);
+	
 }

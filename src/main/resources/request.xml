@@ -15,8 +15,19 @@
 	</select>
 	
 	<!-- 신청 가능 여부 (중복 확인) -->
+	<select id="selectRequest" parameterType="Map" resultType="request">
+		select * 
+		from request 
+		where b_no = #{b_no} and m_id = #{m_id}
+	</select>
+	
+	<!-- 신청 가능 여부 (중복 확인) -->
 	<select id="select" parameterType="Map" resultType="request">
-		select * from request where b_no = #{b_no} and m_id = #{m_id}
+		select * 
+		from request 
+		where b_no = #{b_no} and m_id = #{m_id}
+		and accept = 'w'
+		and cancel = 'n'
 	</select>
 	
 	<!-- 참여 신청 -->

@@ -42,32 +42,32 @@
 					<c:if test="${parti.cancel == 'n'}">
 						<c:if test="${sessionScope.member.m_id == board.m_id}">
 							<li class="list-group-item">
-								<a href="#" title="프로필 확인">${parti.nickname}</a>
-								<a href="${reject}" class="text-danger cursor-no-line" title="참여자 강퇴" onclick="ban('${parti.nickname}')">
+								<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${parti.m_id}')">${parti.nickname}</a>
+								<a href="${ban}" class="text-danger cursor-no-line" title="참여자 강퇴" onclick="ban('${parti.nickname}')">
 									<i class="fas fa-times-circle"></i>																		
 								</a>
 							</li>
 						</c:if>
 						<c:if test="${sessionScope.member.m_id != board.m_id && sessionScope.member.m_id == parti.m_id}">
 							<li class="list-group-item">
-								<a href="#" title="프로필 확인">${parti.nickname}</a>
-								<a href="${cancel}" class="text-danger cursor-no-line" title="활동 탈퇴" onclick="cancel()">
+								<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${parti.m_id}')">${parti.nickname}</a>
+								<a href="${cancel}" class="text-danger cursor-no-line" title="활동 탈퇴" onclick="partiCancel()">
 									<i class="fas fa-times-circle"></i>																		
 								</a>
 							</li>
 						</c:if>
 						<c:if test="${sessionScope.member.m_id != board.m_id && sessionScope.member.m_id != parti.m_id}">
 							<li class="list-group-item">
-								<a href="#" title="프로필 확인">${parti.nickname}</a>
+								<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${parti.m_id}')">${parti.nickname}</a>
 							</li>
 						</c:if>
 					</c:if>
 					
-					<!-- 참여자가 탈퇴 신청하지 않은 경우 -->
+					<!-- 참여자가 탈퇴 신청한 경우 -->
 					<c:if test="${parti.cancel == 'w'}">
 						<c:if test="${sessionScope.member.m_id == board.m_id}">
 							<li class="list-group-item">
-								<a href="#" title="프로필 확인">${parti.nickname}</a>님이 <strong class="text-danger">탈퇴를 신청</strong>하셨습니다.
+								<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${parti.m_id}')">${parti.nickname}</a>님이 <strong class="text-danger">탈퇴를 신청</strong>하셨습니다.
 								<a href="${cancelAccept}" class="text-success cursor-no-line" title="탈퇴 수락" onclick="cancelAccept('${parti.nickname}')">
 									<i class="fas fa-check-circle"></i>																		
 								</a>
@@ -78,7 +78,7 @@
 						</c:if>
 						<c:if test="${sessionScope.member.m_id != board.m_id && sessionScope.member.m_id == parti.m_id}">
 							<li class="list-group-item">
-								<a href="#" title="프로필 확인">${parti.nickname}</a>님이 <strong class="text-danger">탈퇴를 신청</strong>하셨습니다.
+								<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${parti.m_id}')">${parti.nickname}</a>님이 <strong class="text-danger">탈퇴를 신청</strong>하셨습니다.
 								<a href="${reqCancel}" class="text-danger cursor-no-line" title="신청 취소" onclick="reqCancel()">
 									<i class="fas fa-times-circle"></i>																		
 								</a>
@@ -86,28 +86,26 @@
 						</c:if>
 						<c:if test="${sessionScope.member.m_id != board.m_id && sessionScope.member.m_id != parti.m_id}">
 							<li class="list-group-item">
-								참여자 ${vs.count}님이 <strong class="text-danger">탈퇴를 신청</strong>하셨습니다.
+								<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${parti.m_id}')">${parti.nickname}</a> <strong class="text-danger"> 탈퇴를 신청</strong>하셨습니다.
 							</li>
 						</c:if>
-					
-					
 					</c:if>
-					
-					
 				</c:forEach>			
 			</c:if>
-			
 			
 		</ul>
 	</div>
 </div>
+
+
+
 <script type="text/javascript">
 	function ban(nickname) {		
 		if(!confirm('강퇴당한 사용자는 평점이 0점으로 처리됩니다.\r\n또한 다시 활동에 참가할 수 없게 됩니다.\r\n'+nickname+'님을 활동에서 강퇴하시겠습니까?')) {
 			event.preventDefault();
 		} 
 	}
-	function cancel() {		
+	function partiCancel() {		
 		if(!confirm('탈퇴 신청이 수락되면 다시 활동에 참가하실 수 없습니다.\r\n정말 활동에서 탈퇴하시겠습니까?')) {
 			event.preventDefault();
 		} 
@@ -127,4 +125,5 @@
 			event.preventDefault();
 		} 
 	}
+	
 </script>

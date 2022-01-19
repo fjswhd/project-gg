@@ -43,4 +43,7 @@ public class RequestDaoImpl implements RequestDao{
 	public List<Request> getMyRequest(String m_id) {
 		return sst.selectList("requestns.selectMyRequest", m_id);
 	}
+	public Request selectRequest(Map<String, Object> request) {
+		return sst.selectOne("requestns.selectRequest", request);
+	}
 }

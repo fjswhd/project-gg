@@ -47,7 +47,7 @@ public class RequestController {
 		request.put("b_no",b_no);
 		request.put("m_id",m_id);
 		
-		Request rq = rs.select(request);
+		Request rq = rs.selectRequest(request);
 		
 		if (rq == null) {	//첫 신청자인 경우
 			result = rs.insert(request);

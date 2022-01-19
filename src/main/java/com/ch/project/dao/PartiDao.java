@@ -14,5 +14,9 @@ public interface PartiDao {
 	int ptReCancel(Map<String, Object> ptReCancel);
 	int pcAccess(Map<String, Object> pcAccess);
 	int pcReject(Map<String, Object> pcReject);
+	
+	Parti banned(Map<String, Object> param);
+	
+	List<Parti> getMyParti(String m_id);
 
 }

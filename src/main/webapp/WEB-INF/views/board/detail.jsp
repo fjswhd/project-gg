@@ -26,7 +26,7 @@
 			<!-- 제목, 닉네임, 등록일, 조회수-->
 			<div class="align-center j-between shadow-bottom" style="height: 10%; padding: 10px;">
 				<span class="h3">
-					[${board.category.c_name}] ${board.subject} <small>${board.member.nickname} | ${board.reg_date} | 조회 : ${board.readcount }</small>
+					[${board.category.c_name}] ${board.subject} <small>${board.member.nickname} | ${board.reg_date} | 모집 현황 : ${partiNum}/${board.m_count}</small>
 				</span>
 				<span>
 					<!-- 현재 사용자가 로그인했고, 사용자가 보드의 writer는 아닌 경우 -->
@@ -34,23 +34,40 @@
 						<!-- 활동에 참여했다가 강퇴 || 탈퇴한 경우 재참여 불가능 -->
 						
 						<!-- 이미 활동에 참가 신청한 경우 -->
-						<button id="" class="btn btn-primary btn-sm" disabled="disabled">참가 신청</button>
-						
+						<!-- 강퇴, 탈퇴한 경우 -->
 						<!-- 참여자가 활동 최대 인원인 경우 -->
 						<!-- 모집 종료한 경우 -->
+						<c:if test="${requestPossible == false || full == true || banned == true || board.end == 'y'}">
+							<button class="btn btn-primary btn-sm" disabled="disabled">참가 신청</button>						
+						</c:if>
 						
 						<!-- 활동에 참가 신청되있지 않은 경우 -->
-						<button class="btn btn-primary btn-sm" onclick="makeRequest()">참가 신청</button>
+						<c:if test="${requestPossible == true && full == false && banned == false && board.end == 'n'}">
+							<button class="btn btn-primary btn-sm" onclick="makeRequest()">참가 신청</button>						
+						</c:if>
 					</c:if>
 					
-					<!-- 모집 종료하지 않은 경우 && 활동 최대 인원을 못 채운 경우 -->
-					<c:if test="${sessionScope.member.m_id == board.m_id}">
-						<button class="btn btn-success btn-sm">모집 종료</button>
+					<!-- 현재 사용자가 글 작성자인 경우 -->					
+					<c:if test="${not empty sessionScope.member && sessionScope.member.m_id == board.m_id}">
+						<!-- 모집 종료한 경우 -->
+						<c:if test="${board.end == 'y'}">
+							<!-- 인원을 다 못채움 -->
+							<c:if test="${full == false}">
+								<a href="${_board}/recruitStart.do?b_no=${board.b_no}" class="btn btn-success btn-sm" onclick="startConfirm()">모집 재개</a>
+							</c:if>
+							<!-- 인원을 다 못채움 -->
+							<c:if test="${full == true}">
+								<button class="btn btn-success btn-sm" disabled="disabled">모집 재개</button>
+							</c:if>
+						</c:if>
+						
+						<!-- 모집 종료하지 않은 경우 -->
+						<c:if test="${board.end == 'n'}">
+							<a href="${_board}/recruitEnd.do?b_no=${board.b_no}" class="btn btn-success btn-sm" onclick="endConfirm()">모집 종료</a>
+						</c:if>
 					</c:if>
 					
-					<!-- 모집 종료한 경우 && 활동 최대 인원을 못 채운 경우 -->
 					<c:if test="${sessionScope.member.m_id == board.m_id}">
-						<button class="btn btn-success btn-sm">모집 재개</button>
 					</c:if>
 					<c:if test="${sessionScope.member.m_id == board.m_id}">
 						<a href="${_board}/updateForm.do?b_no=${board.b_no}" class="btn btn-warning btn-sm">수정<i class="fas fa-undo-alt mg-l-5"></i></a>
@@ -101,6 +118,27 @@
 		</div>	
 	</div>
 	
+	<div class="modal fade" id="myModal">
+		<div class="modal-dialog ">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 id="profileTitle" class="modal-title"></h4>
+				</div>
+				<div class="modal-body flex-column align-center">
+					<img id="profileImg" class="img-circle mg-b-10" alt="" src="" width="200" height="200" style="box-shadow: 0 0 3px #808080;">
+					<ul id="profileContent" class="list-group" style="width: 80%; box-shadow: 0 0 2px #808080; border-radius: 4px;">
+						<li class="list-group-item"></li>				
+						<li class="list-group-item"></li>				
+						<li class="list-group-item"></li>				
+						<li class="list-group-item"></li>				
+						<li class="list-group-item"></li>				
+					</ul>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+	
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
@@ -144,6 +182,46 @@
 				//alert(b_no+','+m_id);
 				location.href = '${_request}/requestInsert.do?b_no='+b_no+'&m_id='+m_id;
 			} 
+		}
+		function getProfile(m_id) {
+			var sendData = '{"m_id":"'+m_id+'"}';
+			
+			var title = document.querySelector('#profileTitle'),
+				img = document.querySelector('#profileImg'),
+				li = document.querySelectorAll('#profileContent > li');
+			
+			fetch('${_member}/getProfile.do', {
+				method: 'POST',
+				body: sendData,
+				headers: {
+					'Content-Type':'application/json;charset=utf-8'
+				}
+			}).then(function(response) {
+				return response.json();
+			}).then(function(data) {
+				//닉네임 픽쳐 플레이스 레이팅 가입일 태그
+				title.textContent = data.nickname + '님의 프로필';
+				img.src = '${_profile}/' + data.picture;
+				
+				li[0].innerHTML = '<span class="col-md-3 bold">레벨</span>' + data.level;				
+				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span>' + data.reg_date;				
+				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span>' + data.place;				
+				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
+				li[4].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
+				
+			})
+			
+		}
+		
+		function endConfirm() {
+			if(!confirm('모집을 종료하시겠습니까?')) {
+				event.preventDefault();
+			}
+		}
+		function startConfirm() {
+			if(!confirm('다시 모집을 시작하시겠습니까?')) {
+				event.preventDefault();
+			}			
 		}
 	</script>
 </body>

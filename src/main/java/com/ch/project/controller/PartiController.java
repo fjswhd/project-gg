@@ -43,7 +43,7 @@ public class PartiController {
 	@RequestMapping ("/ban")
 	public String partiOut (@RequestParam Map<String, Object> param, Model model) {
 		int result = 0; // 강퇴실패
-		
+
 		result = ps.ban(param);
 		
 		String m_id = (String) param.get("m_id");

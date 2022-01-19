@@ -33,5 +33,10 @@ public class PartiDaoImpl implements PartiDao {
 	public int pcReject(Map<String, Object> pcReject) {
 		return sst.update("partins.pcReject",pcReject);
 	}
-	
+	public Parti banned(Map<String, Object> param) {
+		return sst.selectOne("partins.banned", param);
+	}
+	public List<Parti> getMyParti(String m_id) {
+		return sst.selectList("partins.getMyParti", m_id);
+	}
 }

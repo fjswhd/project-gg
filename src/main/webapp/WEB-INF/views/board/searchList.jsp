@@ -178,7 +178,7 @@
 		
 		const query = '${json}';
 		const param = JSON.parse(query);
-		
+		console.dir(query);
 		//검색하기
 		search(query, displaySearchResult);
 		

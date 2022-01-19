@@ -1,5 +1,6 @@
 package com.ch.project.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -14,9 +15,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ch.project.model.Board;
 import com.ch.project.model.Member;
+import com.ch.project.model.Parti;
 import com.ch.project.model.Request;
 import com.ch.project.service.BoardService;
 import com.ch.project.service.MemberService;
+import com.ch.project.service.PartiService;
 import com.ch.project.service.RequestService;
 
 @Controller
@@ -28,6 +31,8 @@ public class MyPageController {
 	private BoardService bs;
 	@Autowired
 	private RequestService rs;
+	@Autowired
+	private PartiService ps;
 	@Autowired
 	private BCryptPasswordEncoder bpPass;        	// 비밀번호를 암호화 (60개의 문자 랜덤으로)
 	
@@ -56,11 +61,18 @@ public class MyPageController {
 		//내가 신청한 글 구하기
 		List<Request> myRequestList = rs.getMyRequest(m_id);
 		
+		//내가 참여한 활동 리스트 구하기
+		List<Parti> myPartiList = ps.getMyParti(m_id);
+		
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String todayStr = sdf.format(today.getTime());
 		
 		model.addAttribute("level", level);
 		model.addAttribute("myBoardList", myBoardList);
 		model.addAttribute("myRequestList", myRequestList);
-		
+		model.addAttribute("myPartiList", myPartiList);
+		model.addAttribute("today", todayStr);
 		
 		return "myPage/myMain";
 	}

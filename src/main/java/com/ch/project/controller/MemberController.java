@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -143,17 +145,13 @@ public class MemberController {
 		}
 		String realPath = session.getServletContext().getRealPath("/resources/profile");	//실제 저장 위치
 		
-		System.out.println(param);
 		
 		String m_id = param.get("m_id");
 		
 		Member member = ms.selectMember(m_id);
 		
-		System.out.println(member);
 		
 		String fileName = mf.getOriginalFilename();
-		System.out.println(mf);
-		System.out.println(fileName);
 		//파일 입력하지 않았으면 파일명을 noFile로, 파일을 입력했으면 UUID+파일 확장자로 파일명 변경하고 파일을 저장, 
 		if (fileName.equals("")) {
 			fileName = "user.svg";
@@ -166,7 +164,6 @@ public class MemberController {
 			fos.write(mf.getBytes());
 			fos.close();			
 		}
-		
 		
 		//생일 입력 안하면 가입한 날짜를 생일로
 		Date birthday = param.get("birthday").equals("") ? member.getBirthday() : Date.valueOf(param.get("birthday"));
@@ -184,7 +181,36 @@ public class MemberController {
 		return "redirect:/member/loginForm.do";
 	}
 	
-	
+	@RequestMapping(value = "/getProfile", produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public Map<String, Object> getProfile(@RequestBody Map<String, Object> param) {
+		String m_id = (String) param.get("m_id");
+		
+		Member member = ms.selectMember(m_id);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String reg_date = sdf.format(member.getReg_date());
+		
+		//level 구하기
+		Calendar today = Calendar.getInstance();
+		
+		Calendar birthday = Calendar.getInstance();
+		birthday.setTime(member.getBirthday());
+		
+		int level = today.get(Calendar.YEAR) - birthday.get(Calendar.YEAR) + 1;
+		
+		//닉네임 픽쳐 플레이스 레이팅 가입일 태그 생일
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("nickname", member.getNickname());
+		result.put("picture", member.getPicture());
+		result.put("place", member.getPlace());
+		result.put("rating", member.getRating());
+		result.put("reg_date", reg_date);
+		result.put("level", level);
+		result.put("tag", member.getTag());
+		
+		return result;
+	}
 	
 	
 	// 로그인 폼으로 이동

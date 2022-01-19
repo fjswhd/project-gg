@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ch.project.model.Board;
 import com.ch.project.model.Category;
+import com.ch.project.model.Member;
+import com.ch.project.model.Parti;
+import com.ch.project.model.Request;
 import com.ch.project.service.BoardService;
+import com.ch.project.service.PartiService;
+import com.ch.project.service.RequestService;
 import com.google.gson.Gson;
 
 @Controller
@@ -25,7 +32,10 @@ import com.google.gson.Gson;
 public class BoardController {
 	@Autowired
 	private BoardService bs;
-	
+	@Autowired
+	private RequestService rs;
+	@Autowired
+	private PartiService ps;
 	
 	@RequestMapping("/insertForm")
 	public String insertForm(Model model) {
@@ -61,9 +71,44 @@ public class BoardController {
 		return "board/placeSearch";
 	}
 	@RequestMapping("/detail")
-	public String detail(Integer b_no, Model model) {
-		
+	public String detail(Integer b_no, HttpSession session, Model model) {
 		Board board = bs.getBoard(b_no);
+		//신청자 현황 >> 현재 사용자가 신청자인지 판별하기 위해 사용
+		
+		//1. 로그인 하지 않은 사용자(session.getAttribute("member") == null) >> 신청버튼도 안나오니 만들어줄 이유가 없음
+		//2. 로그인 한 사용자 	(session.getAttribute("member") != null) >> 현재 신청한 상태인지 (request 테이블에 값이 있고  accept = 'w', cancel = 'n') 
+		if(session.getAttribute("member") != null) {
+			Member member = (Member) session.getAttribute("member");
+			
+			Map<String, Object> param = new HashMap<String, Object>();
+			param.put("b_no", b_no);
+			param.put("m_id", member.getM_id());
+			
+			Request request = rs.select(param);
+			
+			if (request == null) {
+				model.addAttribute("requestPossible", true);
+			} else {
+				model.addAttribute("requestPossible", false);
+			}
+			//4. 사용자가 강퇴자인 경우
+			Parti parti = ps.banned(param);
+			
+			if (parti == null) {
+				model.addAttribute("banned", false);
+			} else {
+				model.addAttribute("banned", true);
+			}
+		}
+		
+		//3. 현재 참여자 명수가 게시글 참여자 명수 + 1(글쓴이 포함)과 같은 경우
+		List<Parti> partiList = ps.ptList(b_no);
+		if(board.getM_count() == partiList.size() + 1) {
+			model.addAttribute("full", true);
+		} else {
+			model.addAttribute("full", false);
+		}
+		model.addAttribute("partiNum", partiList.size() + 1);
 		
 		String address = board.getAddress();
 		String place = address.substring(0, address.lastIndexOf("("));
@@ -130,6 +175,25 @@ public class BoardController {
 		int result = bs.updateBoard(board);
 		
 		return "redirect:/board/detail.do?b_no="+board.getB_no();
+	}
+	
+	@RequestMapping("/recruitEnd")
+	public String recruitEnd(int b_no) {
+		Board board = bs.getBoard(b_no);
+		
+		board.setEnd("y");
+		bs.updateBoard(board);
+		
+		return "redirect:/board/detail.do?b_no="+b_no;
+	}
+	@RequestMapping("/recruitStart")
+	public String recruitStart(int b_no) {
+		Board board = bs.getBoard(b_no);
+		
+		board.setEnd("n");
+		bs.updateBoard(board);
+		
+		return "redirect:/board/detail.do?b_no="+b_no;
 	}
 	
 	@RequestMapping("/searchList")

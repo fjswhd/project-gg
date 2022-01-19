@@ -131,23 +131,62 @@
 				<div class="flex-column shadow-bottom pd-b-15 mg-t-15">
 					<h2 class="align-center mg-l-15">
 						<strong>나의 활동</strong>
-						<c:if test="${not empty myBoardList && myBoardList.size() > 5}">
+						<c:if test="${not empty myPartiList && myPartiList.size() > 5}">
 							<small><a href="#" class="cursor mg-l-10" title="더보기" style="color: #505050;"><i class="fas fa-plus-square"></i></a></small>
 						</c:if>
 					</h2>
 					<div id="myBoard">
 						<ul class="list-group mg-t-10 mg-b-5">
-							<c:if test="${empty myBoardList}">
+							<li class="list-group-item align-center">
+								<span class="col-md-6">
+									활동명											
+								</span>
+								<span class="col-md-2">
+									활동 상태											
+								</span>
+								<span class="col-md-2">
+									별점											
+								</span>
+								<span class="col-md-2">
+									상호평가											
+								</span>
+							</li>
+							
+							<c:if test="${empty myPartiList}">
 								<li class="list-group-item align-center">
-									<i class="fas fa-times-circle mg-r-5"></i>작성한 게시글이 없습니다.
-									<span><a href="#" class="btn btn-link">새 글 작성하기</a></span>
+									<i class="fas fa-times-circle mg-r-5"></i>참여한 게시글이 없습니다.
 								</li>							
 							</c:if>
-							<c:if test="${not empty myBoardList}">
-								<c:forEach var="board" items="${myBoardList}" varStatus="vs">
+							<c:if test="${not empty myPartiList}">
+								<c:forEach var="parti" items="${myPartiList}" varStatus="vs">
 									<c:if test="${vs.index < 5}">
 										<li class="list-group-item align-center">
-											<a href="${_board}/detail.do?b_no=${board.b_no}" class="cursor">[${board.category.c_name}] ${board.subject}</a>
+											<span class="col-md-6">
+												<a href="${_board}/detail.do?b_no=${parti.b_no}" class="cursor">[${parti.board.category.c_name}] ${parti.board.subject}</a>											
+											</span>
+											<span class="col-md-2">
+												<c:if test="${parti.cancel == 'y' }">
+													탈퇴
+												</c:if>										
+												<c:if test="${parti.ban == 'y' }">
+													강퇴
+												</c:if>										
+												<c:if test="${today < parti.board.s_date && parti.cancel != 'y' && parti.ban != 'y'}">
+													활동 예정											
+												</c:if>
+												<c:if test="${parti.board.s_date < today && today < parti.board.e_date && parti.cancel != 'y' && parti.ban != 'y'}">
+													활동 중											
+												</c:if>
+												<c:if test="${today > parti.board.s_date && parti.cancel != 'y' && parti.ban != 'y'}">
+													활동 종료											
+												</c:if>
+											</span>
+											<span class="col-md-2">
+												별점											
+											</span>
+											<span class="col-md-2">
+												<a href="${_board}/detail.do?b_no=${board.b_no}" class="btn btn-primary btn-sm">상호 평가</a>											
+											</span>
 										</li>										
 									</c:if>
 								</c:forEach>

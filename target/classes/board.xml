@@ -34,7 +34,9 @@
 				FROM BOARD b, CATEGORY c, MEMBER m
 				WHERE b.c_no = c.c_no
 				AND b.m_id = m.m_id
+				AND b.end = 'n'			<!-- 모집종료하지 않은 게시글 -->
 				AND b.del = 'n'			<!-- 삭제되지 않은 게시글 -->
+				AND b.e_date > sysdate	<!-- 활동 종료하지 않은 글 -->
 				<if test="s_date != null and s_date != ''">
 					AND s_date &lt;= TO_DATE(#{s_date}, 'yyyy-mm-dd')
 				</if>
@@ -61,6 +63,8 @@
 		SELECT COUNT(b.b_no)
 		FROM BOARD b
 		WHERE b.del = 'n'
+		AND b.end = 'n'			<!-- 모집종료하지 않은 게시글 -->
+		AND b.e_date > sysdate	<!-- 활동 종료하지 않은 글 -->
 		<if test="c_no != null and c_no != ''">
 			AND b.c_no = #{c_no}
 		</if>

@@ -31,7 +31,7 @@
 					</c:url>
 					<c:if test="${sessionScope.member.m_id == board.m_id}">
 						<li class="list-group-item">
-							<a href="#" title="프로필 확인">${request.nickname}</a>님이 <strong class="text-success">참가를 신청</strong>하셨습니다.
+							<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${request.m_id}')">${request.nickname}</a>님이 <strong class="text-success">참가를 신청</strong>하셨습니다.
 							<a href="${accept}" class="text-success cursor-no-line" title="신청 수락" onclick="accept('${request.nickname}')">
 								<i class="fas fa-check-circle"></i>																		
 							</a>
@@ -42,7 +42,7 @@
 					</c:if>
 					<c:if test="${sessionScope.member.m_id != board.m_id && sessionScope.member.m_id == request.m_id}">
 						<li class="list-group-item">
-							<a href="#" title="프로필 확인">${request.nickname}</a>님이 <strong class="text-success">참가를 신청</strong>하셨습니다.
+							<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${request.m_id}')">${request.nickname}</a>님이 <strong class="text-success">참가를 신청</strong>하셨습니다.
 							<a href="${cancel}" class="text-danger cursor-no-line" title="신청 취소" onclick="cancel()">
 								<i class="fas fa-times-circle"></i>																		
 							</a>

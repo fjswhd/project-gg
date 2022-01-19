@@ -12,4 +12,6 @@ public class Parti {
 	private String 	cancel;			// 참여 취소 여부
 	private String 	ban;			// 강퇴 여부 
 	private String 	nickname;		// 닉네임
+	
+	private Board board;
 }

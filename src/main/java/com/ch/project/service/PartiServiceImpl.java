@@ -35,5 +35,10 @@ public class PartiServiceImpl implements PartiService {
 	public int pcReject(Map<String, Object> pcReject) {
 		return pd.pcReject(pcReject);
 	}
-	
+	public Parti banned(Map<String, Object> param) {
+		return pd.banned(param);
+	}
+	public List<Parti> getMyParti(String m_id) {
+		return pd.getMyParti(m_id);
+	}
 }

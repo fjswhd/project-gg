@@ -47,4 +47,8 @@ public class RequestServiceImpl implements RequestService{
 	public List<Request> getMyRequest(String m_id) {
 		return rd.getMyRequest(m_id);
 	}
+	//신청 이력 확인(신청이 존재하는가)
+	public Request selectRequest(Map<String, Object> request) {
+		return rd.selectRequest(request);
+	}
 }

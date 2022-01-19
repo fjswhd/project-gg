@@ -19,6 +19,9 @@ public interface RequestService {
 	int cancel(Map<String, Object> cancel);			// 참여 신청 취소
 	
 	//내가 신청한 게시글 리스트
-	List<Request> getMyRequest(String m_id);		
+	List<Request> getMyRequest(String m_id);
+	
+	//b_no, m_id로 신청한 이력 확인
+	Request selectRequest(Map<String, Object> request);		
 	
 }

@@ -15,5 +15,9 @@ public interface PartiService {
 	int pcAccess(Map<String, Object> pcAccess);		// 참여자 탈퇴 신청 수락
 	int pcReject(Map<String, Object> pcReject);		// 참여자 탈퇴 신청 거절
 	
-
+	//강퇴||탈퇴 여부판단
+	Parti banned(Map<String, Object> param);
+	
+	//내 참여 내역
+	List<Parti> getMyParti(String m_id);
 }

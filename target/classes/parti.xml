@@ -34,6 +34,26 @@
 		ORDER BY p.reg_date DESC
 	</select>
 	
+	<!-- 사용자가 강퇴||탈퇴 했는지 여부 판단 -->
+	<select id="banned" parameterType="map" resultType="parti">
+		SELECT p.*, m.nickname
+		FROM parti p, member m
+		WHERE b_no = #{b_no}
+		AND p.m_id = #{m_id} 
+		AND (cancel = 'y' OR ban = 'y')
+		AND p.m_id = m.m_id
+	</select>
+	
+	<select id="getMyParti" parameterType="string" resultMap="partiResultMap">
+		SELECT p.*, m.nickname, b.*, c.* 
+		FROM parti p, member m, board b, category c
+		WHERE p.m_id = #{m_id}
+		AND p.m_id = m.m_id
+		AND p.b_no = b.b_no
+		AND b.c_no = c.c_no
+		ORDER BY p.reg_date DESC
+	</select>
+	
 	<!-- 참여 강퇴 -->
 	<update id = "ban" parameterType="Map">
 		update parti set ban = 'y' where b_no = #{b_no} and m_id = #{m_id}
@@ -59,5 +79,28 @@
 		update parti set cancel = 'n' where b_no = #{b_no} and m_id = #{m_id}
 	</update>
 	
-	
+	<resultMap type="parti" 		id="partiResultMap">
+		<id 	column="b_no" 		property="b_no" />
+		<id 	column="m_id" 		property="m_id" />
+		<result column="reg_date" 	property="reg_date" />
+		<result column="cancel"		property="cancel" />
+		<result column="ban" 		property="ban" />
+		<result column="nickname" 	property="nickname" />
+		<association property="board"	javaType="board" resultMap="boardResultMap" />
+	</resultMap>
+	<resultMap type="board" id="boardResultMap">
+		<id 	column="b_no" 		property="b_no" />
+		<result column="m_id" 		property="m_id" />
+		<result column="c_no" 		property="c_no" />
+		<result column="subject" 	property="subject" />
+		<result column="s_date" 	property="s_date" />
+		<result column="e_date" 	property="e_date" />
+		<result column="end"		property="end" />
+		<result column="del" 		property="del" />
+		<association property="category"	javaType="category" resultMap="categoryResultMap" />
+	</resultMap>
+	<resultMap type="category" id="categoryResultMap">
+		<id 	column="c_no" 		property="c_no" />
+		<result	column="c_name" 	property="c_name" />
+	</resultMap>
 </mapper>
