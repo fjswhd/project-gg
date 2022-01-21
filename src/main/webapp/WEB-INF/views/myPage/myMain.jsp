@@ -24,7 +24,10 @@
 				<div class="flex-column shadow-bottom pd-b-15">
 					<h2 class="align-center mg-l-15">
 						<strong>마이 프로필</strong>
-						<small><a href="#" class="cursor mg-l-10" style="color: #505050;"><i class="fas fa-user-edit"></i></a></small>
+						<small>
+							<a href="#" class="cursor mg-l-10" style="color: #505050;"><i class="fas fa-user-edit"></i></a>
+							<a href="#" class="cursor mg-l-10" style="color: #505050;"><i class="fas fa-unlock-alt"></i></a>
+						</small>
 					</h2>
 					<div id="profile" class="align-center">
 						<div id="imgContainer" class="col-md-3 j-center" style="">
