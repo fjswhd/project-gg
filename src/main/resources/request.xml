@@ -55,6 +55,14 @@
 		update request set accept = 'n' where b_no = #{b_no} and m_id = #{m_id}
 	</update> 
 	
+	<!-- 참여 신청 전체 거절 -->
+	<update id="rejectAll" parameterType="int">
+		UPDATE REQUEST
+		SET accept = 'n'
+		WHERE b_no = #{b_no}
+		AND accept != 'y' 
+	</update>
+	
 	<!-- 참여  신청 취소 -->
 	<update id = "cancel" parameterType="Map">
 		update request set cancel = 'y' where b_no = #{b_no} and m_id = #{m_id}

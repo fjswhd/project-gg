@@ -11,7 +11,7 @@
 		<ul class="list-group">
 			<c:if test="${empty partiList}">
 				<li class="list-group-item">
-					아직 참여자가 없습니다.
+					현재 참여자가 없습니다.
 				</li>
 			</c:if>
 			

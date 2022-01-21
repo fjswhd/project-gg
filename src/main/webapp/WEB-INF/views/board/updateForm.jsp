@@ -31,13 +31,13 @@
 						<label>활동 일시</label>					
 					</span>
 					<span class="col-md-2 pd-0">
-						<input type="date" name="s_date" class="form-control input-sm" required="required" value="${board.s_date}" readonly="readonly">
+						<input type="date" name="s_date" class="form-control input-sm" title="활동 시작일" required="required" value="${board.s_date}" readonly="readonly">
 					</span>
 					<span class="col-md-1 j-center pd-0">
 						~
 					</span>
 					<span class="col-md-2 pd-0">
-						<input type="date" name="e_date" class="form-control input-sm" required="required" value="${board.e_date}" readonly="readonly">
+						<input type="date" name="e_date" class="form-control input-sm" title="활동 종료일" required="required" value="${board.e_date}" readonly="readonly">
 					</span>
 				</div>
 				
@@ -47,7 +47,7 @@
 						<label>모집 인원</label>					
 					</span>
 					<span class="col-md-2 pd-0">
-						<input type="number" name="m_count" class="form-control input-sm" placeholder="00명" required="required" value="${board.m_count}">
+						<input type="number" name="m_count" class="form-control input-sm" placeholder="글쓴이 포함 총원" title="모집인원은 글쓴이를 포함한 인원을 적어주세요." required="required" value="${board.m_count}" min="2" max="20">
 					</span>
 				</div>
 				
@@ -139,7 +139,8 @@
 		}
 		
 		frm.onsubmit = function(event) {
-			var m_count = parseInt(frm.m_count.value);
+			var m_count = parseInt(frm.m_count.value),
+				currentParti = parseInt('${currentParti}');
 			
 			if(m_count < 2) {
 				event.preventDefault();
@@ -147,6 +148,20 @@
 				$('[name="m_count"]').popover({
 					html: true,
 					content: '모집인원은 <b>2명 이상</b>이어야합니다.',
+					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>'
+				});
+				$('[name="m_count"]').popover('show');
+				$('[name="m_count"]').focus();
+				$('[name="m_count"]').on('blur', function() {
+					$('[name="m_count"]').popover('destroy');
+				})
+				return;	
+			} else if (m_count < currentParti) {
+				event.preventDefault();
+				
+				$('[name="m_count"]').popover({
+					html: true,
+					content: '모집인원은 <b>현재 참여인원보다 많아야</b>합니다.',
 					template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>'
 				});
 				$('[name="m_count"]').popover('show');

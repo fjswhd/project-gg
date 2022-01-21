@@ -6,13 +6,16 @@
 		<typeAlias alias="board" 	type="com.ch.project.model.Board" />
 		<typeAlias alias="category" type="com.ch.project.model.Category" />
 		<typeAlias alias="member" 	type="com.ch.project.model.Member" />
+		<typeAlias alias="notice" 	type="com.ch.project.model.Notice" />
 		<typeAlias alias="parti" 	type="com.ch.project.model.Parti" />
+		<typeAlias alias="rating" 	type="com.ch.project.model.Rating" />
 		<typeAlias alias="reply" 	type="com.ch.project.model.Reply" />
 		<typeAlias alias="request" 	type="com.ch.project.model.Request" />
 	</typeAliases>
 	<mappers>
 		<mapper resource="board.xml" />
 		<mapper resource="member.xml" />
+		<mapper resource="notice.xml" />
 		<mapper resource="parti.xml" />
 		<mapper resource="reply.xml" />
 		<mapper resource="request.xml" />

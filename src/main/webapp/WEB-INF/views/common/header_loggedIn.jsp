@@ -8,7 +8,7 @@
 
 	<div class="j-end align-end f-1" style="margin-bottom: 15px;">
 		<div class="align-end pd-3">
-			<a href="${_}/loginForm.do" class="btn btn-link" style="margin-right: 15px;"><b>공지사항</b></a>				
+			<a href="${_notice}/list.do" class="btn btn-link" style="margin-right: 15px;"><b>공지사항</b></a>				
 			<div class="btn-group" style="margin-right: 15px;">
 				<button class="btn btn-link dropdown-toggle" data-toggle="dropdown" style="position: relative; color: #000;">
 					<i class="fas fa-bell fa-3x"></i>
@@ -22,9 +22,6 @@
 			</div>				
 			<div class="btn-group">
 				<button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-					<c:if test="${sessionScope.member.picture == 'noFile'}">
-						<i class="fas fa-user-circle fa-3x"></i>
-					</c:if>
 					<c:if test="${sessionScope.member.picture != 'noFile'}">
 						<img alt="" src="${_profile}/${sessionScope.member.picture}" class="img-circle" height="42" width="42">
 					</c:if>

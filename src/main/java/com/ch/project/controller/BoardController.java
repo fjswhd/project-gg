@@ -60,9 +60,14 @@ public class BoardController {
 		List<Category> categoryList = bs.getCategories();
 		
 		Board board = bs.getBoard(b_no);
+		
+		//글쓴이 포함 현재 참여자 구하기
+		List<Parti> partiList = ps.ptList(b_no);
+		int currentParti = partiList.size() + 1;
 
 		model.addAttribute("categoryList", categoryList);
 		model.addAttribute("board", board);
+		model.addAttribute("currentParti", currentParti);
 		
 		return "board/updateForm";
 	}
@@ -168,8 +173,6 @@ public class BoardController {
 		//나중에 json 객체로 만들때 오류나지 않게 "앞에 \넣어주기
 		String content = board.getContent().replace("\"", "\\\"");
 		board.setContent(content);
-		
-		System.out.println(board);
 		
 		//게시글 DB에 넣기
 		int result = bs.updateBoard(board);

@@ -83,7 +83,7 @@
 	display: inline-block; padding: 5px; padding-left: 15px; box-shadow: -1px 0 1px -1px #000;	
 }
 .img-btn {
-	position: absolute; left: 53%; top: 73%; border-radius: 20px; border-color: #444; background: #222; color: #fff;
+	position: absolute; left: 53%; top: 73%; border-radius: 20px; border-color: #888; background: #888; color: #fff; box-shadow: 0 0 1px #808080;
 }
 .img-btn:hover {
 	color: #fff;
@@ -98,6 +98,8 @@
 
 .mg-auto {margin: 0 auto;}
 .mg-r-5 {margin-right: 5px;}
+.mg-r-10 {margin-right: 10px;}
+.mg-r-15 {margin-right: 15px;}
 .mg-t-5 {margin-top: 5px;}
 .mg-t-10 {margin-top: 10px;}
 .mg-t-15 {margin-top: 15px;}
@@ -172,6 +174,9 @@
 	width: 100%;
 	border-radius: 3px;
 }
+.popover-content {
+	white-space: nowrap;
+}
 #searchAgain {
 	position: absolute;
 	left: 50%; 
@@ -212,6 +217,10 @@
 	cursor: pointer;
 }
 
+.ellipsis {
+	overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
 .wrap {position: relative; width: 100%; max-width: 250px; height: 100%; max-height: 100px; transform: translate(0, -70px); padding: 5px; overflow-x: hidden; overflow-y: auto; line-height: 1.5; background: #fff; box-shadow: 0 0 3px #808080;}
 .wrap .info {width: 100%;}
 
@@ -241,7 +250,6 @@
 	overflow-x: hidden;
 }
 
-.table th {
-	text-align: center !important;
-	font-weight: bold;
+.loading {
+	position: absolute; width: 100%; height: 100%; top: 0; left: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.5); color: #fff; z-index:10;
 }

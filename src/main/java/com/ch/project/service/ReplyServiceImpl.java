@@ -21,4 +21,20 @@ public class ReplyServiceImpl implements ReplyService {
 	public int insertReply(Reply reply) {
 		return rd.insertReply(reply);
 	}
+	//다음 댓글 번호 구하기
+	public int selectReplyCount() {
+		return rd.selectReplyCount();
+	}
+	//re_step구하기
+	public int selectReStep(int re_ref) {
+		return rd.selectReStep(re_ref);
+	}
+	//댓글 원주인 구하기
+	public String selectReplyMaster(int re_ref) {
+		return rd.selectReplyMaster(re_ref);
+	}
+	//댓글 삭제
+	public int delete(int re_no) {
+		return rd.delete(re_no);
+	}
 }

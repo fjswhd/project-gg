@@ -22,6 +22,9 @@ public interface RequestService {
 	List<Request> getMyRequest(String m_id);
 	
 	//b_no, m_id로 신청한 이력 확인
-	Request selectRequest(Map<String, Object> request);		
+	Request selectRequest(Map<String, Object> request);
+	
+	//마지막 신청자를 수락할 때 나머지 신청자 거절
+	void rejectAll(int b_no);		
 	
 }

@@ -13,9 +13,10 @@
 
 <c:url value="/board" 				var="_board" />
 <c:url value="/member" 				var="_member" />
+<c:url value="/myPage" 				var="_myPage" />
+<c:url value="/notice" 				var="_notice" />
 <c:url value="/parti" 				var="_parti" />
 <c:url value="/reply" 				var="_reply" />
 <c:url value="/request" 			var="_request" />
-<c:url value="/myPage" 				var="_myPage" />
 
 <c:set var="_" value="<%= pageContext.getServletContext().getContextPath() %>" />

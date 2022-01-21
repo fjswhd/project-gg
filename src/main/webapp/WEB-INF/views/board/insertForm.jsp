@@ -30,13 +30,13 @@
 						<label>활동 일시</label>					
 					</span>
 					<span class="col-md-2 pd-0">
-						<input type="date" name="s_date" class="form-control input-sm" required="required" min="${today}" max="${lastday}">
+						<input type="date" name="s_date" class="form-control input-sm" title="활동 시작일" required="required" min="${today}" max="${lastday}">
 					</span>
 					<span class="col-md-1 j-center pd-0">
 						~
 					</span>
 					<span class="col-md-2 pd-0">
-						<input type="date" name="e_date" class="form-control input-sm" required="required" min="${today}" max="${lastday}">
+						<input type="date" name="e_date" class="form-control input-sm" title="활동 종료일" required="required" min="${today}" max="${lastday}">
 					</span>
 				</div>
 				
@@ -46,7 +46,7 @@
 						<label>모집 인원</label>					
 					</span>
 					<span class="col-md-2 pd-0">
-						<input type="number" id="m_count" name="m_count" class="form-control input-sm" placeholder="00명" required="required">
+						<input type="number" id="m_count" name="m_count" class="form-control input-sm" placeholder="글쓴이 포함 총원" title="모집인원은 글쓴이를 포함한 인원을 적어주세요." required="required" min="2" max="20">
 					</span>
 				</div>
 				
@@ -156,7 +156,7 @@
 			
 			var address = $('[name="address"]');
 			
-			if(!address) {
+			if(!address.val()) {
 				event.preventDefault();
 				
 				$('#placeSearch').popover({

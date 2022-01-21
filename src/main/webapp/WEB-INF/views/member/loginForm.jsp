@@ -54,6 +54,9 @@
 			var sendData = $('form[name=frm]').serialize(),
 				msg = document.querySelectorAll('.msg')[0];
 			
+			var prev = '${prev}';
+			sendData += '&prev='+prev;
+			
 			//ajax로 로그인 확인하자
 			fetch('/project/member/login.do', {
 				method :'POST',
@@ -74,8 +77,8 @@
 					msg.innerHTML = '잘못된 비밀번호입니다.';
 					msg.classList.replace('ok','err');
 					//로그인 성공
-				} else if (result > 0) {
-					location.href = '/project/home.do';
+				} else {
+					location.href = result;
 				} 
 				//메시지 부분 열기
 				$('#mCollapse').collapse('show');
