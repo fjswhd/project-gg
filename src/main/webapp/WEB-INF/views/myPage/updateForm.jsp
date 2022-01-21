@@ -5,88 +5,79 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>같이 가치</title>
 </head>
 <body>
 	<script type="text/javascript">
-// 중복체크안해도 submit 버튼 활성화 
-	$(function() { 
-		var nickname = '${member.nickname }'; 
-			if (nickname == frm.nickname.value || nickname.equals(frm.nickname.value)) {
-				$("#submit").attr('disabled', false); 
-			} else {
-				$("#submit").attr('disabled', true); 
-	} 
-	}); 
+	frm.nickname.addEventListener('change', nickChk)
+	async function nickChk() {
+		var nickname = document.querySelector('#nickname').value,
+		msg = document.querySelectorAll('.msg')[2],
+		sendData = 'nickname='+nickname;
+		
+		var result = await fetch('${_member}/nickChk.do', {
+			method :'POST',
+			body: sendData,
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		}).then(function(response) {
+			return response.text();
+		})
+		
+		if (nickname.trim() == '' || nickname == null) {
+			msg.innerHTML = '별명을 입력하세요.';
+		} else if (result == '1') {
+			msg.innerHTML = '사용 가능한 별명입니다.';
+			msg.classList.replace('err','ok');
+			document.querySelector('button[type="submit"]').removeAttribute('disabled');
+			return;
+		} else if(result != '1') {
+			msg.innerHTML = '중복된 별명입니다.';
+		}
+	}
 	
-	// 닉네임 중복체크 function
-	function(nickChk() {
-		if(!frm.nickname.value) { 
-			alert("닉네임을 입력하세요")
-			frm.nickname.focus(); 
-			frm.nickname.value=""; 
-			return false; 
-			} else { 
-				$.post('nickChkMy.do', 'nickname='+frm.nickname.value+'&m_id='+'${member.m_id}', function(data) { 
-					$('#nickChk').html(data); 
-					if (data == '사용가능한 닉네임입니다.') { 
-						$("#submit").attr('disabled', false); 
-						} else {
-							$("#submit").attr('disabled', true); 
-							} 
-					}); 
-				} 
-		} // 파일 업로드 미리보기 완성
-	function preView(fis) { 
-			var str = fis.value;
-				$('.thumbnail').text(fis.value.substring(str.lastIndexOf("\\")+1)); 
-				// 이미지를 변경
-				var reader = new FileReader(); 
-					reader.onload = function(e) {
-						$('.thumbnail').attr('src',e.target.result); 
-						}
-					reader.readAsDataURL(fis.files[0]); 
-					} 
-				//파일이름 
-				$(document).ready(function() { 
-					var fileTarget = $('.filebox .upload-hidden');
-						fileTarget.on('change', function() {
-							// 값이 변경되면 
-							if(window.FileReader){
-								var filename = $(this)[0].files[0].name; 
-							} else {
-								$(this).siblings('.upload-name').val(filename); 
-							); 
-						});
 </script>
-<div class="col-md-5 mg-auto box">
-			<form action="${_}/join" method="post" name="frm">
-				<div id="eCollapse" class="collapse">
-					<div class="form-group">
-						<label for="email">이메일을 입력하세요.</label>
-						<input type="email" id="email" name="email" class="form-control" required="required">
-						<input type="button" onclick="idChk()" value="이메일 인증"
-							class="btn_sm_full2">
-						<div id="idChk" class="err"></div>
-					</div>
-					<div id="pCollapse" class="collapse">
-						<div class="form-group">
-							<label for="password">비밀번호를 입력하세요.</label> <input type="password"
-								id="password" name="password" class="form-control"
-								required="required" placeholder="비밀번호">
-						</div>
-						<div class="form-group">
-							<label for="passwordChk">비밀번호를 확인해주세요.</label> <input
-								type="password" id="passwordChk" name="passwordChk"
-								class="form-control" required="required" placeholder="비밀번호 확인">
-							<div class="msg err"></div>
-						</div>
-					</div>
-					<div class="flex" style="justify-content: flex-end;">
-						<button type="submit" class="btn btn-primary">가입하기</button>
-					</div>
+	<div class="col-md-5 mg-auto box">
+		<form action="${_myPage}/Update.do" method="post" name="frm" enctype="multipart/form-data">
+			<input type="hidden" name="m_id" value="${member.m_id }">
+			<div class="j-center mg-b-10"
+				style="color: #808080; position: relative;">
+				<label class="btn btn-sm img-btn" for="picture"> <i
+					class="far fa-images mg-r-5"></i><strong>등록</strong>
+				</label> <input type="file" id="picture" name="picture" class="hide">
+				<div id="image">
+					<i class="fas fa-user-circle fa-10x"></i>
 				</div>
-			</form>
-		</div>
+			</div>
+			<div class="form-group">
+				<label for="nickname">수정할 별명을 입력해주세요.</label> <input type="text"
+					id="nickname" name="nickname" class="form-control" placeholder="별명">
+				<div class="j-between">
+					<div class="msg err"></div>
+				</div>
+			</div>
+			<div class="form-group mg-t-5">
+				<label for="birthday">레벨 측정을 위해 생일을 입력해주세요.</label> <input
+					type="date" id="birthday" name="birthday" class="form-control"
+					min="1900-01-01">
+			</div>
+			<div class="form-group">
+				<label for="place">주요 출몰지(활동 지역)를 알려주세요.</label> <input type="text"
+					id="place" name="place" class="form-control" placeholder="주요 출몰지">
+				<div class="msg err"></div>
+			</div>
+			<div class="form-group">
+				<label for="tag">당신의 관심사를 알려주세요.</label> <input type="text" id="tag"
+					name="tag" class="form-control" placeholder="#관심사">
+			</div>
+			<div class="j-end">
+				<button type="submit" class="btn btn-primary mg-r-5">수정 완료</button>
+			</div>
+		</form>
+	</div>
+
+
+	<!-- <button type="submit" class="btn btn-primary">수정 완료</button> -->
 </body>
 </html>
