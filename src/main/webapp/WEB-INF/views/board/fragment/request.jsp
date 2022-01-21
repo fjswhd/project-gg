@@ -11,7 +11,7 @@
 		<ul class="list-group">
 			<c:if test="${empty requestList}">
 				<li class="list-group-item">
-					아직 신청자가 없습니다. 첫 신청자가 되어보세요!
+					현재 신청자가 없습니다.
 				</li>
 			</c:if>
 			

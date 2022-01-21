@@ -28,4 +28,6 @@ public interface RequestDao {
 
 	Request selectRequest(Map<String, Object> request);
 	
+	void rejectAll(int b_no);
+	
 }

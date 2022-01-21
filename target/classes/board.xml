@@ -85,13 +85,22 @@
 	
 	<!-- 내가 쓴 게시글 -->
 	<select id="selectMyBoard" parameterType="string" resultMap="boardResultMap">
-		SELECT b.*, c.* , m.m_id, m.nickname
-		FROM BOARD b, CATEGORY c, MEMBER m 
+		SELECT b.*, c.* , m.nickname, ROUND(r.r_score, 2) AS r_score
+		FROM BOARD b, CATEGORY c, MEMBER m, (
+			SELECT b1.b_no, avg(r_score) r_score
+			FROM BOARD b1, RATING r1
+			WHERE b1.m_id = #{m_id}
+			AND b1.b_no = r1.b_no (+)
+			GROUP BY b1.b_no
+		) r
 		WHERE b.c_no = c.c_no 
 		AND b.m_id = m.m_id
+		AND b.b_no = r.b_no
 		AND b.m_id = #{m_id}
-		ORDER BY b.reg_date DESC
+		ORDER BY b.reg_date
 	</select>
+	
+	<!--  -->
 	
 	<!-- 게시글 수정 -->
 	<update id="updateBoard" parameterType="board">
@@ -122,6 +131,7 @@
 		<result column="reg_date" 	property="reg_date" />
 		<result column="end"		property="end" />
 		<result column="del" 		property="del" />
+		<result column="r_score" 	property="r_score" />
 		<association property="category"	javaType="category" resultMap="categoryResultMap" />
 		<association property="member" 		javaType="member" 	resultMap="memberResultMap" />
 	</resultMap>

@@ -19,10 +19,11 @@
 
 <c:url value="/board" 				var="_board" />
 <c:url value="/member" 				var="_member" />
+<c:url value="/myPage" 				var="_myPage" />
+<c:url value="/notice" 				var="_notice" />
 <c:url value="/parti" 				var="_parti" />
 <c:url value="/reply" 				var="_reply" />
 <c:url value="/request" 			var="_request" />
-<c:url value="/myPage" 				var="_myPage" />
 
 <c:set var="_" value="<%= pageContext.getServletContext().getContextPath() %>" />
 
@@ -34,3 +35,9 @@
 
 <!-- font awsome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+
+<!-- google icon -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Sharp|Material+Icons+Two+Tone|Material+Icons+Outlined|Material+Icons+Round" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">

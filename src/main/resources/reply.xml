@@ -3,21 +3,42 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="replyns">
 	<select id="selectReplyList" parameterType="int" resultMap="replyResultMap">
-		SELECT re.*, b.*, m.*
+		SELECT re.*, b.m_id as b_m_id, m.nickname
 		FROM REPLY re, BOARD b, MEMBER m
 		WHERE re.b_no = #{b_no}
 		AND re.b_no = b.b_no
 		AND re.m_id = m.m_id
+		ORDER BY re_ref, re_step 
 	</select>
 	
 	<!-- 댓글 입력 -->
 	<insert id="insertReply" parameterType="reply">
-		<selectKey keyProperty="re_no" resultType="int" order="BEFORE">
-			SELECT COUNT(re_no)+1 FROM REPLY
-		</selectKey>
 		INSERT INTO REPLY
 		VALUES (#{re_no}, #{b_no}, #{m_id}, #{content}, #{re_ref}, #{re_step}, sysdate, #{secret}, 'n')
 	</insert>
+	
+	<select id="selectReplyCount" resultType="int">
+		SELECT COUNT(re_no)+1 FROM REPLY
+	</select>
+	
+	<select id="selectReStep" parameterType="int" resultType="int">
+		SELECT COUNT(*) 
+		FROM REPLY
+		WHERE re_ref = #{re_ref}
+	</select>
+	
+	<!-- 댓글 원주인 구하기 -->
+	<select id="selectReplyMaster" parameterType="int" resultType="string">
+		SELECT m_id
+		FROM REPLY
+		WHERE re_no = #{re_ref}
+	</select>
+	
+	<update id="delete" parameterType="int">
+		UPDATE REPLY
+		SET del = 'y'
+		WHERE re_no = #{re_no}
+	</update>
 	
 	<!-- join을 위한 resultMap -->
 	<resultMap type="reply" id="replyResultMap">
@@ -36,7 +57,7 @@
 	
 	<resultMap type="board" id="boardResultMap">
 		<id 	column="b_no" 		property="b_no" />
-		<result column="m_id" 		property="m_id" />
+		<result column="b_m_id" 	property="m_id" />
 	</resultMap>
 	<resultMap type="member" id="memberResultMap">
 		<id 	column="m_id" 			property="m_id" />

@@ -14,7 +14,7 @@
 	
 	<insert id="insert" parameterType="member">
 		INSERT INTO MEMBER
-		VALUES (#{m_id}, #{password}, sysdate, #{nickname}, sysdate, '알 수 없음', '알 수 없음', 'noFile', 0.0, 'n', 'n')
+		VALUES (#{m_id}, #{password}, sysdate, #{nickname}, sysdate, '알 수 없음', '알 수 없음', 'user.svg', 0.0, 'n', 'n')
 	</insert>
 	
 	<!-- 회원프로필 수정 -->

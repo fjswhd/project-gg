@@ -46,67 +46,64 @@ public class MemberController {
 	
 	// 회원가입 폼으로 이동
 	@RequestMapping("/joinForm")
-	public String joinForm() {
+	public String joinForm(HttpSession session) {
+		if(session.getAttribute("member") != null) {
+			return "redirect:/home";
+		}
 		return "member/joinForm";
 	}
 	// 프로필 입력 폼으로 이동
 	@RequestMapping("/profileForm")
-	public String profileForm(Model model, RedirectAttributes re, HttpServletRequest request) {
-		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
-		
-		int result = 0;
-		Member member = null;
-		if (flashMap != null) {
-			result = (Integer)flashMap.get("result");
-			member = (Member)flashMap.get("member");
-		}
-		
+	public String profileForm(String m_id, Model model) {
+//		falshAttribute사용 시
+//		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+//		
+//		int result = 0;
+//		Member member = null;
+//		if (flashMap != null) {
+//			result = (Integer)flashMap.get("result");
+//			member = (Member)flashMap.get("member");
+//		}
+//		
 		
 		/* flashMap에 Map으로 담겨져 온 경우
 		 * HashMap<String, Object> param = (HashMap<String, Object>)flashMap.get("param"); 
 		 * int result = (Integer) param.get("result"); 
 		 * Member member = (Member) param.get("member");
 		 */
-		
-		if (result != 1) {
-			re.addFlashAttribute("result", result);
-			return "redirect:/error";
-		}
-		
-		model.addAttribute("member", member);
+
+		model.addAttribute("m_id", m_id);
 		return "member/profileForm";
 	}
-	@RequestMapping("/join")
+	@RequestMapping(value = "/join", produces = "text/html;charset=utf-8")
+	@ResponseBody
 	public String join(Member member, Model model, RedirectAttributes re, HttpServletRequest request) {
-		int result = 0;
+		String result = "0";
 		
 		if(request.getHeader("referer") == null) {
-			result = -1;
-			model.addAttribute("result", result);
-			return "error";
+			result = "-1";
+			return result;
 		}
 		
 		String password = bpPass.encode(member.getPassword());
 		member.setPassword(password);
 		
+		//기본 프로필 설정 >> db에서
+		
 		//막아둠
-		result = ms.insert(member);
+		int iResult = ms.insert(member);
+		//int iResult = 1;
 		
-		//result = 1;
+		if (iResult == 1) {
+			result = member.getM_id();
+		} else {
+			result = "0";
+		}
 		
-		re.addFlashAttribute("result", result);
-		re.addFlashAttribute("member", member);
+//		re.addFlashAttribute("result", result);
+//		re.addFlashAttribute("member", member);
 		
-		/* 
-		 * Map<String, Object> param = new HashMap<String, Object>();
-		 * 
-		 * param.put("result", result); 
-		 * param.put("member", member);
-		 * 
-		 * re.addFlashAttribute("param", param);
-		 */
-		
-		return "redirect:/member/profileForm.do";
+		return result;
 	}
 
 	// 아이디 중복체크 할때 사용
@@ -138,22 +135,19 @@ public class MemberController {
 	}
 	
 	//member로 넣으면 400에러 enctype과 관련된문제같음
-	@RequestMapping("/profileInsert")
-	public String profileInsert(@RequestParam("picture") MultipartFile mf, @RequestParam Map<String, String> param, Model model, HttpSession session, HttpServletRequest request) throws IOException {
-		if (request.getHeader("referer") == null) {
-			return "redirect:/member/loginForm";
-		}
-		String realPath = session.getServletContext().getRealPath("/resources/profile");	//실제 저장 위치
+	@RequestMapping(value = "/profileInsert")
+	@ResponseBody
+	public Map<String, Object> profileInsert(@RequestParam("picture") MultipartFile mf, @RequestParam Map<String, String> param, Model model, HttpSession session, HttpServletRequest request) throws IOException {
 		
+		String realPath = session.getServletContext().getRealPath("/resources/profile");	//실제 저장 위치
 		
 		String m_id = param.get("m_id");
 		
 		Member member = ms.selectMember(m_id);
 		
-		
 		String fileName = mf.getOriginalFilename();
 		//파일 입력하지 않았으면 파일명을 noFile로, 파일을 입력했으면 UUID+파일 확장자로 파일명 변경하고 파일을 저장, 
-		if (fileName.equals("")) {
+		if (fileName.equals("") || fileName == null) {
 			fileName = "user.svg";
 		} else {
 			//파일명을 변경하고 싶을 때 : 날짜(연월일시분초), UUID
@@ -178,7 +172,28 @@ public class MemberController {
 		int result = 0;
 		result = ms.updateProfile(member);
 		
-		return "redirect:/member/loginForm.do";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String reg_date = sdf.format(member.getReg_date());
+		
+		//level 구하기
+		Calendar today = Calendar.getInstance();
+		
+		Calendar cBirthday = Calendar.getInstance();
+		cBirthday.setTime(member.getBirthday());
+		
+		int level = today.get(Calendar.YEAR) - cBirthday.get(Calendar.YEAR) + 1;
+		
+		//닉네임 픽쳐 플레이스 레이팅 가입일 태그 생일
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("nickname", member.getNickname());
+		resultMap.put("picture", member.getPicture());
+		resultMap.put("place", member.getPlace());
+		resultMap.put("rating", member.getRating());
+		resultMap.put("reg_date", reg_date);
+		resultMap.put("level", level);
+		resultMap.put("tag", member.getTag());
+		
+		return resultMap;
 	}
 	
 	@RequestMapping(value = "/getProfile", produces = "application/json;charset=utf-8")
@@ -216,26 +231,39 @@ public class MemberController {
 	// 로그인 폼으로 이동
 	@RequestMapping("loginForm")
 	public String loginForm(HttpServletRequest request, Model model) {
+		String prev = "";
+		
+		if(request.getHeader("referer") != null) {
+			prev = request.getHeader("referer");
+		}
+		
+		model.addAttribute("prev", prev);
+		
 		return "member/loginForm";
 	}
 
 	@RequestMapping(value = "login", produces = "text/html;charset=utf-8")
 	@ResponseBody
-	public String login(String m_id, String password, HttpSession session) {
-		int result = 0;   // 암호가 다르다
+	public String login(String m_id, String password, String prev, HttpSession session) {
+		if(prev.contains("profileForm")) {
+			prev = "/project/home.do";
+		}
+		
+		
+		String result = "0";   // 암호가 다르다
 		Member member = ms.selectMember(m_id);
 		if (member == null || member.getDel().equals("y"))
-			result = -1;  // 없는 id
+			result = "-1";  // 없는 id
 		else {
 			// if (member.getPassword().equals(member2.getPassword())) 이렇게 쓰면 안 된다
 			// 입력된 데이터도 암호화 시켜서 DB에 있는 암호와 비교해야 한다(matches)
 			if (bpPass.matches(password, member.getPassword())) {
-				result = 1;   // 성공(id와 암호가 일치)
+				result = prev;   // 성공(id와 암호가 일치)
 				session.setAttribute("member", member);
 			}
 		}
 		
-		return result+"";
+		return result;
 	}
 	// 로그 아웃
 	@RequestMapping("logout")

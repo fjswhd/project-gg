@@ -19,7 +19,9 @@ public class Board {
 	private Date	reg_date;
 	private String	end;
 	private String	del;
+	private Float	r_score;
 	
 	private Category 	category;
 	private Member		member;
+//	private Rating		rating;
 }

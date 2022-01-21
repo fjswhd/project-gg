@@ -51,4 +51,7 @@ public class RequestServiceImpl implements RequestService{
 	public Request selectRequest(Map<String, Object> request) {
 		return rd.selectRequest(request);
 	}
+	public void rejectAll(int b_no) {
+		rd.rejectAll(b_no);
+	}
 }

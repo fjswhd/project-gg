@@ -8,6 +8,18 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<c:if test="${result == -2 }">
+		<script type="text/javascript">
+			alert("이미 모집 종료된 글입니다.")
+			history.go(-1);
+		</script>
+	</c:if>
+	<c:if test="${result == -1 }">
+		<script type="text/javascript">
+			alert("이미 참여 신청한 글입니다.")
+			history.go(-1);
+		</script>
+	</c:if>
 	<c:if test="${result == -1 }">
 		<script type="text/javascript">
 			alert("이미 참여 신청한 글입니다.")

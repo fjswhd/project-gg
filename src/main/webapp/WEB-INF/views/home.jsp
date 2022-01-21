@@ -166,11 +166,11 @@
 		
 		frm.address.addEventListener('keyup', function() {
 			$('[name="address"]').autocomplete({  //오토 컴플릿트 시작
-	            source : list
-	            /* function(request, response) {
+	            source : //list
+	            function(request, response) {
 	                var results = $.ui.autocomplete.filter(list, request.term);
-	                response(results.slice(0, 5));
-	            } */,    // source 는 자동 완성 대상
+	                response(results.slice(0, 30));
+	            },    // source 는 자동 완성 대상
 	            select : function(event, ui) {    //아이템 선택시
 					frm.address.blur();
 	           		frm.address.value = ui.item.value;

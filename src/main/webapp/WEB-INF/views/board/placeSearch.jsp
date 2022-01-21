@@ -360,8 +360,9 @@
 	        	
 				var content = 
 					'<ul class="list-group" style="margin: 0;">'+
-					'<li class="list-group-item" style="padding: 3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">'+
-					place.place_name+'<a href="'+place.place_url+'" class="cursor mg-l-5" title="상세보기" onclick="detail()"><i class="fas fa-link"></i></a>'+
+					'<li class="list-group-item align-center" style="padding: 3px;">'+
+					'<span class="ellipsis">'+place.place_name+'</span>'+
+					'<a href="'+place.place_url+'" class="cursor mg-l-5" title="상세보기" onclick="detail()"><i class="fas fa-link"></i></a>'+
 					'<i class="fas fa-check mg-l-5 cursor cursor-no-line" title="선택하기"></i>'+
 					'</li>'+
 					'</ul>';
@@ -452,8 +453,9 @@
         	
 			var content = 
 				'<ul class="list-group" style="margin: 0;">'+
-				'<li class="list-group-item" style="padding: 3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">'+
-				''+place.place_name+'<a href="'+place.place_url+'" class="cursor mg-l-5" title="상세보기" onclick="detail()"><i class="fas fa-link"></i></a>'+
+				'<li class="list-group-item" style="padding: 3px;">'+
+				'<span class="ellipsis">'+place.place_name+'</span>'+
+				'<a href="'+place.place_url+'" class="cursor mg-l-5" title="상세보기" onclick="detail()"><i class="fas fa-link"></i></a>'+
 				'<i class="fas fa-check mg-l-5 cursor cursor-no-line" title="선택하기"></i>'+
 				'</li>'+
 				'</ul>';

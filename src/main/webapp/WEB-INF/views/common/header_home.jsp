@@ -8,7 +8,7 @@
 
 	<div class="j-end align-end f-1" style="margin-bottom: 15px;">
 		<div class="align-end pd-3">
-			<a href="${_member}/loginForm.do" class="btn btn-link mg-r-5"><b>공지사항</b></a>				
+			<a href="${_notice}/list.do" class="btn btn-link mg-r-5"><b>공지사항</b></a>				
 			<a href="${_member}/loginForm.do" class="btn btn-primary mg-r-5">로그인</a>				
 			<a href="${_member}/joinForm.do" class="btn btn-default">회원가입</a>
 		</div>

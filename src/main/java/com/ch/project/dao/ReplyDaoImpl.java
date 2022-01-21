@@ -20,4 +20,20 @@ public class ReplyDaoImpl implements ReplyDao {
 	public int insertReply(Reply reply) {
 		return sst.insert("replyns.insertReply", reply);
 	}
+	//다음 댓글 번호 구하기
+	public int selectReplyCount() {
+		return sst.selectOne("replyns.selectReplyCount");
+	}
+	
+	public int selectReStep(int re_ref) {
+		return sst.selectOne("replyns.selectReStep", re_ref);
+	}
+	
+	public String selectReplyMaster(int re_ref) {
+		return sst.selectOne("replyns.selectReplyMaster", re_ref);
+	}
+	//댓글 삭제
+	public int delete(int re_no) {
+		return sst.delete("replyns.delete", re_no);
+	}
 }

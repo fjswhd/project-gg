@@ -24,42 +24,70 @@
 			<c:forEach var="reply" items="${replyList}">
 				<!-- 삭제된 댓글인 경우 -->
 				<c:if test="${reply.del == 'y'}">
-					<li class="list-group-item">
+					<li class="list-group-item flex">
+						<c:if test="${reply.re_step > 0}">
+							<div class="col-md-1 j-center align-center">
+								<i class="fas fa-reply fa-lg fa-rotate-180 mg-r-5"></i>
+							</div>
+						</c:if>		
 						<h5><i class="fas fa-times-circle mg-r-5"></i>삭제된 댓글입니다.</h5>					
 					</li>	
 				</c:if>
 				
-				<!-- 비밀댓글 yes && !(세션아이디 == 글아이디 || 세션아이디 == 댓글아이디) -->
-				<c:if test="${reply.del == 'n' && (reply.secret == 'y' && !(sessionScope.member.m_id == reply.board.m_id || sessionScope.member.m_id == reply.m_id))}">
-					<li class="list-group-item">
+				<!-- 비밀댓글 yes && !(세션아이디 == 글아이디 || 세션아이디 == 댓글아이디 || 세션아이디 == 댓글 원주인 아이디) -->
+				<c:if test="${reply.del == 'n' && reply.secret == 'y' && !(sessionScope.member.m_id == reply.board.m_id || sessionScope.member.m_id == reply.m_id || sessionScope.member.m_id == reply.re_master)}">
+					<li class="list-group-item flex">
+						<c:if test="${reply.re_step > 0}">
+							<div class="col-md-1 j-center align-center">
+								<i class="fas fa-reply fa-lg fa-rotate-180 mg-r-5"></i>
+							</div>
+						</c:if>	
 						<h5><i class="fas fa-lock mg-r-5"></i>비밀 댓글입니다.</h5>					
 					</li>	
 				</c:if>
 				
+				
 				<!-- 비밀댓글 no || (세션아이디 == 글아이디 || 세션아이디 == 댓글아이디) -->
-				<c:if test="${reply.del == 'n' && (reply.secret == 'n' || (sessionScope.member.m_id == reply.board.m_id || sessionScope.member.m_id == reply.m_id))}">
-					<li id="re_${reply.re_no}" class="list-group-item pd-t-5" style="word-break: break-all;">
-						<div class="align-center">
-							<span class="h4 mg-r-5">
-								<a href="#myModal" class="h4" data-toggle="modal" title="프로필 확인" onclick="getProfile('${reply.m_id}')">
-									${reply.member.nickname}
-								</a>
-								<small class="mg-l-5">
-									${reply.reg_date}
-								</small>
-							</span>
-							<c:if test="${not empty sessionScope.member}">
-								<a class="cursor-no-line mg-r-5" title="답글" onclick="replyToReply('${reply.re_no}')">
-									<i class="fas fa-comment-dots"></i>																		
-								</a>							
-							</c:if>
-							<c:if test="${sessionScope.member.m_id == reply.m_id }">
-								<a class="text-danger cursor-no-line" title="삭제">
-									<i class="fas fa-times-circle"></i>																		
-								</a>							
-							</c:if>
+				<c:if test="${reply.del == 'n' && (reply.secret == 'n' || (sessionScope.member.m_id == reply.board.m_id || sessionScope.member.m_id == reply.m_id || sessionScope.member.m_id == reply.re_master))}">
+					<li class="list-group-item pd-t-5 flex re_${reply.re_ref}" style="word-break: break-all;">
+						<c:if test="${reply.re_step > 0}">
+							<div class="col-md-1 j-center align-center">
+								<i class="fas fa-reply fa-lg fa-rotate-180 mg-r-5"></i>
+							</div>
+						</c:if>						
+						<div> 
+							<div class="align-center">
+								<div class="h4 align-center">
+									<a href="#myModal" class="mg-r-5" style="color: #000;" data-toggle="modal" title="프로필 확인" onclick="getProfile('${reply.m_id}')">
+										${reply.member.nickname}
+									</a>
+									<c:if test="${reply.m_id == reply.board.m_id }">
+										<div class="label label-primary mg-r-5" style="font-size: 10px;">작성자</div>
+									</c:if>
+									<small class="mg-r-5">
+										${reply.reg_date}
+									</small>
+								</div>
+								<c:if test="${reply.secret == 'y' }">
+									<i class="fas fa-lock mg-r-5"></i>
+								</c:if>
+								<c:if test="${not empty sessionScope.member && reply.re_step == 0}">
+									<a class="cursor-no-line mg-r-5" title="답글" onclick="replyToReply('${reply.re_ref}')">
+										<i class="fas fa-reply"></i>																		
+									</a>							
+								</c:if>
+								<c:if test="${sessionScope.member.m_id == reply.m_id }">
+									<c:url var="replyDelete" value="/reply/delete.do">
+										<c:param name="re_no" value="${reply.re_no}" />
+										<c:param name="b_no" value="${reply.b_no}" />
+									</c:url>
+									<a href="${replyDelete}" class="text-danger cursor-no-line" title="삭제" onclick="deleteReplyConfirm()">
+										<i class="fas fa-times-circle"></i>																		
+									</a>							
+								</c:if>
+							</div>
+							<pre style="padding: 0; background: #fff; font-family: sans-serif; border: none; border-radius: 0;">${reply.content}</pre>
 						</div>
-						${reply.content}
 					</li>
 				</c:if>
 			
@@ -75,7 +103,7 @@
 					<input type="hidden" name="re_ref" value="0">
 					<input type="hidden" name="re_step" value="0">
 					<div class="col-md-2 pd-0 j-center">
-						<h4>${sessionScope.member.nickname}</h4>
+						<h4><i id="nick" class="fas fa-reply fa-rotate-180 mg-r-5 hide"></i>${sessionScope.member.nickname}</h4>
 					</div>
 					<div class="col-md-10 list">
 						<textarea name="content" class="form-control mg-b-5" rows="3" cols="40"></textarea>
@@ -122,25 +150,35 @@
 	}
 	
 	var button = document.querySelector('#cancelReToRe');
-	
+	var icon = document.querySelector('#nick');
 	var writeForm = document.querySelector('#writeReply');
 	
-	button.addEventListener('click', function() {
-		document.querySelector('ul.list-group').appendChild(writeForm);
-		
-		button.classList.add('hide');
-		
-		frm.re_ref.value = '0';
-	});
+	if(button) {
+		button.addEventListener('click', function() {
+			document.querySelector('ul.list-group').appendChild(writeForm);
+			
+			button.classList.add('hide');
+			icon.classList.add('hide');
+			
+			frm.re_ref.value = '0';
+		});
+	}
 	
-	function replyToReply(re_no) {
+	function replyToReply(re_ref) {
+		var targets = document.querySelectorAll('.re_'+re_ref);
+		var target = targets[0];
 		
-		var target = document.querySelector('#re_'+re_no);
-		frm.re_ref.value = re_no;
+		frm.re_ref.value = re_ref;
 		
 		document.querySelector('ul.list-group').insertBefore(writeForm, target.nextSibling);
 		
 		button.classList.remove('hide');
-		
+		icon.classList.remove('hide');
+	}
+	
+	function deleteReplyConfirm() {
+		if(!confirm('댓글을 삭제하시겠습니까?')) {
+			event.preventDefault();
+		} 
 	}
 </script>

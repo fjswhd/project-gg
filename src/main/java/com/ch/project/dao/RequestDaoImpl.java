@@ -46,4 +46,7 @@ public class RequestDaoImpl implements RequestDao{
 	public Request selectRequest(Map<String, Object> request) {
 		return sst.selectOne("requestns.selectRequest", request);
 	}
+	public void rejectAll(int b_no) {
+		sst.update("requestns.rejectAll", b_no);
+	}
 }

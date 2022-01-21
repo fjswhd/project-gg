@@ -1,6 +1,7 @@
 package com.ch.project.model;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class Parti {
 	private String 	nickname;		// 닉네임
 	
 	private Board board;
+	private double rating;
 }

@@ -191,6 +191,18 @@
 				img = document.querySelector('#profileImg'),
 				li = document.querySelectorAll('#profileContent > li');
 			
+			$.post('${_member}/getProfile.do', sendData, function() {
+				title.textContent = data.nickname + '님의 프로필';
+				img.src = '${_profile}/' + data.picture;
+				
+				li[0].innerHTML = '<span class="col-md-3 bold">레벨</span>' + data.level;				
+				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span>' + data.reg_date;				
+				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span>' + data.place;				
+				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
+				li[4].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
+				
+			})
+			
 			fetch('${_member}/getProfile.do', {
 				method: 'POST',
 				body: sendData,
