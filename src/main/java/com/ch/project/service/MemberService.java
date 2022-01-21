@@ -7,5 +7,8 @@ public interface MemberService {
 	Member selectMemberWithNick(String nickname);
 	int insert(Member member);
 	int updateProfile(Member member);
+	
+	//멤버 정보 수정
+	int updateMember(Member member);
 
 }

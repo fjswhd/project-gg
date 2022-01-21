@@ -246,6 +246,7 @@
 						});
 						
 						document.querySelector('#profileForm').addEventListener('click', function() {
+							//m_id="아이디"쭉 붙는게 별로 보기 싫어서 form 만들어서 보냄
 							var newForm = document.createElement('form');
 							newForm.setAttribute('method', 'POST');
 							newForm.setAttribute('action', '${_member}/profileForm.do');

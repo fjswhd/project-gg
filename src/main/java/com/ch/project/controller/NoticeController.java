@@ -61,7 +61,7 @@ public class NoticeController {
 		param.put("startRow", startRow);
 		param.put("endRow", endRow);
 		
-		List<Notice> noticeList = ns.selectNotice(param);
+		List<Notice> noticeList = ns.selectNoticeList(param);
 		
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("firstPage", firstPage);
@@ -69,5 +69,52 @@ public class NoticeController {
 		model.addAttribute("page", page);
 		
 		return "notice/list";
+	}
+	@RequestMapping("/insertForm")
+	public String insertForm() {
+		return "notice/insertForm";
+	}
+	@RequestMapping("/insert")
+	public String insert(Notice notice) {
+		int no_no = ns.selectNoticeNum();
+		notice.setNo_no(no_no);
+		
+		int result = 0;
+		result = ns.insertNotice(notice);
+		
+		return "redirect:/notice/list";
+	}
+	@RequestMapping("/detail")
+	public String detail(int no_no, Model model) {
+		Notice notice = ns.selectNotice(no_no);
+		
+		model.addAttribute("notice", notice);
+		
+		return "notice/detail";
+	}
+	@RequestMapping("/updateForm")
+	public String updateForm(int no_no, Model model) {
+		Notice notice = ns.selectNotice(no_no);
+		
+		model.addAttribute("notice", notice);
+		
+		return "notice/updateForm";
+	}
+	@RequestMapping("/update")
+	public String update(Notice notice) {
+		int result = 0;
+		result = ns.updateNotice(notice);
+		
+		return "redirect:/notice/detail.do?no_no="+notice.getNo_no();
+	}
+	@RequestMapping("/delete")
+	public String delete(Notice notice, Model model) {
+		int result = 0;
+		notice.setDel("y");
+		result = ns.updateNotice(notice);
+		
+		model.addAttribute("result", result);
+		
+		return "notice/delete";
 	}
 }

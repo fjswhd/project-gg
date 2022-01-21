@@ -22,6 +22,21 @@
 		update member set birthday=#{birthday}, place=#{place},tag=#{tag}, picture=#{picture} where m_id=#{m_id} 
 	</update>
 	
+	<update id="updateMember" parameterType="member">
+		UPDATE MEMBER
+		<set>
+			<if test="password != null">password = #{password},</if>
+			<if test="nickname != null">nickname = #{nickname},</if>
+			<if test="birthday != null">birthday = #{birthday},</if>
+			<if test="place != null">place = #{place},</if>
+			<if test="tag != null">tag = #{tag},</if>
+			<if test="picture != null">picture = #{picture},</if>
+			<if test="rating != null">rating = #{rating},</if>
+			<if test="del != null">del = #{del},</if>
+		</set>
+		WHERE m_id = #{m_id}
+	</update>
+	
 	
 	<!-- 비밀번호 찾기 -->
 	<select id="selectFindPw" parameterType="member" resultType="member">

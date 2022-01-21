@@ -23,7 +23,9 @@
 			<div class="flex-column pd-b-15">
 				<h2 class="align-center mg-l-15">
 					<strong>공지사항</strong>
-					<small><a href="${_notice}/insert.do" class="cursor mg-l-10" style="color: #505050;"><i class="fas fa-edit"></i></a></small>
+					<c:if test="${sessionScope.member.admin == 'y' }">
+						<small><a href="${_notice}/insertForm.do" class="cursor mg-l-10" style="color: #505050;"><i class="fas fa-edit"></i></a></small>
+					</c:if>
 				</h2>
 				<div id="profile" class="align-center">
 					<ul class="list-group mg-b-5" style="width: 100%;">
@@ -40,7 +42,9 @@
 						<c:if test="${not empty noticeList}">
 							<c:forEach var="notice" items="${noticeList}">
 								<li class="list-group-item">
-									<div class="col-md-8 bold">${notice.subject}</div>
+									<div class="col-md-8">
+										<a href="${_notice}/detail.do?no_no=${notice.no_no}" style="color: #000;">${notice.subject}</a>
+									</div>
 									<div class="col-md-2 bold">${notice.member.nickname}</div>
 									<div class="bold">${notice.reg_date}</div>
 								</li>

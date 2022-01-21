@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.ch.project.model.MailSender;
 import com.ch.project.model.Member;
 import com.ch.project.service.MemberService;
 
@@ -43,6 +44,8 @@ public class MemberController {
 	private MemberService ms;
 	@Autowired
 	private BCryptPasswordEncoder bpPass;        	// 비밀번호를 암호화 (60개의 문자 랜덤으로)
+	@Autowired
+	private MailSender mailSender;
 	
 	// 회원가입 폼으로 이동
 	@RequestMapping("/joinForm")
@@ -245,7 +248,7 @@ public class MemberController {
 	@RequestMapping(value = "login", produces = "text/html;charset=utf-8")
 	@ResponseBody
 	public String login(String m_id, String password, String prev, HttpSession session) {
-		if(prev.contains("profileForm")) {
+		if(prev.contains("profileForm") || prev.contains("findPwForm")) {
 			prev = "/project/home.do";
 		}
 		
@@ -275,57 +278,42 @@ public class MemberController {
 	
 	// 비밀번호 찾기 폼으로 이동
 	@RequestMapping("findPwForm")
-	public String findPwForm(String m_id, Model model) {
-		// 아이디 찾기 후 비밀번호를 찾으면 값이 자동으로 넘어가게 하기 위함
-		model.addAttribute("m_id", m_id);
+	public String findPwForm() {
 		return "member/findPwForm";
 	}
 	
-	// 비밀번호 찾기
-	@RequestMapping("findPwResult")
-	public String findPwResult(Member member, Model model) {
-		int result = 0;
-		Member member2 = ms.selectFindPw(member);
-		if (member2 != null) {
-			// 아이디가 존재 할 때 결과 값 1을 반영
-			result = 1;
-			model.addAttribute("member", member2);
-			
-			// 난수 생성
-			String msg = "";
-			String code = "";
-			Random random = new Random();
-			for(int i=0; i<3; i++) {
-				int index = random.nextInt(25)+65; //A~Z까지 랜덤 알파벳 생성
-				code += (char)index;
-			}
-			int numIndex = random.nextInt(9999)+1000; //4자리 랜덤 정수 생성
-			code += numIndex;		
-			msg = (String)code;  //메시지 내용 함수입력
-					
-			MimeMessage mm = jMailSender.createMimeMessage();
-			try {
-				MimeMessageHelper mmh = new MimeMessageHelper(mm, true, "utf-8");
-				mmh.setSubject("타이거 임시비밀번호 입니다.");
-				mmh.setText("임시비밀번호 : " + msg);
-				mmh.setTo(member.getM_id());
-				mmh.setFrom("email@email.com");
-				jMailSender.send(mm);
-				
-				// 이메일이 성공적으로 보내졌으면 멤버 비밀번호를 변경
-				member.setPassword(msg);
-				int resultUpdatePw = ms.updatePw(member);
-				model.addAttribute("resultUpdatePw", resultUpdatePw);
-				
-			} catch (Exception e) {
-				result = 0;
-				model.addAttribute("msg", e.getMessage());
-			}		
-		} else {
-			result = -1;
+	//이메일 인증번호 보내기
+	@RequestMapping(value = "authUser", produces = "html/text;charset=utf-8")
+	@ResponseBody
+	public String authUser(String m_id) {
+		//6자리 랜덤 정수 만들기
+		String result = "";
+		
+		for(int i = 0; i < 6; i++) {
+			int num = (int)(Math.random() * 10);
+			result += num;
 		}
-		model.addAttribute("result", result);
-		return "member/findPw";
+		
+		mailSender.authMail(m_id, result);
+		
+		return result;
+	}
+	
+	
+	// 비밀번호 찾기
+	@RequestMapping("findPw")
+	public String findPwResult(Member member, Model model, HttpServletRequest request) {
+		String newPw = mailSender.getNewPassword();
+		
+		mailSender.initPwMailSend(member.getM_id(), newPw, request);
+		
+		newPw = bpPass.encode(newPw);
+		member.setPassword(newPw);
+		
+		int result = ms.updateMember(member);
+		
+		
+		return "redirect:/member/loginForm.do";
 	}
 	
 	// 마이페이지 메인으로 이동

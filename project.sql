@@ -8,6 +8,9 @@ select * from member
 
 delete from member where m_id = 'ejm4000@naver.com'
 
+INSERT INTO MEMBER
+VALUES ('admin@naver.com', '', sysdate, 'admin', sysdate, '알 수 없음', '알 수 없음', 'user.svg', 0.0, 'y', 'n')
+
 update member
 set picture = 'user.svg', admin = 'y'
 where m_id = 'admin@naver.com'
@@ -16,6 +19,12 @@ create table category (
 	c_no		number			primary key,
 	c_name		varchar2(15)	not null
 )
+--카테고리 데이터 입력
+INSERT INTO CATEGORY VALUES (10, '여행')
+INSERT INTO CATEGORY VALUES (20, '식사')
+INSERT INTO CATEGORY VALUES (30, '취미')
+INSERT INTO CATEGORY VALUES (40, '스터디')
+INSERT INTO CATEGORY VALUES (90, '기타')
 
 drop table board
 CREATE TABLE board (
@@ -34,12 +43,6 @@ CREATE TABLE board (
 	del			char(1)			default 'n'		not null
 )
 
---카테고리 데이터 입력
-INSERT INTO CATEGORY VALUES (10, '여행')
-INSERT INTO CATEGORY VALUES (20, '식사')
-INSERT INTO CATEGORY VALUES (30, '취미')
-INSERT INTO CATEGORY VALUES (40, '스터디')
-INSERT INTO CATEGORY VALUES (90, '기타')
 
 CREATE TABLE MEMBER (
 	m_id		varchar2(30)	primary key,

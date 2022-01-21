@@ -33,7 +33,7 @@
 					<input type="password" id="password" name="password" class="form-control" required="required" placeholder="비밀번호">
 				</div>
 				<div class="j-between">
-					<a href="#" class="btn btn-link" style="padding-left: 0;">비밀번호를 잊으셨나요?</a>
+					<a href="${_member}/findPwForm.do" class="btn btn-link" style="padding-left: 0;">비밀번호를 잊으셨나요?</a>
 					<button type="submit" class="btn btn-primary">로그인</button>						
 				</div>				
 				<div id="mCollapse" class="msg err flex collapse" style="margin-top: 10px">
