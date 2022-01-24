@@ -231,7 +231,7 @@
 											</span>
 											<span class="col-md-2">
 												<c:if test="${today >  parti.board.e_date}">
-													<a href="#rating" class="btn btn-primary btn-sm" data-toggle="modal" onclick="partiList2()">상호 평가</a>											
+													<a href="#rating" class="btn btn-primary btn-sm" data-toggle="modal" onclick="partiList(${parti.b_no})">상호 평가</a>											
 												</c:if>
 												<c:if test="${today <=  parti.board.e_date}">
 													<a href="#rating" class="btn btn-primary btn-sm disabled"  >상호 평가</a>											
