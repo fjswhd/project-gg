@@ -37,13 +37,10 @@
 							<!-- Wrapper for slides -->
 							<div class="carousel-inner" role="listbox" style="height: 500px;">
 								<div class="item active">
-									<img src="${logo}" alt="..." height="500">
-									<div class="carousel-caption">
-										...
-									</div>
+									<img src="${images}/main.png" alt="..." height="500" onclick="img1()" style="cursor:pointer;">
 								</div>
 								<div class="item">
-									<img src="${community}" alt="..." height="500">
+									<img src="${images}/main2.png" alt="..." height="500" onclick="img2()" style="cursor:pointer;">
 									<div class="carousel-caption">
 										...
 									</div>
@@ -192,6 +189,13 @@
 	            position: { my : "right top", at: "right bottom" }    
 	        });
 		})
+		
+		function img1() {
+			location.href = '${_notice}/latest.do';
+		}
+		function img2() {
+			location.href = '${_notice}/latest2.do';
+		}
 	</script>
 </body>
 </html>

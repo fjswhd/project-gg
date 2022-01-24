@@ -6,6 +6,11 @@ select * from PARTI
 select * from rating
 select * from member
 
+update parti
+set ban = 'n'
+where m_id = 'fjswhd93@hanmail.net'
+and b_no = 106
+
 delete from member where m_id = 'ejm4000@naver.com'
 
 INSERT INTO MEMBER
@@ -191,3 +196,7 @@ set rating = 0
 SELECT B_NO, M_ID, AVG(R_SCORE) R_SCORE
 	FROM RATING
 	GROUP BY B_NO, M_ID
+	
+update member
+set picture = '099b122a-4a36-4a0a-b848-609d55dbf46e.jpg'
+where m_id = 'fjswhd93@naver.com'

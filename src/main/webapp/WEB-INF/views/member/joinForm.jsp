@@ -186,9 +186,6 @@
 		}
 		
 		async function nickChk() {
-			
-		
-			
 			var nickname = document.querySelector('#nickname').value,
 			msg = document.querySelectorAll('.msg')[2],
 			sendData = 'nickname='+nickname;

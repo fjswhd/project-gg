@@ -19,7 +19,8 @@
 	
 	<!-- 회원프로필 수정 -->
 	<update id="updateProfile" parameterType="member">
-		update member set birthday=#{birthday}, place=#{place},tag=#{tag}, picture=#{picture} where m_id=#{m_id} 
+		update member 
+		set nickname=#{nickname}, birthday=#{birthday}, place=#{place},tag=#{tag}, picture=#{picture} where m_id=#{m_id} 
 	</update>
 	
 	<update id="updateMember" parameterType="member">

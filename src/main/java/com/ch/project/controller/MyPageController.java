@@ -21,7 +21,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ch.project.model.Board;
 import com.ch.project.model.Member;
-import com.ch.project.model.Notice;
 import com.ch.project.model.Parti;
 import com.ch.project.model.Rating;
 import com.ch.project.model.Request;
@@ -247,8 +246,6 @@ public class MyPageController {
 				member.setM_id(rating.getM_id());
 				member.setRating(avg);
 				int updateResult = ms.updateRating(member);
-				
-				//result++;
 			}
 			
 		} else {
@@ -260,7 +257,6 @@ public class MyPageController {
 				rating.setR_no(r_no);
 				
 				result += ras.updateRating(rating);
-				//result++;
 				
 				//특정인의 평균 점수 구하기
 				float avg = ras.selectAvgScore(rating.getM_id());
@@ -273,7 +269,6 @@ public class MyPageController {
 			}
 		}
 		
-		//3. result로 결과를 받아서 
 		return result+"";
 	}
 	

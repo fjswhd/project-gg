@@ -7,10 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ch.project.model.Board;
 import com.ch.project.model.Notice;
 import com.ch.project.service.NoticeService;
 
@@ -117,4 +115,32 @@ public class NoticeController {
 		
 		return "notice/delete";
 	}
+	
+	@RequestMapping("/latest")
+	public String latest(Model model) {
+		//매개변수에 topN을 위한 row 변수 넣고 전달
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("startRow", 1);
+		param.put("endRow", 10);
+		
+		List<Notice> noticeList = ns.selectNoticeList(param);
+		
+		int no_no = noticeList.get(1).getNo_no();
+		
+		return "redirect:/notice/detail.do?no_no="+no_no;
+	}
+	@RequestMapping("/latest2")
+	public String latest2(Model model) {
+		//매개변수에 topN을 위한 row 변수 넣고 전달
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("startRow", 1);
+		param.put("endRow", 10);
+		
+		List<Notice> noticeList = ns.selectNoticeList(param);
+		
+		int no_no = noticeList.get(0).getNo_no();
+		
+		return "redirect:/notice/detail.do?no_no="+no_no;
+	}
+	
 }

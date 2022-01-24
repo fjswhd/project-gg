@@ -1,7 +1,5 @@
 package com.ch.project.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,29 +7,22 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.ch.project.model.MailSender;
 import com.ch.project.model.Member;
@@ -332,7 +323,7 @@ public class MemberController {
 		
 		//파일 입력하지 않았으면 아무 것도 안함 >> 기존의 사진 그대로 유지 
 		if (fileName.equals("") || fileName == null) {
-			fileName = "user.svg";
+			fileName = member.getPicture();
 		} else {
 			//기존 파일 삭제
 			if(!member.getPicture().equals("user.svg")) {
@@ -349,11 +340,13 @@ public class MemberController {
 			fos.close();			
 		}
 		
+		String nickname = param.get("nickname").equals("") ? member.getNickname() : param.get("nickname");
 		//생일 입력 안하면 가입한 날짜를 생일로
 		Date birthday = param.get("birthday").equals("") ? member.getBirthday() : Date.valueOf(param.get("birthday"));
 		String place = param.get("place").equals("") ? "알 수 없음" : param.get("place");
 		String tag = param.get("tag").equals("") ? "알 수 없음" : param.get("tag") ;
-
+		
+		member.setNickname(nickname);
 		member.setPicture(fileName);
 		member.setBirthday(birthday);
 		member.setPlace(place);
@@ -386,66 +379,6 @@ public class MemberController {
 		resultMap.put("tag", member.getTag());
 		
 		return resultMap;
-	}
-	
-	
-	// 마이페이지 회원정보 수정폼으로 이동
-	@RequestMapping("updateForm")
-	public String updateForm(Model model, HttpSession session) {
-		String m_id = (String)session.getAttribute("m_id");
-		Member member = ms.select(m_id);
-		model.addAttribute("member", member);
-		return "myPage/updateForm";
-	}
-		
-	// 마이페이지 회원정보 수정
-	@RequestMapping("updateResult")
-	public String updateResult(Member member, Model model, HttpSession session) throws IOException {
-		// 사진을 리소스 폴더에 저장하기 위한 로직
-		String fileName1 = member.getFile().getOriginalFilename();
-		if (fileName1 != null && !fileName1.equals("")) {
-			UUID uuid = UUID.randomUUID(); // 파일이름이 겹치지 않게 하기 위함
-			String fileName = uuid+"_"+fileName1;
-			// 파일을 리소스 폴더에 저장
-			String real = session.getServletContext().getRealPath("/resources/memberImg");
-			FileOutputStream fos = new FileOutputStream(new File(real+"/"+fileName));
-			fos.write(member.getFile().getBytes());
-			fos.close();
-			// 정보를 수정
-			member.setM_img(fileName);
-		}	
-		
-		int result = ms.update(member);
-		
-		model.addAttribute("result", result);
-		return "myPage/updateResult";
-	}
-		
-	// 비밀번호 변경 폼으로 이동
-	@RequestMapping("updatePw")
-	public String updatePw(Model model, HttpSession session) {
-		String m_id = (String)session.getAttribute("m_id");
-		Member member = ms.select(m_id);
-		model.addAttribute("member", member);
-		return "myPage/updatePw";
-	}
-	
-	// 비밀번호 변경
-	@RequestMapping("updatePwResult")
-	public String updatePwResult(Member member, Model model) {
-		int result = ms.updatePw(member);
-		model.addAttribute("result", result);
-		return "myPage/updatePwResult";
-	}
-
-	// 마이페이지 회원 탈퇴
-	@RequestMapping("delete")
-	public String delete(HttpSession session, Model model) {
-		String m_id=(String)session.getAttribute("m_id");
-		int result=ms.delete(m_id);
-		if (result>0) session.invalidate();
-		model.addAttribute("result", result);
-		return "myPage/delete";
 	}
 }
 	

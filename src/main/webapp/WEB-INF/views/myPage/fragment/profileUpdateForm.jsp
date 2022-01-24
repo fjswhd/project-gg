@@ -32,6 +32,11 @@
 						<div id="image"><img alt="" src="${_profile}/${member.picture}" class="img-circle" width="140" height="140"></div>
 					</div>
 					<div class="form-group mg-t-5">
+						<label for="birthday">사용하실 닉네임을 입력해주세요.</label>
+						<input type="text" id="nickname" name="nickname" class="form-control" onchange="nickChk()" value="${member.nickname}">
+						<div class="msg err"></div>
+					</div>
+					<div class="form-group mg-t-5">
 						<label for="birthday">레벨 측정을 위해 생일을 입력해주세요.</label>
 						<input type="date" id="birthday" name="birthday" class="form-control" min="1900-01-01" value="${member.birthday}">
 					</div>
@@ -67,6 +72,7 @@
 						<li class="list-group-item"></li>				
 						<li class="list-group-item"></li>				
 						<li class="list-group-item"></li>				
+						<li class="list-group-item"></li>				
 					</ul>
 				</div>
 				<div class="modal-footer">
@@ -79,9 +85,6 @@
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
-		history.pushState(null, null, "http://localhost:8080/project/member/profileForm.do"); 
-		window.onpopstate = function(event) { history.go(1); };
-		
 		document.querySelector("#picture").onchange = function (event) {
 			var image = event.target.files[0],
 				reader = new FileReader();
@@ -106,6 +109,46 @@
 			console.log(image);
 			reader.readAsDataURL(image);
 			
+		}
+		
+		async function nickChk() {
+			var nickname = document.querySelector('#nickname').value,
+			msg = document.querySelectorAll('.msg')[0],
+			sendData = 'nickname='+nickname;
+			
+			var result = await fetch('${_member}/nickChk.do', {
+				method :'POST',
+				body: sendData,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				}
+			}).then(function(response) {
+				return response.text();
+			})
+			
+			if (nickname.trim() == '' || nickname == null) {
+				msg.innerHTML = '별명을 입력하세요.';
+			} else if (/[^가-힣|\w]/.test(nickname)) { //한글 오탈자나 특수문자
+				msg.innerHTML = '별명에 특수문자는 입력할 수 없습니다.';
+			} else if (getByteLength(nickname) > 15) {
+				msg.innerHTML = '별명은 최대 한글 5글자, 영숫자 15글자입니다.';
+			} else if (result == '1') {
+				msg.innerHTML = '사용 가능한 별명입니다.';
+				msg.classList.replace('err','ok');
+				document.querySelector('button[type="submit"]').removeAttribute('disabled');
+				return;
+			} else if(result != '1') {
+				msg.innerHTML = '중복된 별명입니다.';
+			} 
+			
+			msg.classList.replace('ok','err');
+			document.querySelector('button[type="submit"]').setAttribute('disabled', 'disabled');
+		}
+		
+		function getByteLength(string){
+			var byteLength, c, i;
+		    for(byteLength = i = 0; c = string.charCodeAt(i++); byteLength += c>>11 ? 3 : c>>7 ? 2 : 1);
+		    return byteLength;
 		}
 		
 		frm.onsubmit = function() {
@@ -134,21 +177,17 @@
 				title.textContent = '당신의 프로필을 확인하세요.';
 				img.src = '${_profile}/' + data.picture;
 				
-				li[0].innerHTML = '<span class="col-md-3 bold">레벨</span>' + data.level;				
-				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span>' + data.reg_date;				
-				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span>' + data.place;				
-				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
-				li[4].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
+				li[0].innerHTML = '<span class="col-md-3 bold">별명</span>' + data.nickname;				
+				li[1].innerHTML = '<span class="col-md-3 bold">레벨</span>' + data.level;				
+				li[2].innerHTML = '<span class="col-md-3 bold">가입일</span>' + data.reg_date;				
+				li[3].innerHTML = '<span class="col-md-3 bold">출몰지</span>' + data.place;				
+				li[4].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
+				li[5].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
 				
 				$('#myModal').modal({
 					backdrop: 'static'
 				});
-				/* setTimeout(function() {
-					div.className = 'hide';
-				}, randomTime); */
-				
 			})
-			
 		}
 	</script>
 </body>
