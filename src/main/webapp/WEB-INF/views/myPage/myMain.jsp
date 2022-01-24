@@ -107,10 +107,15 @@
 											</span>
 											<span class="col-md-2">
 												<c:if test="${empty board.r_score}">평가받지 않음</c:if>											
-												<c:if test="${not empty board.r_score}">${board.r_score}</c:if>											
+												<c:if test="${not empty board.r_score}"> ${board.r_score}</c:if>											
 											</span>
 											<span class="col-md-2">
-												<a href="${_board}/detail.do?b_no=${board.b_no}" class="btn btn-primary btn-sm">상호 평가</a>											
+												<c:if test="${today > board.e_date}">
+													<a href="#rating" class="btn btn-primary btn-sm" data-toggle="modal" onclick="partiList(${board.b_no})">상호 평가</a>											
+												</c:if>
+												<c:if test="${today <= board.e_date}">
+													<a href="#rating" class="btn btn-primary btn-sm disabled"  >상호 평가</a>											
+												</c:if>
 											</span>
 										</li>										
 									</c:if>
@@ -225,7 +230,12 @@
 												별점											
 											</span>
 											<span class="col-md-2">
-												<a href="${_board}/detail.do?b_no=${board.b_no}" class="btn btn-primary btn-sm">상호 평가</a>											
+												<c:if test="${today >  parti.board.e_date}">
+													<a href="#rating" class="btn btn-primary btn-sm" data-toggle="modal" onclick="partiList2()">상호 평가</a>											
+												</c:if>
+												<c:if test="${today <=  parti.board.e_date}">
+													<a href="#rating" class="btn btn-primary btn-sm disabled"  >상호 평가</a>											
+												</c:if>										
 											</span>
 										</li>										
 									</c:if>
@@ -239,12 +249,31 @@
 			</div>
 		</div>
 	</div>
-	
 	<div id="background"></div>
+	
+		<div class="modal fade" id="rating">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title"> 상호 평가 </h4>
+		      </div>
+		      <div class="modal-body">
+		      	<div id="partiList"></div>
+		      </div>
+		      
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
+	function partiList(b_no) {
 		
-		
+		$('#partiList').load('${_myPage}/partiList.do', {b_no:b_no});
+	}
+	
 	</script>
 </body>
 </html>
