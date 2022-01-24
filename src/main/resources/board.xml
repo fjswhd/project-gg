@@ -89,7 +89,7 @@
 		FROM BOARD b, CATEGORY c, MEMBER m, (
 			SELECT b1.b_no, avg(r_score) r_score
 			FROM BOARD b1, RATING r1
-			WHERE b1.m_id = #{m_id}
+			WHERE b1.m_id = r1.m_id(+)
 			AND b1.b_no = r1.b_no (+)
 			GROUP BY b1.b_no
 		) r

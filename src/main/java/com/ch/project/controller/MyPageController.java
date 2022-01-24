@@ -10,16 +10,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ch.project.model.Board;
 import com.ch.project.model.Member;
 import com.ch.project.model.Parti;
+import com.ch.project.model.Rating;
 import com.ch.project.model.Request;
 import com.ch.project.service.BoardService;
 import com.ch.project.service.MemberService;
 import com.ch.project.service.PartiService;
+import com.ch.project.service.RatingService;
 import com.ch.project.service.RequestService;
 
 @Controller
@@ -33,6 +37,8 @@ public class MyPageController {
 	private RequestService rs;
 	@Autowired
 	private PartiService ps;
+	@Autowired
+	private RatingService rts;
 	@Autowired
 	private BCryptPasswordEncoder bpPass;        	// 비밀번호를 암호화 (60개의 문자 랜덤으로)
 	
@@ -76,6 +82,30 @@ public class MyPageController {
 		
 		return "myPage/myMain";
 	}
-	
+	@RequestMapping ("/partiList")
+	public String partiList (int b_no, Model model) {
+		//작성자 id 구하기
+		Board board = bs.getBoard(b_no);
+		// 내가 쓴 글의 참여자 목록
+		List<Parti> partiList = ps.ptList(b_no);
+		model.addAttribute("partiList", partiList);
+		
+		return "myPage/partiList";
+	}
+	@RequestMapping (value="/insertRscore", produces="application/json;charset=utf-8")
+	@ResponseBody
+	public String insertRscore(@RequestBody List<Rating> partiList  ) {
+		int result= 0;
+		
+		for(Rating rating : partiList) {
+			
+			  int r_no = rts.selectRatingCount(); rating.setR_no(r_no);
+			  rts.insertRscore(rating);
+			 
+		  result += 1;
+		}  
+		  
+		  return result+"";  
+	}
 }
 	

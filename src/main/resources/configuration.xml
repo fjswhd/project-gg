@@ -19,5 +19,6 @@
 		<mapper resource="parti.xml" />
 		<mapper resource="reply.xml" />
 		<mapper resource="request.xml" />
+		<mapper resource="rating.xml" />
 	</mappers>
 </configuration>
