@@ -31,9 +31,15 @@
 			<if test="place != null">place = #{place},</if>
 			<if test="tag != null">tag = #{tag},</if>
 			<if test="picture != null">picture = #{picture},</if>
-			<if test="rating != null">rating = #{rating},</if>
+			<!-- <if test="rating != null">rating = #{rating},</if> -->	<!-- rating type이 int라서 0으로 들어오는 경우 있음 -->
 			<if test="del != null">del = #{del},</if>
 		</set>
+		WHERE m_id = #{m_id}
+	</update>
+	
+	<update id="updateRating" parameterType="member">
+		UPDATE MEMBER
+		SET rating = #{rating}
 		WHERE m_id = #{m_id}
 	</update>
 	

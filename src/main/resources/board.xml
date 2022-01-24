@@ -10,6 +10,12 @@
 		SELECT COUNT(b_no) FROM BOARD
 	</select>
 	
+	<!-- 게시글 번호 -->
+	
+	<select id="selectMaxB_no" resultType="int">
+		SELECT NVL(MAX(b_no), 0) FROM BOARD
+	</select>
+	
 	<select id="selectBoard" parameterType="int" resultMap="boardResultMap">
 		SELECT b.*, c.* , m.m_id, m.nickname
 		FROM BOARD b, CATEGORY c, MEMBER m 
@@ -80,28 +86,7 @@
 		<if test="keyword != null and keyword != ''">
 			AND (subject like '%'||#{keyword}||'%' or content like '%'||#{keyword}||'%')
 		</if>
-		
 	</select>
-	
-	<!-- 내가 쓴 게시글 -->
-	<select id="selectMyBoard" parameterType="string" resultMap="boardResultMap">
-		SELECT b.*, c.* , m.nickname, ROUND(r.r_score, 2) AS r_score
-		FROM BOARD b, CATEGORY c, MEMBER m, (
-			SELECT b1.b_no, avg(r_score) r_score
-			FROM BOARD b1, RATING r1
-			WHERE b1.m_id = #{m_id}
-			AND r1.m_id = #{m_id}
-			AND b1.b_no = r1.b_no (+)
-			GROUP BY b1.b_no
-		) r
-		WHERE b.c_no = c.c_no 
-		AND b.m_id = m.m_id
-		AND b.b_no = r.b_no
-		AND b.m_id = #{m_id}
-		ORDER BY b.reg_date
-	</select>
-	
-	<!--  -->
 	
 	<!-- 게시글 수정 -->
 	<update id="updateBoard" parameterType="board">
@@ -117,6 +102,36 @@
 		WHERE b_no = #{b_no}
 	</update>
 	
+	<select id="selectTotalMyBoard" parameterType="string" resultType="int">
+		SELECT COUNT(b_no)
+		FROM BOARD
+		WHERE m_id = #{m_id}
+	</select>
+	
+	<select id="selectMyBoard" parameterType="map" resultMap="boardResultMap">
+		SELECT b2.*
+		FROM (
+			SELECT ROWNUM rn, b1.*
+			FROM (SELECT * FROM my_board WHERE m_id = #{m_id} ORDER BY b_no DESC) b1
+		) b2
+		WHERE rn BETWEEN #{startRow} and #{endRow}
+	</select>
+	<!-- 내가 쓴 게시글 
+	<select id="selectMyBoard" parameterType="string" resultMap="boardResultMap">
+		SELECT b.*, c.* , m.nickname, ROUND(r.r_score, 2) AS r_score
+		FROM BOARD b, CATEGORY c, MEMBER m, (
+			SELECT b1.b_no, avg(r_score) r_score
+			FROM BOARD b1, RATING r1
+			WHERE b1.m_id = r1.m_id (+)
+			AND b1.b_no = r1.b_no (+)
+			GROUP BY b1.b_no
+		) r
+		WHERE b.c_no = c.c_no 
+		AND b.m_id = m.m_id
+		AND b.b_no = r.b_no
+		AND b.m_id = #{m_id}
+		ORDER BY b.b_no DESC
+	</select> -->
 	<!-- join을 위한 resultMap -->
 	<resultMap type="board" id="boardResultMap">
 		<id 	column="b_no" 		property="b_no" />

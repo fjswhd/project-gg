@@ -69,10 +69,10 @@
 				<div class="align-center f-s mg-b-5">
 					<span class="col-md-2">
 						<select name="c_no" class="form-control input-sm" required="required">
-							<option value="" disabled="disabled">카테고리</option>
+							<option value="">카테고리</option>
 							<c:forEach var="category" items="${categoryList}">
 								<c:if test="${category.c_no != board.c_no}">
-									<option value="${category.c_no}" disabled="disabled">${category.c_name}</option>
+									<option value="${category.c_no}">${category.c_name}</option>
 								</c:if>
 								<c:if test="${category.c_no == board.c_no}">
 									<option value="${category.c_no}" selected="selected">${category.c_name}</option>

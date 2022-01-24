@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ratingns">
+	<select id="selectMyRatings" parameterType="map" resultType="rating">
+		SELECT *
+		FROM RATING
+		WHERE m_id_eval = #{m_id}
+		AND b_no = #{b_no}
+	</select>
+	
+	<select id="selectMaxR_no" resultType="int">
+		SELECT NVL(MAX(r_no), 0)
+		FROM RATING
+	</select>
+	
+	<insert id="insertRating" parameterType="rating">
+		INSERT INTO RATING
+		VALUES (#{r_no}, #{m_id}, #{b_no}, #{r_score}, #{m_id_eval})
+	</insert>
+	
+	<update id="updateRating" parameterType="rating">
+		UPDATE RATING
+		SET r_score = #{r_score}
+		WHERE r_no = #{r_no}
+	</update>
+	
+	<select id="selectAvgScore" parameterType="string" resultType="float">
+		SELECT ROUND(AVG(r_score), 2) AS r_score
+		FROM (
+			SELECT b_no, m_id, AVG(r_score) r_score
+			FROM RATING
+			GROUP BY b_no, m_id
+		) 
+		WHERE m_id = #{m_id}
+	</select>
+	
+</mapper>

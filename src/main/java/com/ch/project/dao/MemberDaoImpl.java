@@ -26,4 +26,7 @@ public class MemberDaoImpl implements MemberDao{
 	public int updateMember(Member member) {
 		return sst.update("memberns.updateMember", member);
 	}
+	public int updateRating(Member member) {
+		return sst.update("memberns.updateRating", member);
+	}
 }

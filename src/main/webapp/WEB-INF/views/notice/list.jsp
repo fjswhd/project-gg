@@ -29,10 +29,10 @@
 				</h2>
 				<div id="profile" class="align-center">
 					<ul class="list-group mg-b-5" style="width: 100%;">
-						<li class="list-group-item">
+						<li class="list-group-item align-center">
 							<div class="col-md-8 bold">공지명</div>
 							<div class="col-md-2 bold">작성자</div>
-							<div class="bold">작성일</div>
+							<div class="col-md-2 bold">작성일</div>
 						</li>
 						<c:if test="${empty noticeList}">
 							<li class="list-group-item">
@@ -41,19 +41,19 @@
 						</c:if>
 						<c:if test="${not empty noticeList}">
 							<c:forEach var="notice" items="${noticeList}">
-								<li class="list-group-item">
+								<li class="list-group-item align-center">
 									<div class="col-md-8">
 										<a href="${_notice}/detail.do?no_no=${notice.no_no}" style="color: #000;">${notice.subject}</a>
 									</div>
 									<div class="col-md-2 bold">${notice.member.nickname}</div>
-									<div class="bold">${notice.reg_date}</div>
+									<div class="col-md-2 bold">${notice.reg_date}</div>
 								</li>
 							</c:forEach>
 						</c:if>
 					</ul>
 				</div>
-				<div class="j-center">
 				
+				<div class="j-center">
 					<ul class="pagination mg-t-5 mg-b-5">
 						<li><a href="${_notice}/list.do?page=${page-5}">&laquo;</a></li>
 						<c:forEach begin="${firstPage}" end="${lastPage}" varStatus="vs">
@@ -67,6 +67,7 @@
 						<li><a href="${_notice}/list.do?page=${page+5}">&raquo;</a></li>
 					</ul>
 				</div>
+				
 			</div>
 		</div>
 	</div>

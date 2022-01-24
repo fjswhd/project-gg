@@ -44,16 +44,6 @@
 		AND p.m_id = m.m_id
 	</select>
 	
-	<select id="getMyParti" parameterType="string" resultMap="partiResultMap">
-		SELECT p.*, m.nickname, b.*, c.* 
-		FROM parti p, member m, board b, category c
-		WHERE p.m_id = #{m_id}
-		AND p.m_id = m.m_id
-		AND p.b_no = b.b_no
-		AND b.c_no = c.c_no
-		ORDER BY p.reg_date DESC
-	</select>
-	
 	<!-- 참여 강퇴 -->
 	<update id = "ban" parameterType="Map">
 		update parti set ban = 'y' where b_no = #{b_no} and m_id = #{m_id}
@@ -79,6 +69,54 @@
 		update parti set cancel = 'n' where b_no = #{b_no} and m_id = #{m_id}
 	</update>
 	
+	<select id="selectTotalMyParti" parameterType="string" resultType="int">
+		SELECT COUNT(b_no)
+		FROM PARTI
+		WHERE m_id = #{m_id}
+	</select>
+	
+	<select id="selectMyParti" parameterType="map" resultMap="partiResultMap">
+		SELECT p2.*
+		FROM (
+			SELECT ROWNUM rn, p1.*
+			FROM (
+				SELECT p.*, m.nickname, b.m_id b_m_id, b.c_no, b.subject, b.s_date, b.e_date, b.end, b.del, c.c_name, ROUND(r.r_score, 2) AS r_score
+				FROM parti p, member m, board b, category c, (
+					SELECT p1.b_no, avg(r_score) r_score
+					FROM PARTI p1, RATING r1
+					WHERE p1.m_id = r1.m_id (+)
+					AND p1.b_no = r1.b_no (+)
+					AND p1.m_id = #{m_id}
+					GROUP BY p1.b_no
+				) r
+				WHERE p.m_id = #{m_id}
+				AND p.m_id = m.m_id
+				AND p.b_no = b.b_no
+				AND p.b_no = r.b_no
+				AND b.c_no = c.c_no
+				ORDER BY p.reg_date DESC
+			) p1
+		) p2
+		WHERE rn BETWEEN #{startRow} and #{endRow}
+	</select>
+	
+	
+	<!-- <select id="getMyParti" parameterType="string" resultMap="partiResultMap">
+		SELECT p.*, m.nickname, b.m_id b_m_id, b.c_no, b.subject, b.s_date, b.e_date, b.end, b.del, c.c_name, ROUND(r.r_score, 2) AS r_score
+		FROM parti p, member m, board b, category c, (
+			SELECT p1.b_no, avg(r_score) r_score
+			FROM PARTI p1, RATING r1
+			WHERE p1.m_id = r1.m_id (+)
+			AND p1.b_no = r1.b_no (+)
+			GROUP BY p1.b_no
+		) r
+		WHERE p.m_id = #{m_id}
+		AND p.m_id = m.m_id
+		AND p.b_no = b.b_no
+		AND p.b_no = r.b_no
+		AND b.c_no = c.c_no
+		ORDER BY p.reg_date DESC
+	</select> -->
 	<resultMap type="parti" 		id="partiResultMap">
 		<id 	column="b_no" 		property="b_no" />
 		<id 	column="m_id" 		property="m_id" />
@@ -86,11 +124,11 @@
 		<result column="cancel"		property="cancel" />
 		<result column="ban" 		property="ban" />
 		<result column="nickname" 	property="nickname" />
+		<result column="r_score" 	property="r_score" />
 		<association property="board"	javaType="board" resultMap="boardResultMap" />
 	</resultMap>
 	<resultMap type="board" id="boardResultMap">
-		<id 	column="b_no" 		property="b_no" />
-		<result column="m_id" 		property="m_id" />
+		<result column="b_m_id" 	property="m_id" />
 		<result column="c_no" 		property="c_no" />
 		<result column="subject" 	property="subject" />
 		<result column="s_date" 	property="s_date" />
@@ -100,7 +138,6 @@
 		<association property="category"	javaType="category" resultMap="categoryResultMap" />
 	</resultMap>
 	<resultMap type="category" id="categoryResultMap">
-		<id 	column="c_no" 		property="c_no" />
 		<result	column="c_name" 	property="c_name" />
 	</resultMap>
 </mapper>

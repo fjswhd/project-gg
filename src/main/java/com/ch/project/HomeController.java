@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,13 +47,16 @@ public class HomeController {
 		return "home";
 	}
 	@RequestMapping(value = "error", method = RequestMethod.GET)
-	public String error(Model model, HttpServletRequest request) {
+	public String error(Model model, HttpSession session, HttpServletRequest request) {
 		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
 
 		int result = -1;
 		if(flashMap != null) {
 			result = (Integer) flashMap.get("result");
 		}
+		
+		session.invalidate();
+		
 		model.addAttribute("result", result);	
 		return "error";
 	}

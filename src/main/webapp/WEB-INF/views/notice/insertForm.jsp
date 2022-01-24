@@ -26,7 +26,7 @@
 				
 				<!-- 카테고리, 제목 -->
 				<div class="align-center f-s mg-b-5">
-					<input type="text" name="subject" class="form-control input-sm" placeholder="제목" required="required">					
+					<input type="text" name="subject" class="form-control" placeholder="제목" required="required">					
 				</div>
 				
 				<!-- 웹 에디터 -->

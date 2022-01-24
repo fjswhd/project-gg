@@ -16,7 +16,7 @@ public class Member {
 	private String 	place;
 	private String 	tag;
 	private String	picture;
-	private int		rating;
+	private Float	rating;
 	private String	admin;
 	private String	del;
 	

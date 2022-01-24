@@ -46,6 +46,9 @@
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
+		history.pushState(null, null, "http://localhost:8080/project/member/loginForm.do"); 
+		window.onpopstate = function(event) { history.go(1); };
+	
 		frm.addEventListener('submit', login);
 		
 		function login(event) {

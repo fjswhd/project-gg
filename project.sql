@@ -80,10 +80,12 @@ CREATE TABLE NOTIFICATION (
 
 CREATE TABLE RATING (
 	r_no	number	primary key,
-	m_id			references MEMBER(m_id),
+	m_id			references MEMBER(m_id), --평가 받는 사람
 	b_no			references BOARD(b_no),
-	r_score	number	not null
+	r_score	number	not null,
+	m_id_eval		references MEMBER(m_id)	--평가 하는 사람
 )
+
 
 CREATE TABLE REQUEST (
 	b_no				references BOARD(b_no),
@@ -115,22 +117,77 @@ CREATE TABLE REPLY (
 	del			char(1)			default 'n' not null
 )
 
+CREATE OR REPLACE VIEW my_board 
+AS
+	SELECT b.*, c.c_name, m.nickname, ROUND(r.r_score, 2) AS r_score
+	FROM BOARD b, CATEGORY c, MEMBER m, (
+		SELECT b1.b_no, avg(r_score) r_score
+		FROM BOARD b1, RATING r1
+		WHERE b1.m_id = r1.m_id (+)
+		AND b1.b_no = r1.b_no (+)
+		GROUP BY b1.b_no
+	) r
+	WHERE b.c_no = c.c_no 
+	AND b.m_id = m.m_id
+	AND b.b_no = r.b_no
+	ORDER BY b.b_no DESC
 
-select a2.*
-from (
-	select rownum rn, a1.*
-	from (
-		select b.*, c.c_name, m.nickname
-		from board b, CATEGORY c, MEMBER m
-		where b.c_no = c.c_no
-		and b.m_id = m.m_id
-		order by b_no desc
-	) a1
-) a2
-where rn between '1' and '10'
+CREATE OR REPLACE VIEW my_parti
+AS
+	SELECT p.*, m.nickname, b.m_id b_m_id, b.c_no, b.subject, b.s_date, b.e_date, b.end, b.del, c.c_name, ROUND(r.r_score, 2) AS r_score
+	FROM parti p, member m, board b, category c, (
+		SELECT p1.b_no, avg(r_score) r_score
+		FROM PARTI p1, RATING r1
+		WHERE p1.m_id = r1.m_id (+)
+		AND p1.b_no = r1.b_no (+)
+		GROUP BY p1.b_no
+	) r
+	WHERE p.m_id = m.m_id
+	AND p.b_no = b.b_no
+	AND p.b_no = r.b_no
+	AND b.c_no = c.c_no
+	ORDER BY p.reg_date DESC
+	
+select * from my_board;
 
-		and s_date <= to_date('2022-02-01', 'yyyy-mm-dd')
-		and to_date('2022-02-01', 'yyyy-mm-dd') <= e_date
-		and b.c_no = '40'
-		and address like '%'||'서울'||'%'
-		and (subject like '%'||'코딩'||'%' or content like '%'||'코딩'||'%')
+select * from my_parti;
+
+
+SELECT p1.b_no, avg(r_score) r_score
+		FROM PARTI p1, RATING r1
+		WHERE p1.m_id = r1.m_id (+)
+		AND p1.b_no = r1.b_no (+)
+		AND p1.m_id = 'fjswhd93@hanmail.net'
+		GROUP BY p1.b_no
+
+SELECT p.*, m.nickname, b.*, c.c_name, ROUND(r.r_score, 2) AS r_score
+	FROM parti p, member m, board b, category c, (
+		SELECT p1.b_no, avg(r_score) r_score
+		FROM PARTI p1, RATING r1
+		WHERE p1.m_id = r1.m_id (+)
+		AND p1.b_no = r1.b_no (+)
+		GROUP BY p1.b_no
+	) r
+	WHERE p.m_id = m.m_id
+	AND p.b_no = b.b_no
+	AND p.b_no = r.b_no
+	AND b.c_no = c.c_no
+	ORDER BY p.reg_date DESC;
+	
+SELECT * FROM RATING
+
+SELECT avg(r_score)
+FROM (
+	SELECT B_NO, M_ID, AVG(R_SCORE) R_SCORE
+	FROM RATING
+	GROUP BY B_NO, M_ID
+) 
+where m_id = 'ejm4000@naver.com'
+
+
+update member
+set rating = 0
+
+SELECT B_NO, M_ID, AVG(R_SCORE) R_SCORE
+	FROM RATING
+	GROUP BY B_NO, M_ID

@@ -120,20 +120,20 @@
 	</div>
 	
 	<div class="modal fade" id="myModal">
-		<div class="modal-dialog ">
+		<div class="modal-dialog" style="font-family: 'Noto Sans KR'">
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header bg-info" style="border-top-left-radius: 5px; border-top-right-radius: 5px;">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 id="profileTitle" class="modal-title"></h4>
 				</div>
 				<div class="modal-body flex-column align-center">
 					<img id="profileImg" class="img-circle mg-b-10" alt="" src="" width="200" height="200" style="box-shadow: 0 0 3px #808080;">
-					<ul id="profileContent" class="list-group" style="width: 80%; box-shadow: 0 0 2px #808080; border-radius: 4px;">
-						<li class="list-group-item"></li>				
-						<li class="list-group-item"></li>				
-						<li class="list-group-item"></li>				
-						<li class="list-group-item"></li>				
-						<li class="list-group-item"></li>				
+					<ul id="profileContent" class="list-group" style="width: 90%; box-shadow: 0 0 2px #808080; border-radius: 4px;">
+						<li class="list-group-item flex"></li>				
+						<li class="list-group-item flex"></li>				
+						<li class="list-group-item flex"></li>				
+						<li class="list-group-item flex"></li>				
+						<li class="list-group-item flex"></li>				
 					</ul>
 				</div>
 			</div><!-- /.modal-content -->
@@ -191,7 +191,7 @@
 				img = document.querySelector('#profileImg'),
 				li = document.querySelectorAll('#profileContent > li');
 			
-			$.post('${_member}/getProfile.do', sendData, function() {
+			/* $.post('${_member}/getProfile.do', sendData, function() {
 				title.textContent = data.nickname + '님의 프로필';
 				img.src = '${_profile}/' + data.picture;
 				
@@ -201,7 +201,7 @@
 				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
 				li[4].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
 				
-			})
+			}) */
 			
 			fetch('${_member}/getProfile.do', {
 				method: 'POST',
@@ -216,11 +216,11 @@
 				title.textContent = data.nickname + '님의 프로필';
 				img.src = '${_profile}/' + data.picture;
 				
-				li[0].innerHTML = '<span class="col-md-3 bold">레벨</span>' + data.level;				
-				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span>' + data.reg_date;				
-				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span>' + data.place;				
-				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
-				li[4].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
+				li[0].innerHTML = '<span class="col-md-3 bold">레벨</span><div class="col-md-9 pd-0 wordWrap">' + data.level + '</div>';
+				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span><div class="col-md-9 pd-0 wordWrap">' + data.reg_date + '</div>';			
+				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span><div class="col-md-9 pd-0 wordWrap">' + data.place + '</div>';				
+				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span><div class="col-md-9 pd-0 wordWrap">' + data.tag + '</div>';				
+				li[4].innerHTML = '<span class="col-md-3 bold">평점</span><div class="col-md-9 pd-0 wordWrap">' + data.rating + '</div>';
 				
 			})
 			

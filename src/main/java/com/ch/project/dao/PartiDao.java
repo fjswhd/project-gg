@@ -17,6 +17,7 @@ public interface PartiDao {
 	
 	Parti banned(Map<String, Object> param);
 	
-	List<Parti> getMyParti(String m_id);
-
+	int selectTotalMyParti(String m_id);
+	
+	List<Parti> selectMyParti(Map<String, Object> param);
 }

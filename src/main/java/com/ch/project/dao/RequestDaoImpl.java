@@ -40,13 +40,17 @@ public class RequestDaoImpl implements RequestDao{
 	public int cancel(Map<String, Object> cancel) {
 		return sst.update("requestns.cancel", cancel);
 	}
-	public List<Request> getMyRequest(String m_id) {
-		return sst.selectList("requestns.selectMyRequest", m_id);
-	}
 	public Request selectRequest(Map<String, Object> request) {
 		return sst.selectOne("requestns.selectRequest", request);
 	}
 	public void rejectAll(int b_no) {
 		sst.update("requestns.rejectAll", b_no);
 	}
+	public int selectTotalMyRequest(String m_id) {
+		return sst.selectOne("requestns.selectTotalMyRequest", m_id);
+	}
+	public List<Request> selectMyRequest(Map<String, Object> param) {
+		return sst.selectList("requestns.selectMyRequest", param);
+	}
+	
 }

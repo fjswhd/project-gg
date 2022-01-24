@@ -248,7 +248,7 @@ public class MemberController {
 	@RequestMapping(value = "login", produces = "text/html;charset=utf-8")
 	@ResponseBody
 	public String login(String m_id, String password, String prev, HttpSession session) {
-		if(prev.contains("profileForm") || prev.contains("findPwForm")) {
+		if(prev.contains("profileForm") || prev.contains("findPwForm") || prev.contains("pwUpdateForm")) {
 			prev = "/project/home.do";
 		}
 		
@@ -312,33 +312,83 @@ public class MemberController {
 		
 		int result = ms.updateMember(member);
 		
+		model.addAttribute("result", result);
 		
-		return "redirect:/member/loginForm.do";
+		return "member/findPw";
 	}
 	
-	// 마이페이지 메인으로 이동
-	@RequestMapping("myMain")
-	public String myMain(Model model, HttpSession session) {
-		String m_id = (String)session.getAttribute("m_id");
-		Member member = ms.select(m_id);
-		model.addAttribute("member", member);
-		return "myPage/myMain";
-	}
-	
-	// 프로필 상세보기
-	@RequestMapping("profileView")
-	public String profileView(String nickname, HttpSession session, Model model) {
-		int result = 0; 
-		Member member = ms.selectNick(nickname); // 선택한 계정의 정보를 가져옴
-		if (member.getDel() == "y") { // 회원 탈퇴 처리 되어있는지 확인
-			result = 0; // 회원 탈퇴 처리가 되어있음
+	//member로 넣으면 400에러 enctype과 관련된문제같음
+	@RequestMapping(value = "/profileUpdate")
+	@ResponseBody
+	public Map<String, Object> profileUpdate(@RequestParam("picture") MultipartFile mf, @RequestParam Map<String, String> param, Model model, HttpSession session, HttpServletRequest request) throws IOException {
+		
+		String realPath = session.getServletContext().getRealPath("/resources/profile");	//실제 저장 위치
+		
+		String m_id = param.get("m_id");
+		
+		Member member = ms.selectMember(m_id);
+		
+		String fileName = mf.getOriginalFilename();
+		
+		//파일 입력하지 않았으면 아무 것도 안함 >> 기존의 사진 그대로 유지 
+		if (fileName.equals("") || fileName == null) {
+			fileName = "user.svg";
 		} else {
-			result = 1; // 회원 탈퇴 처리가 안되있을 경우
-		model.addAttribute("result", result); // 회원 탈퇴 여부 확인
-		model.addAttribute("member", member); // 프로필에서 회원정보 입력하기 위해서
-		return "myPage/profileView";
+			//기존 파일 삭제
+			if(!member.getPicture().equals("user.svg")) {
+				File oldFile = new File(realPath + "/" + member.getPicture());
+				oldFile.delete();
+			}
+			
+			//파일명을 변경하고 싶을 때 : 날짜(연월일시분초), UUID
+			UUID uuid = UUID.randomUUID();
+			fileName = uuid + fileName.substring(fileName.lastIndexOf('.'));
+			
+			FileOutputStream fos = new FileOutputStream(new File(realPath + "/" + fileName));
+			fos.write(mf.getBytes());
+			fos.close();			
 		}
+		
+		//생일 입력 안하면 가입한 날짜를 생일로
+		Date birthday = param.get("birthday").equals("") ? member.getBirthday() : Date.valueOf(param.get("birthday"));
+		String place = param.get("place").equals("") ? "알 수 없음" : param.get("place");
+		String tag = param.get("tag").equals("") ? "알 수 없음" : param.get("tag") ;
+
+		member.setPicture(fileName);
+		member.setBirthday(birthday);
+		member.setPlace(place);
+		member.setTag(tag);
+		
+		int result = 0;
+		result = ms.updateProfile(member);
+		
+		session.setAttribute("member", member);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String reg_date = sdf.format(member.getReg_date());
+		
+		//level 구하기
+		Calendar today = Calendar.getInstance();
+		
+		Calendar cBirthday = Calendar.getInstance();
+		cBirthday.setTime(member.getBirthday());
+		
+		int level = today.get(Calendar.YEAR) - cBirthday.get(Calendar.YEAR) + 1;
+		
+		//닉네임 픽쳐 플레이스 레이팅 가입일 태그 생일
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("nickname", member.getNickname());
+		resultMap.put("picture", member.getPicture());
+		resultMap.put("place", member.getPlace());
+		resultMap.put("rating", member.getRating());
+		resultMap.put("reg_date", reg_date);
+		resultMap.put("level", level);
+		resultMap.put("tag", member.getTag());
+		
+		return resultMap;
 	}
+	
+	
 	// 마이페이지 회원정보 수정폼으로 이동
 	@RequestMapping("updateForm")
 	public String updateForm(Model model, HttpSession session) {

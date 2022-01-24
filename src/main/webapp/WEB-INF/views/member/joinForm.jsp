@@ -186,6 +186,9 @@
 		}
 		
 		async function nickChk() {
+			
+		
+			
 			var nickname = document.querySelector('#nickname').value,
 			msg = document.querySelectorAll('.msg')[2],
 			sendData = 'nickname='+nickname;
@@ -274,6 +277,17 @@
 		    for(byteLength = i = 0; c = string.charCodeAt(i++); byteLength += c>>11 ? 3 : c>>7 ? 2 : 1);
 		    return byteLength;
 		}
+		
+		/*	var d = $('form[name=frm]').serializeArray();
+			
+			var obj = {};
+			d.forEach(function(element) {
+				obj[element.name] = element.value;
+			})
+			console.log(obj);
+				
+			
+			  */
 	</script>
 </body>
 </html>

@@ -13,5 +13,7 @@ public interface MemberDao {
 	int updateProfile(Member member);
 
 	int updateMember(Member member);
+
+	int updateRating(Member member);
 	
 }

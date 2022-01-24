@@ -17,6 +17,7 @@
 		<mapper resource="member.xml" />
 		<mapper resource="notice.xml" />
 		<mapper resource="parti.xml" />
+		<mapper resource="rating.xml" />
 		<mapper resource="reply.xml" />
 		<mapper resource="request.xml" />
 	</mappers>

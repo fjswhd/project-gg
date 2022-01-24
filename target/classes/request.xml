@@ -68,16 +68,28 @@
 		update request set cancel = 'y' where b_no = #{b_no} and m_id = #{m_id}
 	</update>                    
 	
-	<!-- 신청자 리스트 -->
+	<select id="selectTotalMyRequest" parameterType="string" resultType="int">
+		SELECT COUNT(b_no)
+		FROM REQUEST
+		WHERE m_id = #{m_id}
+	</select>
+	
 	<select id="selectMyRequest" parameterType="string" resultMap="requestResultMap">
-		SELECT req.*, m.nickname, b.*, c.* 
-		from request req, member m, board b, category c
-		where req.m_id = #{m_id} 
-		and accept != 'y' 
-		and req.m_id = m.m_id
-		AND req.b_no = b.b_no
-		AND b.c_no = c.c_no
-		order by req.reg_date desc
+		SELECT req2.* 
+		FROM (
+			SELECT ROWNUM rn, req1.*
+			FROM (
+				SELECT req.*, m.nickname, b.m_id b_m_id, b.c_no, b.subject, b.end, b.del, c.c_name 
+				from request req, member m, board b, category c
+				where req.m_id = #{m_id} 
+				and req.accept != 'y' 
+				and req.m_id = m.m_id
+				AND req.b_no = b.b_no
+				AND b.c_no = c.c_no
+				order by req.reg_date desc
+			) req1
+		) req2
+		WHERE rn BETWEEN #{startRow} AND #{endRow}
 	</select>
 	
 	<resultMap type="request" 	id="requestResultMap">
@@ -90,8 +102,7 @@
 		<association property="board"	javaType="board" resultMap="boardResultMap" />
 	</resultMap>
 	<resultMap type="board" id="boardResultMap">
-		<id 	column="b_no" 		property="b_no" />
-		<result column="m_id" 		property="m_id" />
+		<result column="b_m_id" 	property="m_id" />
 		<result column="c_no" 		property="c_no" />
 		<result column="subject" 	property="subject" />
 		<result column="end"		property="end" />
@@ -99,7 +110,6 @@
 		<association property="category"	javaType="category" resultMap="categoryResultMap" />
 	</resultMap>
 	<resultMap type="category" id="categoryResultMap">
-		<id 	column="c_no" 		property="c_no" />
 		<result	column="c_name" 	property="c_name" />
 	</resultMap>
 </mapper>

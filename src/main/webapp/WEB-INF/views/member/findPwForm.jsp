@@ -26,29 +26,35 @@
 			<form action="${_member}/findPw.do" method="post" name="frm">
 				<div class="form-group">
 					<label for="m_id">비밀번호를 초기화하실 이메일을 입력하세요.</label>
-					<input type="email" id="m_id" name="m_id" class="form-control" required="required" placeholder="이메일">
+					<div class="input-group">
+						<input type="email" id="m_id" name="m_id" class="form-control" required="required" placeholder="이메일">
+						<span class="input-group-btn">
+							<button id="idChkBtn" class="btn btn-primary" type="button" >확인</button>
+						</span>
+					</div>
 					<div class="msg ok"></div>
 				</div>				
-				<div id="aCollapse" class="collapse">
 					<div class="form-group">
 						<label for="password">본인확인을 위해 이메일로 보낸 인증번호를 입력해주세요.</label>
-						<input type="text" id="password" name="password" class="form-control" required="required" placeholder="인증번호">
+						<div class="input-group">
+							<input type="text" id="password" name="password" class="form-control" required="required" placeholder="인증번호">
+							<span class="input-group-btn">
+								<button id="pwChkBtn" class="btn btn-primary" type="button">확인</button>
+							</span>
+						</div>
 						<div class="j-between">
 							<div class="msg err"></div>
-							<button type="submit" class="btn btn-primary mg-t-5" disabled="disabled">비밀번호 초기화</button>	
+							<button type="submit" class="btn btn-success btn-sm mg-t-10" disabled="disabled">비밀번호 초기화</button>	
 						</div>
 					</div>
 				</div>
 			</form>
 		</div>
-		
 	</div>
 	
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
-		frm.m_id.addEventListener('change', idChk)
-		
 		//form안에서 키다운 이벤트가 발생했을 때 그 키의 key code가 13(enter)이면 이벤트 진행(submit)막기, 현재 커서부분 블러 처리 >> onchange 이벤트 발생
 		frm.addEventListener("keydown", function(event)  {
 		    if ((event.keyCode || event.which) === 13) {
@@ -57,12 +63,14 @@
 		    }
 		});
 		
+		document.querySelector('#idChkBtn').addEventListener('click', idChk);
+		
 		//아이디 중복 체크
 		async function idChk(event) {
 			var id = document.querySelector('#m_id').value,
-			msg = document.querySelectorAll('.msg')[0],
-			sendData = 'm_id='+id,
-			regExp = new RegExp('^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$', 'i');
+				msg = document.querySelectorAll('.msg')[0],
+				sendData = 'm_id='+id,
+				regExp = new RegExp('^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$', 'i');
 			
 			//입력한 아이디가 이메일 형식을 만족하지 않는 경우
 			if(regExp.test(id)) {
@@ -86,7 +94,6 @@
 					$('#aCollapse').collapse('show');
 					
 					authMailSend(id);
-					
 					return;
 				} 
 			} else {
@@ -103,22 +110,28 @@
 			}
 		}
 		
-		var num, pass = document.querySelector('#password');
-				
-		pass.onchange = function() {
+		document.querySelector('#pwChkBtn').addEventListener('click', authUser);		
+		
+		var num = '';
+		
+		function authUser() {
+			var pass = document.querySelector('#password'),
+				msg = document.querySelectorAll('.msg')[1],
+				submitBtn = document.querySelector('button[type="submit"]');
+			
+			//입력한 번호랑 인증번호가 일치하는 경우
 			if (pass.value == num) {
-				document.querySelectorAll('.msg')[1].classList.replace('err','ok');
-				document.querySelectorAll('.msg')[1].innerHTML = '인증번호가 일치합니다.';
-				document.querySelector('button[type="submit"]').removeAttribute('disabled');
+				msg.classList.replace('err','ok');
+				msg.innerHTML = '인증번호가 일치합니다.';
+				submitBtn.removeAttribute('disabled');
 			} else {
-				document.querySelectorAll('.msg')[1].classList.replace('ok','err');
-				document.querySelectorAll('.msg')[1].innerHTML = '인증번호가 일치하지 않습니다.';
-				document.querySelector('button[type="submit"]').setAttribute('disabled', 'disabled');
+				msg.classList.replace('ok','err');
+				msg.innerHTML = '인증번호가 일치하지 않습니다.';
+				submitBtn.setAttribute('disabled', 'disabled');
 			}			
 		}
 		
 		function authMailSend(id) {
-			//timer();
 			$.post('${_member}/authUser.do', 'm_id='+id, function(data) {
 				num = data	
 			})
@@ -146,42 +159,6 @@
 		function fillZero(sec){
 		    return parseInt(sec/10) == 0 ? '0'+sec : sec //남는 길이만큼 0으로 채움
 		}
-		
-		/* function login(event) {
-			//submit막기
-			event.preventDefault();
-			var sendData = $('form[name=frm]').serialize(),
-				msg = document.querySelectorAll('.msg')[0];
-			
-			var prev = '${prev}';
-			
-			//ajax로 로그인 확인하자
-			fetch('/project/member/findPw.do', {
-				method :'POST',
-				body: sendData,
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				}
-			}).then(function(response) {
-				return response.text();
-			}).then(function(result) {
-				
-				//아이디 없음
-				if(result < 0) {
-					msg.innerHTML = '존재하지 않는 아이디입니다.';
-					msg.classList.replace('ok','err');
-					//아이디 있음, 비밀번호 틀림
-				} else if (result == 0) {
-					msg.innerHTML = '잘못된 비밀번호입니다.';
-					msg.classList.replace('ok','err');
-					//로그인 성공
-				} else {
-					location.href = result;
-				} 
-				//메시지 부분 열기
-				$('#mCollapse').collapse('show');
-			});
-		} */
 	</script>
 </body>
 </html>

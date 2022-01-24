@@ -14,6 +14,7 @@ public class Parti {
 	private String 	ban;			// 강퇴 여부 
 	private String 	nickname;		// 닉네임
 	
+	private Float 	r_score;
+	
 	private Board board;
-	private double rating;
 }

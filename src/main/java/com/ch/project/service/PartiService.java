@@ -18,6 +18,7 @@ public interface PartiService {
 	//강퇴||탈퇴 여부판단
 	Parti banned(Map<String, Object> param);
 	
-	//내 참여 내역
-	List<Parti> getMyParti(String m_id);
+	int selectTotalMyParti(String m_id);
+	
+	List<Parti> selectMyParti(Map<String, Object> param);
 }
