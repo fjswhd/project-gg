@@ -72,7 +72,7 @@
 										<a href="#" class="btn btn-primary btn-sm disabled">상호 평가</a>											
 									</c:if>										
 									<c:if test="${today > board.e_date}">
-										<button class="btn btn-primary btn-sm" onclick="eval('${board.b_no}')">상호 평가</button>											
+										<button class="btn btn-primary btn-sm" onclick="eval('${board.b_no}', '${sessionScope.member.m_id}')">상호 평가</button>											
 									</c:if>	
 								</span>
 							</li>										
@@ -104,8 +104,8 @@
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
-		function eval(b_no) {
-			$('#eval').load('${_myPage}/evalForm.do', 'b_no='+b_no, function() {
+		function eval(b_no, m_id_eval) {
+			$('#eval').load('${_myPage}/evalForm.do', 'b_no='+b_no+'&m_id_eval='+m_id_eval, function() {
 				$('#eval').modal({
 					backdrop: 'static'
 				});

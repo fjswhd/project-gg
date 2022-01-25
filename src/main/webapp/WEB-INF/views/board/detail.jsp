@@ -104,7 +104,7 @@
 						</li>
 						<li class="list-group-item align-center" style="font-size: 16px;">
 							<span class="col-md-1 j-center pd-0"><i class="fas fa-compass fa-lg"></i></span>
-							${place}
+							${place} <a href="#" id="placeLink" title="상세보기" style="color: #000;"><i class="fas fa-link mg-l-5"></i></a>
 						</li>
 						<li class="list-group-item align-center" style="font-size: 16px;">
 							<span class="col-md-1 j-center pd-0"><i class="fas fa-map-marked-alt fa-lg"></i></span>
@@ -151,23 +151,84 @@
 		$('#reply').load('${_reply}/list.do', 'b_no=${board.b_no}');
 		
 		var geocoder = new kakao.maps.services.Geocoder(),
-		address = '${address}';
+			address = '${address}',
+			place = '${place}';
 		
+		var map = new kakao.maps.Map(document.querySelector('#map'), {
+		    level: 4,
+		    center: new kakao.maps.LatLng(37.5, 127)
+		});	
+		//마커 정보 보여줄 오버레이
+		var overlay = new kakao.maps.CustomOverlay({
+			clickable: true,
+			map: map,
+			zIndex: 15
+		});
+		
+		//검색 객체?
+		var ps = new kakao.maps.services.Places();	
+			
 		geocoder.addressSearch(address, function(result, status) {
 		    if (status === kakao.maps.services.Status.OK) {
 		        var currCenter = new kakao.maps.LatLng(result[0].y, result[0].x);
 		        
-		        var map = new kakao.maps.Map(document.querySelector('#map'), {
-				    level: 4,
-				    center: currCenter
-				});	
+		        map.setCenter(currCenter);
 			    
 			   	var marker = new kakao.maps.Marker({
 			        map: map,
 			    	position: currCenter
 			    });
+			   	
+			  	//마커 누르면 정보 노출 이벤트 리스너 달아주기
+		        kakao.maps.event.addListener(marker, 'mouseover', function() {
+		        	var	div = document.createElement('div');
+				
+					div.classList.add('wrap');
+		        	
+					var content = 
+						'<ul class="list-group" style="margin: 0;">'+
+						'<li class="list-group-item align-center" style="padding: 3px;">'+
+						'<span class="ellipsis">'+place+'</span>'+
+						'</li>'+
+						'</ul>';
+					
+					div.innerHTML = content;
+					
+					overlay.setPosition(marker.getPosition());
+					overlay.setContent(div);
+					overlay.setMap(map);
+				});
+			  	
+		        kakao.maps.event.addListener(marker, 'mouseout', function() {
+		        	overlay.setMap(null);
+				});
 		    }
 		});
+		
+		
+		searchPlaces();
+		
+		//keyword로 장소 검색
+		function searchPlaces() {
+		    var keyword = address + ' ' + place
+
+			ps.keywordSearch(keyword, placesSearchCB); 
+		}
+		
+		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+		function placesSearchCB(data, status, pagination) {
+		    if (status === kakao.maps.services.Status.OK) {
+		    	var url = data[0].place_url
+		    	document.querySelector('#placeLink').href = url;
+
+		    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+		        return;
+
+		    } else if (status === kakao.maps.services.Status.ERROR) {
+		        
+		        return;
+		    }
+		}
 		
 		var viewer = toastui.Editor.factory({
 			el: document.querySelector('#viewer'),

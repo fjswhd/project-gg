@@ -3,10 +3,11 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ratingns">
 	<select id="selectMyRatings" parameterType="map" resultType="rating">
-		SELECT *
-		FROM RATING
-		WHERE m_id_eval = #{m_id}
+		SELECT r.*, m.nickname
+		FROM RATING r, MEMBER m
+		WHERE m_id_eval = #{m_id_eval}
 		AND b_no = #{b_no}
+		AND r.m_id = m.m_id
 	</select>
 	
 	<select id="selectMaxR_no" resultType="int">
@@ -34,5 +35,14 @@
 		) 
 		WHERE m_id = #{m_id}
 	</select>
+	
+	<resultMap type="rating" 		id="ratingResultMap">
+		<id 	column="r_no" 		property="r_no" />
+		<result column="m_id" 		property="m_id" />
+		<result column="b_no" 		property="b_no" />
+		<result column="m_id_eval"	property="m_id_eval" />
+		<result column="r_score" 	property="r_score" />
+		<result column="nickname"	property="nickname" />
+	</resultMap>
 	
 </mapper>

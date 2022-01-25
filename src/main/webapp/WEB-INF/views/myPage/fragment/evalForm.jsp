@@ -29,13 +29,19 @@
 								<c:if test="${sessionScope.member.m_id == board.m_id}">
 									It's You!					
 								</c:if>
-								<c:if test="${sessionScope.member.m_id != board.m_id}">
+								<c:if test="${sessionScope.member.m_id != board.m_id && board.r_score == null}">
 									<input id="r_score" type="range" name="r_score" oninput="evaluation()" min="0" max="5" step="0.5"> 
+								</c:if>
+								<c:if test="${sessionScope.member.m_id != board.m_id && board.r_score != null}">
+									<input id="r_score" type="range" name="r_score" oninput="evaluation()" min="0" max="5" step="0.5" value="${board.r_score}"> 
 								</c:if>
 							</div>
 							<div class="col-md-1 pd-0">
-								<c:if test="${sessionScope.member.m_id != board.m_id}">
+								<c:if test="${sessionScope.member.m_id != board.m_id && board.r_score == null}">
 									2.5점
+								</c:if>
+								<c:if test="${sessionScope.member.m_id != board.m_id && board.r_score != null}">
+									${board.r_score}점
 								</c:if>
 							</div>
 						</li>
@@ -58,13 +64,19 @@
 									<c:if test="${sessionScope.member.m_id == parti.m_id}">
 										It's You!							
 									</c:if>
-									<c:if test="${sessionScope.member.m_id != parti.m_id}">
+									<c:if test="${sessionScope.member.m_id != parti.m_id && parti.r_score == null}">
 										<input type="range" name="r_score" oninput="evaluation()" min="0" max="5" step="0.5">
 									</c:if>
+									<c:if test="${sessionScope.member.m_id != parti.m_id && parti.r_score != null}">
+									<input id="r_score" type="range" name="r_score" oninput="evaluation()" min="0" max="5" step="0.5" value="${parti.r_score}"> 
+								</c:if>
 								</div>
 								<div class="col-md-1 pd-0">
-									<c:if test="${sessionScope.member.m_id != parti.m_id}">
+									<c:if test="${sessionScope.member.m_id != parti.m_id && parti.r_score == null}">
 										2.5점
+									</c:if>
+									<c:if test="${sessionScope.member.m_id != parti.m_id && parti.r_score != null}">
+										${parti.r_score}점
 									</c:if>
 								</div>							
 							</li>				

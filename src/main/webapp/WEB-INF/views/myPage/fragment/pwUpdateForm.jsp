@@ -66,7 +66,7 @@
 			msg = document.querySelectorAll('.msg')[0];
 			
 			//비밀번호 유효성 검사 >> 비밀번호가 유효해야 비밀번호 일치 불일치 판단
-			if(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,15}$/.test(password)) {
+			if(!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,15}$/.test(password)) {
 				msg.classList.replace('ok','err');
 				msg.innerHTML = '비밀번호는 숫자, 영소문자, 영대문자의 조합 8~15자로 만들어주세요.';
 			

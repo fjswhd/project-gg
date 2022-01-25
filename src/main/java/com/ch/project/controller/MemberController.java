@@ -84,9 +84,7 @@ public class MemberController {
 		
 		//기본 프로필 설정 >> db에서
 		
-		//막아둠
 		int iResult = ms.insert(member);
-		//int iResult = 1;
 		
 		if (iResult == 1) {
 			result = member.getM_id();
@@ -239,7 +237,7 @@ public class MemberController {
 	@RequestMapping(value = "login", produces = "text/html;charset=utf-8")
 	@ResponseBody
 	public String login(String m_id, String password, String prev, HttpSession session) {
-		if(prev.contains("profileForm") || prev.contains("findPwForm") || prev.contains("pwUpdateForm")) {
+		if(prev.contains("profileForm") || prev.contains("findPwForm") || prev.contains("pwUpdateForm") || prev.contains("findPw")) {
 			prev = "/project/home.do";
 		}
 		

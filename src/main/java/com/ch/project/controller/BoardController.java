@@ -125,14 +125,7 @@ public class BoardController {
 		
 		return "board/detail";
 	}
-	@RequestMapping("/request")
-	public String request() {
-		return "board/fragment/request";
-	}
-	@RequestMapping("/parti")
-	public String parti() {
-		return "board/fragment/parti";
-	}
+	
 	
 	@RequestMapping("/insert")
 	public String insert(Board board) {

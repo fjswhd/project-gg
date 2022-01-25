@@ -34,18 +34,17 @@
 					</div>
 					<div class="msg ok"></div>
 				</div>				
-					<div class="form-group">
-						<label for="password">본인확인을 위해 이메일로 보낸 인증번호를 입력해주세요.</label>
-						<div class="input-group">
-							<input type="text" id="password" name="password" class="form-control" required="required" placeholder="인증번호">
-							<span class="input-group-btn">
-								<button id="pwChkBtn" class="btn btn-primary" type="button">확인</button>
-							</span>
-						</div>
-						<div class="j-between">
-							<div class="msg err"></div>
-							<button type="submit" class="btn btn-success btn-sm mg-t-10" disabled="disabled">비밀번호 초기화</button>	
-						</div>
+				<div id="aCollapse" class="form-group collapse">
+					<label for="password">본인확인을 위해 이메일로 보낸 인증번호를 입력해주세요.</label>
+					<div class="input-group">
+						<input type="text" id="password" name="password" class="form-control" required="required" placeholder="인증번호">
+						<span class="input-group-btn">
+							<button id="pwChkBtn" class="btn btn-primary" type="button">확인</button>
+						</span>
+					</div>
+					<div class="j-between">
+						<div class="msg err"></div>
+						<button type="submit" class="btn btn-success btn-sm mg-t-10" disabled="disabled">비밀번호 초기화</button>	
 					</div>
 				</div>
 			</form>
@@ -137,28 +136,6 @@
 			})
 		}
 		
-		function timer() {
-			var time = 180;
-			var min, sec,
-				msg = document.querySelectorAll('.msg')[1]
-			
-			var x = setInterval(function() {
-				min = parseInt(time/60);
-				sec = time%60;
-				time--;
-				
-				msg.innerText = '남은 시간 : 0'+min+':'+fillZero(sec);
-				
-				if (time == 0) {
-					clearInterval(x);
-					msg.classList.add('err');
-					msg.innerText = '세션이 만료되었습니다.';
-				}
-			}, 1000)
-		}
-		function fillZero(sec){
-		    return parseInt(sec/10) == 0 ? '0'+sec : sec //남는 길이만큼 0으로 채움
-		}
 	</script>
 </body>
 </html>

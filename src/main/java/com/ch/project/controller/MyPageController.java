@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -193,14 +194,36 @@ public class MyPageController {
 	
 	//상호평가모달
 	@RequestMapping("/evalForm")
-	public String evalForm(Integer b_no, Model model, HttpSession session, HttpServletRequest request) {
-		if (request.getHeader("referer") == null || session.getAttribute("member") == null || b_no == null) {
+	public String evalForm(@RequestParam Map<String, Object> param, Model model, HttpSession session, HttpServletRequest request) {
+		if (request.getHeader("referer") == null || session.getAttribute("member") == null || param.size() == 0) {
 			return "redirect:/error.do";
 		} 
+		
+		int b_no = Integer.parseInt(param.get("b_no").toString());
 		
 		//활동 작성자 + 참여자 리스트
 		Board board = bs.getBoard(b_no);
 		List<Parti> partiList = ps.ptList(b_no);
+		
+		//만약 내가 평가한 내역이 있다면 해당 내역 값을 초기값으로
+		List<Rating> ratingList = ras.selectMyRatings(param);
+		
+		if(ratingList.size() != 0) {
+			
+			for (Rating rating : ratingList) {
+				//평가받은 사람 id가 글쓴이이면 board에 해당 스코어 값 넣어줌
+				if(board.getM_id().equals(rating.getM_id())) {
+					board.setR_score(Math.round(rating.getR_score()*10)/(float)10);
+				}
+				
+				for (Parti parti : partiList) {
+					//평가받은 사람 아이디가 참여자 중에 있으면 해당 평가의 스코어값 넣어줌 
+					if (parti.getM_id().equals(rating.getM_id())) {
+						parti.setR_score(Math.round(rating.getR_score()*10)/(float)10);
+					}
+				}
+			}			
+		}
 		
 		model.addAttribute("board", board);
 		model.addAttribute("partiList", partiList);
@@ -218,11 +241,11 @@ public class MyPageController {
 		//1. 해당 rating 내역이 있는지 확인
 		//있는지 검사할 때는 해당 글에 나의 평가 내역이 있는지 확인
 		int b_no = ratings.get(0).getB_no();
-		String m_id = ((Member) session.getAttribute("member")).getM_id();
+		String m_id_eval = ((Member) session.getAttribute("member")).getM_id();
 		
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("b_no", b_no);
-		param.put("m_id", m_id);
+		param.put("m_id_eval", m_id_eval);
 		
 		List<Rating> ratingList = ras.selectMyRatings(param);
 		

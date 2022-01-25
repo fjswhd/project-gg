@@ -85,6 +85,14 @@
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
+		//form안에서 키다운 이벤트가 발생했을 때 그 키의 key code가 13(enter)이면 이벤트 진행(submit)막기, 현재 커서부분 블러 처리 >> onchange 이벤트 발생
+		frm.addEventListener("keydown", function(event) {
+		    if ((event.keyCode || event.which) === 13) {
+		    	event.target.blur();
+		    	event.preventDefault();
+		    }
+		})
+		
 		document.querySelector("#picture").onchange = function (event) {
 			var image = event.target.files[0],
 				reader = new FileReader();

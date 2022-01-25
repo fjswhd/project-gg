@@ -143,7 +143,7 @@
 		//지도
 		var map = new kakao.maps.Map(document.querySelector('#map'), {
 		    level: 5,
-		    center: new kakao.maps.LatLng(37.5, 127),
+		    center: new kakao.maps.LatLng(37.5, 127)
 		});
 		
 		//마커 관리할 클러스터

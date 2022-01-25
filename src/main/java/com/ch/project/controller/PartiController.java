@@ -1,5 +1,7 @@
 package com.ch.project.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +39,13 @@ public class PartiController {
 		//게시글 주인인지 확인하기 위한 게시글 객체
 		Board board = bs.getBoard(b_no);
 		
+		Calendar today = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String todayStr = sdf.format(today.getTime());
+		
 		model.addAttribute("board", board);
 		model.addAttribute("partiList", partiList);
+		model.addAttribute("today", todayStr);
 		
 		return "board/fragment/parti";
 	}

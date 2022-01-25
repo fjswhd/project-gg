@@ -25,7 +25,22 @@
 			<form action="${_member}/join.do" method="post" name="frm">
 				<div class="form-group">
 					<label for="id">이메일을 입력하세요</label>
-					<input type="email" id="m_id" name="m_id" class="form-control" required="required" placeholder="이메일">
+					<div class="input-group">
+						<input type="email" id="m_id" name="m_id" class="form-control" required="required" placeholder="이메일">
+						<span class="input-group-btn">
+							<button id="idChkBtn" class="btn btn-primary" type="button" >확인</button>
+						</span>
+					</div>
+					<div class="msg err"></div>
+				</div>
+				<div id="aCollapse" class="form-group collapse">
+					<label for="password">본인확인을 위해 이메일로 보낸 인증번호를 입력해주세요.</label>
+					<div class="input-group">
+						<input type="text" id="auth" name="auth" class="form-control" required="required" placeholder="인증번호">
+						<span class="input-group-btn">
+							<button id="authChkBtn" class="btn btn-primary" type="button">확인</button>
+						</span>
+					</div>
 					<div class="msg err"></div>
 				</div>
 				<div id="pCollapse" class="collapse">
@@ -79,10 +94,11 @@
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
 		
-		frm.m_id.addEventListener('change', idChk)
-		frm.password.addEventListener('change', passwordChk)
-		frm.passwordChk.addEventListener('change', passwordChk)
-		frm.nickname.addEventListener('change', nickChk)
+		document.querySelector('#idChkBtn').addEventListener('click', idChk);
+		document.querySelector('#authChkBtn').addEventListener('click', authUser);
+		frm.password.addEventListener('change', passwordChk);
+		frm.passwordChk.addEventListener('change', passwordChk);
+		frm.nickname.addEventListener('change', nickChk);
 		
 		//form안에서 키다운 이벤트가 발생했을 때 그 키의 key code가 13(enter)이면 이벤트 진행(submit)막기, 현재 커서부분 블러 처리 >> onchange 이벤트 발생
 		frm.addEventListener("keydown", function(event)  {
@@ -115,8 +131,10 @@
 					msg.innerHTML = '사용 가능한 이메일입니다.';
 					msg.classList.replace('err','ok');
 					
-					//비밀번호 부분 열기
-					$('#pCollapse').collapse('show');
+					//인증 부분 열기
+					$('#aCollapse').collapse('show');
+					
+					authMailSend(id);
 					return;
 				} else if(result != '1') {
 					msg.innerHTML = '중복된 이메일입니다.';
@@ -128,29 +146,74 @@
 			msg.classList.replace('ok','err');
 			
 			//비밀번호 부분이 열려있으면 비밀번호, 비밀번호 확인 input의 값을 지우고 닫음
+			if ($('#aCollapse').hasClass('in') ) {
+				$('#pCollapse').collapse('hide');
+				document.querySelector('#auth').value = '';
+				document.querySelectorAll('.msg')[1].innerHTML = '';
+			}
 			if ($('#pCollapse').hasClass('in') ) {
 				$('#pCollapse').collapse('hide');
 				document.querySelector('#password').value = '';
 				document.querySelector('#passwordChk').value = '';
-				document.querySelectorAll('.msg')[1].innerHTML = '';
+				document.querySelectorAll('.msg')[2].innerHTML = '';
 			}
 			
 			//이메일 부분이 열려있으면 이메일 input의 값을 지우고 닫음
 			if ($('#nCollapse').hasClass('in') ) {
 				$('#nCollapse').collapse('hide');
 				document.querySelector('#nickname').value = '';
+				document.querySelectorAll('.msg')[3].innerHTML = '';
+				document.querySelector('button[type="submit"]').setAttribute('disabled', 'disabled');
 			}
 		}
-
+		var num = '';
+		
+		function authUser() {
+			var auth = document.querySelector('#auth'),
+				msg = document.querySelectorAll('.msg')[1];
+			
+			//입력한 번호랑 인증번호가 일치하는 경우
+			if (auth.value == num) {
+				msg.classList.replace('err','ok');
+				msg.innerHTML = '인증번호가 일치합니다.';
+				
+				$('#pCollapse').collapse('show');
+				return;
+				
+			} else {
+				msg.classList.replace('ok','err');
+				msg.innerHTML = '인증번호가 일치하지 않습니다.';
+				
+				if ($('#pCollapse').hasClass('in') ) {
+					$('#pCollapse').collapse('hide');
+					document.querySelector('#password').value = '';
+					document.querySelector('#passwordChk').value = '';
+					document.querySelectorAll('.msg')[2].innerHTML = '';
+				}
+				
+				if ($('#nCollapse').hasClass('in') ) {
+					$('#nCollapse').collapse('hide');
+					document.querySelector('#nickname').value = '';
+					document.querySelectorAll('.msg')[3].innerHTML = '';
+					document.querySelector('button[type="submit"]').setAttribute('disabled', 'disabled');
+				}
+			}			
+		}
+		
+		function authMailSend(id) {
+			$.post('${_member}/authUser.do', 'm_id='+id, function(data) {
+				num = data	
+			})
+		}
 		//비밀번호 유효성 검사
 		function passwordChk(event) {
 			var password, passwordChk, msg;
 			password = document.querySelector('#password').value;
 			passwordChk = document.querySelector('#passwordChk').value;
-			msg = document.querySelectorAll('.msg')[1];
+			msg = document.querySelectorAll('.msg')[2];
 			
 			//비밀번호 유효성 검사 >> 비밀번호가 유효해야 비밀번호 일치 불일치 판단
-			if(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,15}$/.test(password)) {
+			if(!/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,15}$/.test(password)) {
 				msg.classList.replace('ok','err');
 				msg.innerHTML = '비밀번호는 숫자, 영소문자, 영대문자의 조합 8~15자로 만들어주세요.';
 			
@@ -182,12 +245,14 @@
 			if ($('#nCollapse').hasClass('in') ) {
 				$('#nCollapse').collapse('hide');
 				document.querySelector('#nickname').value = '';
+				document.querySelectorAll('.msg')[3].innerHTML = '';
+				document.querySelector('button[type="submit"]').setAttribute('disabled', 'disabled');
 			}
 		}
 		
 		async function nickChk() {
 			var nickname = document.querySelector('#nickname').value,
-			msg = document.querySelectorAll('.msg')[2],
+			msg = document.querySelectorAll('.msg')[3],
 			sendData = 'nickname='+nickname;
 			
 			var result = await fetch('${_member}/nickChk.do', {

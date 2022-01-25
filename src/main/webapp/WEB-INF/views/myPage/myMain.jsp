@@ -121,7 +121,7 @@
 													<a href="${_board}/detail.do?b_no=${board.b_no}" class="btn btn-primary btn-sm disabled">상호 평가</a>											
 												</c:if>										
 												<c:if test="${today > board.e_date && today <= board.e_date_after}">
-													<button class="btn btn-primary btn-sm" onclick="eval('${board.b_no}')">상호 평가</button>											
+													<button class="btn btn-primary btn-sm" onclick="eval('${board.b_no}', '${sessionScope.member.m_id}')">상호 평가</button>											
 												</c:if>	
 											</span>
 										</li>										
@@ -246,7 +246,7 @@
 													<a href="${_board}/detail.do?b_no=${board.b_no}" class="btn btn-primary btn-sm disabled">상호 평가</a>											
 												</c:if>										
 												<c:if test="${today > parti.board.e_date && today <= parti.board.e_date_after && parti.cancel != 'y' && parti.ban != 'y'}">
-													<button class="btn btn-primary btn-sm" onclick="eval('${parti.b_no}')">상호 평가</button>											
+													<button class="btn btn-primary btn-sm" onclick="eval('${parti.b_no}', '${sessionScope.member.m_id}')">상호 평가</button>											
 												</c:if>	
 											</span>
 										</li>										
@@ -281,8 +281,8 @@
 		1. 서브쿼리문으로 보드, 파티리스트에 r_score값을 구해서 가져온다. 
 		2. mybatis collection을 사용해본다.
 		*/
-		function eval(b_no) {
-			$('#eval').load('${_myPage}/evalForm.do', 'b_no='+b_no, function() {
+		function eval(b_no, m_id_eval) {
+			$('#eval').load('${_myPage}/evalForm.do', 'b_no='+b_no+'&m_id_eval='+m_id_eval, function() {
 				$('#eval').modal({
 					backdrop: 'static'
 				});

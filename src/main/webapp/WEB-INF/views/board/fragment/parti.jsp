@@ -43,17 +43,21 @@
 						<c:if test="${sessionScope.member.m_id == board.m_id}">
 							<li class="list-group-item">
 								<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${parti.m_id}')">${parti.nickname}</a>
-								<a href="${ban}" class="text-danger cursor-no-line" title="참여자 강퇴" onclick="ban('${parti.nickname}')">
-									<i class="fas fa-times-circle"></i>																		
-								</a>
+								<c:if test="${today <= board.e_date}">
+									<a href="${ban}" class="text-danger cursor-no-line" title="참여자 강퇴" onclick="ban('${parti.nickname}')">
+										<i class="fas fa-times-circle"></i>																		
+									</a>
+								</c:if>
 							</li>
 						</c:if>
 						<c:if test="${sessionScope.member.m_id != board.m_id && sessionScope.member.m_id == parti.m_id}">
 							<li class="list-group-item">
 								<a href="#myModal" data-toggle="modal" title="프로필 확인" onclick="getProfile('${parti.m_id}')">${parti.nickname}</a>
-								<a href="${cancel}" class="text-danger cursor-no-line" title="활동 탈퇴" onclick="partiCancel()">
-									<i class="fas fa-times-circle"></i>																		
-								</a>
+								<c:if test="${today <= board.e_date}">
+									<a href="${cancel}" class="text-danger cursor-no-line" title="활동 탈퇴" onclick="partiCancel()">
+										<i class="fas fa-times-circle"></i>																		
+									</a>
+								</c:if>
 							</li>
 						</c:if>
 						<c:if test="${sessionScope.member.m_id != board.m_id && sessionScope.member.m_id != parti.m_id}">

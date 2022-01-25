@@ -1,4 +1,4 @@
-
+--$2a$10$pWfgZ78Fpc4ZOG2lrcdByuvTKDYKG0IR5h7vAAwYU8eu8jX.0Tmm.
 
 select * from BOARD
 select * from REQUEST
@@ -6,15 +6,29 @@ select * from PARTI
 select * from rating
 select * from member
 
-update parti
-set ban = 'n'
-where m_id = 'fjswhd93@hanmail.net'
-and b_no = 106
-
-delete from member where m_id = 'ejm4000@naver.com'
+delete from RATING
+delete from PARTI
+delete from REQUEST
+delete from REPLY
+delete from BOARD
+delete from member where m_id != 'admin@naver.com'
 
 INSERT INTO MEMBER
 VALUES ('admin@naver.com', '', sysdate, 'admin', sysdate, '알 수 없음', '알 수 없음', 'user.svg', 0.0, 'y', 'n')
+
+INSERT INTO MEMBER
+VALUES ('a@a.com', '$2a$10$pWfgZ78Fpc4ZOG2lrcdByuvTKDYKG0IR5h7vAAwYU8eu8jX.0Tmm.', sysdate, '같가', sysdate, '알 수 없음', '알 수 없음', 'user.svg', 0.0, 'n', 'n')
+INSERT INTO MEMBER
+VALUES ('b@b.com', '$2a$10$pWfgZ78Fpc4ZOG2lrcdByuvTKDYKG0IR5h7vAAwYU8eu8jX.0Tmm.', sysdate, '은영짱짱', sysdate, '고덕이 좋아요', '맛있는거 짱짱', 'user.svg', 0.0, 'n', 'n')
+INSERT INTO MEMBER
+VALUES ('c@c.com', '$2a$10$pWfgZ78Fpc4ZOG2lrcdByuvTKDYKG0IR5h7vAAwYU8eu8jX.0Tmm.', sysdate, '종민쿤', sysdate, '고양시', '맛집찾기 좋아요', 'user.svg', 0.0, 'n', 'n')
+INSERT INTO MEMBER
+VALUES ('d@d.com', '$2a$10$pWfgZ78Fpc4ZOG2lrcdByuvTKDYKG0IR5h7vAAwYU8eu8jX.0Tmm.', sysdate, '지선양', sysdate, '연희', '축구 같이 보러 가실 분 찾아용', 'user.svg', 0.0, 'n', 'n')
+INSERT INTO MEMBER
+VALUES ('e@e.com', '$2a$10$pWfgZ78Fpc4ZOG2lrcdByuvTKDYKG0IR5h7vAAwYU8eu8jX.0Tmm.', sysdate, '윤석사마', sysdate, '아현', '함께 몸 만드실 분?', 'user.svg', 0.0, 'n', 'n')
+INSERT INTO MEMBER
+VALUES ('f@f.com', '$2a$10$pWfgZ78Fpc4ZOG2lrcdByuvTKDYKG0IR5h7vAAwYU8eu8jX.0Tmm.', sysdate, '주니센세', sysdate, '알 수 없음', '알 수 없음', 'user.svg', 0.0, 'n', 'n')
+
 
 update member
 set picture = 'user.svg', admin = 'y'
@@ -200,3 +214,11 @@ SELECT B_NO, M_ID, AVG(R_SCORE) R_SCORE
 update member
 set picture = '099b122a-4a36-4a0a-b848-609d55dbf46e.jpg'
 where m_id = 'fjswhd93@naver.com'
+
+SELECT r.*, m.nickname
+		FROM RATING r, MEMBER m
+		WHERE m_id_eval = 'ejm4000@naver.com'
+		AND b_no = '105'
+		AND r.m_id = m.m_id
+		
+update member set m_id = 'ejm4000@naver.co' where m_id = 'ejm4000@naver.com'
