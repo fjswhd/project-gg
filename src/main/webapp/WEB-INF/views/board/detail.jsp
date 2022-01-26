@@ -73,9 +73,6 @@
 					<c:if test="${sessionScope.member.m_id == board.m_id}">
 						<a href="${_board}/updateForm.do?b_no=${board.b_no}" class="btn btn-warning btn-sm">수정<i class="fas fa-undo-alt mg-l-5"></i></a>
 					</c:if>
-					<c:if test="${sessionScope.member.m_id == board.m_id}">
-						<button class="btn btn-danger btn-sm">삭제<i class="fas fa-trash-alt mg-l-5"></i></button>
-					</c:if>
 				</span>
 			</div>
 			
@@ -84,7 +81,7 @@
 				<div class="f-2 mg-r-5 scroll" style="overflow: auto; position: relative;">
 					<div class="flex-column pd-b-5 pd-r-5" style="position: absolute; width: 100%;">
 						<!-- 내용 -->
-						<div id="viewer" class="shadow-bottom mg-b-5 pd-10"></div>
+						<div id="viewer" class="shadow-bottom mg-b-5 pd-10 pd-b-15"></div>
 						
 						<!-- 댓글 -->
 						<div id="reply"></div>
@@ -170,7 +167,30 @@
 			
 		geocoder.addressSearch(address, function(result, status) {
 		    if (status === kakao.maps.services.Status.OK) {
-		        var currCenter = new kakao.maps.LatLng(result[0].y, result[0].x);
+		        
+		    }
+		});
+		
+		
+		searchPlaces();
+		
+		//keyword로 장소 검색
+		function searchPlaces() {
+		    var keyword = address + ' ' + place
+
+			ps.keywordSearch(keyword, placesSearchCB); 
+		    
+		    
+		    
+		}
+		
+		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+		function placesSearchCB(data, status, pagination) {
+		    if (status === kakao.maps.services.Status.OK) {
+		    	var url = data[0].place_url
+		    	document.querySelector('#placeLink').href = url;
+				
+		    	var currCenter = new kakao.maps.LatLng(data[0].y, data[0].x);
 		        
 		        map.setCenter(currCenter);
 			    
@@ -180,7 +200,7 @@
 			    });
 			   	
 			  	//마커 누르면 정보 노출 이벤트 리스너 달아주기
-		        kakao.maps.event.addListener(marker, 'mouseover', function() {
+		        kakao.maps.event.addListener(marker, 'click', function() {
 		        	var	div = document.createElement('div');
 				
 					div.classList.add('wrap');
@@ -202,25 +222,8 @@
 		        kakao.maps.event.addListener(marker, 'mouseout', function() {
 		        	overlay.setMap(null);
 				});
-		    }
-		});
-		
-		
-		searchPlaces();
-		
-		//keyword로 장소 검색
-		function searchPlaces() {
-		    var keyword = address + ' ' + place
-
-			ps.keywordSearch(keyword, placesSearchCB); 
-		}
-		
-		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
-		function placesSearchCB(data, status, pagination) {
-		    if (status === kakao.maps.services.Status.OK) {
-		    	var url = data[0].place_url
-		    	document.querySelector('#placeLink').href = url;
-
+		    	
+		    	
 		    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 		        return;
 
@@ -281,7 +284,17 @@
 				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span><div class="col-md-9 pd-0 wordWrap">' + data.reg_date + '</div>';			
 				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span><div class="col-md-9 pd-0 wordWrap">' + data.place + '</div>';				
 				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span><div class="col-md-9 pd-0 wordWrap">' + data.tag + '</div>';				
-				li[4].innerHTML = '<span class="col-md-3 bold">평점</span><div class="col-md-9 pd-0 wordWrap">' + data.rating + '</div>';
+				
+				var rating = '';
+				if (data.rating.toString().length == 1) {
+					rating = data.rating.toString()+'.00 점'
+				} else if (data.rating.toString().length == 3) {
+					rating = data.rating.toString()+'0 점'
+				} else {
+					rating = data.rating.toString()+' 점'
+				}
+				
+				li[4].innerHTML = '<span class="col-md-3 bold">평점</span><div class="col-md-9 pd-0 wordWrap">' + rating + '</div>';
 				
 			})
 			

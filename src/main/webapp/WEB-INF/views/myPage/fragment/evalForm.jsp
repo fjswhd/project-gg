@@ -204,7 +204,17 @@
 			li[1].innerHTML = '<span class="col-md-3 bold">가입일</span><div class="col-md-9 pd-0 wordWrap">' + data.reg_date + '</div>';			
 			li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span><div class="col-md-9 pd-0 wordWrap">' + data.place + '</div>';				
 			li[3].innerHTML = '<span class="col-md-3 bold">관심사</span><div class="col-md-9 pd-0 wordWrap">' + data.tag + '</div>';				
-			li[4].innerHTML = '<span class="col-md-3 bold">평점</span><div class="col-md-9 pd-0 wordWrap">' + data.rating + '</div>';
+			
+			var rating = '';
+			if (data.rating.toString().length == 1) {
+				rating = data.rating.toString()+'.00 점'
+			} else if (data.rating.toString().length == 3) {
+				rating = data.rating.toString()+'0 점'
+			} else {
+				rating = data.rating.toString()+' 점'
+			}
+			
+			li[4].innerHTML = '<span class="col-md-3 bold">평점</span><div class="col-md-9 pd-0 wordWrap">' + rating + '</div>';
 			
 		})
 		

@@ -94,7 +94,7 @@
 				AND p.b_no = b.b_no
 				AND p.b_no = r.b_no
 				AND b.c_no = c.c_no
-				ORDER BY p.reg_date DESC
+				ORDER BY p.reg_date DESC, p.b_no DESC
 			) p1
 		) p2
 		WHERE rn BETWEEN #{startRow} and #{endRow}

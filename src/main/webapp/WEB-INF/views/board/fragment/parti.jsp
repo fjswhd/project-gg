@@ -100,9 +100,6 @@
 		</ul>
 	</div>
 </div>
-
-
-
 <script type="text/javascript">
 	function ban(nickname) {		
 		if(!confirm('강퇴당한 사용자는 평점이 0점으로 처리됩니다.\r\n또한 다시 활동에 참가할 수 없게 됩니다.\r\n'+nickname+'님을 활동에서 강퇴하시겠습니까?')) {

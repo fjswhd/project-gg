@@ -7,7 +7,9 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -206,6 +208,11 @@ public class MemberController {
 		
 		int level = today.get(Calendar.YEAR) - birthday.get(Calendar.YEAR) + 1;
 		
+		Set<String> set = new HashSet<String>();
+		
+		set.add("가나다");
+		set.add("가나다");
+		
 		//닉네임 픽쳐 플레이스 레이팅 가입일 태그 생일
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("nickname", member.getNickname());
@@ -216,6 +223,9 @@ public class MemberController {
 		result.put("level", level);
 		result.put("tag", member.getTag());
 		
+		for (Map.Entry<String, Object> entry : result.entrySet()) {
+			
+		}
 		return result;
 	}
 	

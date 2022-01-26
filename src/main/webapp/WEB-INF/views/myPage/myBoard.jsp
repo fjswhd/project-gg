@@ -64,7 +64,7 @@
 										<span class="text-muted">평가 전</span>
 									</c:if>											
 									<c:if test="${not empty board.r_score}">
-										<span class="bold">${board.r_score}</span>
+										<span class="bold">${board.r_score}점</span>
 									</c:if>											
 								</span>
 								<span class="col-md-2">

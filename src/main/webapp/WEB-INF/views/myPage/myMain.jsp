@@ -53,7 +53,7 @@
 								</li>
 								<li class="list-group-item flex ellipsis">
 									<span class="col-md-3 bold">평점</span>
-									<span>${member.rating}</span>
+									<span>${member.rating}점</span>
 								</li>
 							</ul>
 						</div>

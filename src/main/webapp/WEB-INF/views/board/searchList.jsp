@@ -29,7 +29,7 @@
 				<div id="searchBox" class="shadow-bottom">
 					<form action="${_board}/searchList.do" name="frm">
 						<input type="hidden" name="pageNum" value="1">
-						<div class="form-group align-center" style="margin-bottom: 10px;">
+						<div class="form-group align-center">
 							<label class="col-md-2">일자</label>
 							<span class="col-md-5">
 								<input type="date" name="s_date" class="form-control input-sm" min="${today}" max="${lastday}" value="${param.s_date}">
@@ -37,11 +37,6 @@
 							~
 							<span class="col-md-5">
 								<input type="date" name="e_date" class="form-control input-sm"  min="${today}" max="${lastday}" value="${param.e_date}">
-							</span>
-						</div>
-						<div class="align-center j-end" style="height: 14px; margin-bottom: 10px;">
-							<span class="col-md-10">
-								<input type="checkbox" id="accute"><label for="accute" class="mg-l-5">정확한 일자로 검색</label>
 							</span>
 						</div>
 						<div class="form-group align-center">
@@ -78,7 +73,7 @@
 				</div>
 				
 				<!-- 검색 결과 -->
-				<div id="searchList" class="scroll" style="position: absolute; overflow: auto; top: 30%; width: 100%; height: 70%;">
+				<div id="searchList" class="scroll" style="position: absolute; overflow: auto; top: 25%; width: 100%; height: 70%;">
 					<ul class="list-group mg-b-5 mg-r-5 mg-l-5"></ul>
 					<div class="j-center">
 						<ul class="pagination mg-t-5 mg-b-5"></ul>
@@ -136,7 +131,8 @@
 	<script type="text/javascript">
 		//주소를 맵 좌표로 바꿔줄 geocoder
 		var geocoder = new kakao.maps.services.Geocoder();
-		
+		//검색 객체?
+		var ps = new kakao.maps.services.Places();	
 		//마커를 담을 배열
 		var markers = [];
 		
@@ -280,11 +276,42 @@
 			
 			itemList.map(function(item, index) {
 				var address = item.address;
+				var place = address.substring(0, address.lastIndexOf('('));
 				address = address.substring(address.lastIndexOf('(') + 1, address.lastIndexOf(')'));
+				
+				var keyword = address + ' ' + place;
 				
 				var title = JSON.stringify(item);
 				
-				geocoder.addressSearch(address, function(result, status) {
+				searchPlaces(keyword);
+				
+				
+				//keyword로 장소 검색
+				function searchPlaces(keyword) {
+					ps.keywordSearch(keyword, placesSearchCB); 
+				}
+				
+				// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+				function placesSearchCB(data, status, pagination) {
+				    if (status === kakao.maps.services.Status.OK) {
+				    	var placePosition = new kakao.maps.LatLng(data[0].y, data[0].x),
+				    		marker = makeMarker(title, placePosition);
+				        
+				        bounds.extend(placePosition);					        	
+				        map.setBounds(bounds);
+				        
+				        clusterer.addMarker(marker);
+				        markers.push(marker);
+				    	
+				    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+				        return;
+
+				    } else if (status === kakao.maps.services.Status.ERROR) {
+				        
+				        return;
+				    }
+				}
+				/* geocoder.addressSearch(address, function(result, status) {
 				    if (status === kakao.maps.services.Status.OK) {
 				        var placePosition = new kakao.maps.LatLng(result[0].y, result[0].x),
 					   		marker = makeMarker(title, placePosition);
@@ -295,9 +322,14 @@
 				        clusterer.addMarker(marker);
 				        markers.push(marker);
 				    }
-				});
+				}); */
 			})
 		}
+		
+		
+		
+		
+		
 		
 		//검색 결과를 보여줌
 		function displaySearchResult(itemList) {
@@ -320,16 +352,22 @@
 			for(var i = 0; i < itemList.length; i++) {
 				var board = itemList[i];
 				li = document.createElement('li'),
-				a = document.createElement('a');
+				a = document.createElement('a'),
+				small = document.createElement('small');
+				
 				
 				li.classList.add('list-group-item')
 				
 				a.setAttribute('href', '${_board}/detail.do?b_no='+board.b_no);
 				a.classList.add('cursor');
 				a.style.color = '#000';
-				a.textContent = '['+board.category.c_name+'] '+ board.subject
+				a.innerHTML = '['+board.category.c_name+'] '+ board.subject
 				
+				small.classList.add('text-muted', 'mg-l-5');
+				small.innerText = board.address.substring(0, board.address.lastIndexOf('('));
+						
 				li.appendChild(a);
+				li.appendChild(small);
 				
 				target.appendChild(li);
 			}

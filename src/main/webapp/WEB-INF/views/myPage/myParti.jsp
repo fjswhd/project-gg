@@ -43,7 +43,7 @@
 							</span>
 						</li>
 						<c:forEach var="parti" items="${myPartiList}">
-							<li class="list-group-item align-center">
+							<li class="list-group-item align-center pd-t-5 pd-b-5">
 								<span class="col-md-6 ellipsis">
 									<a href="${_board}/detail.do?b_no=${parti.b_no}" class="cursor">[${parti.board.category.c_name}] ${parti.board.subject}</a>											
 								</span>
@@ -69,7 +69,7 @@
 										<span class="text-muted">평가 전</span>
 									</c:if>											
 									<c:if test="${not empty parti.r_score}">
-										<span class="bold">${parti.r_score}</span>
+										<span class="bold">${parti.r_score}점</span>
 									</c:if>			
 								</span>
 								<span class="col-md-2">

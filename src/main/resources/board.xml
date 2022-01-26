@@ -112,7 +112,7 @@
 		SELECT b2.*
 		FROM (
 			SELECT ROWNUM rn, b1.*
-			FROM (SELECT * FROM my_board WHERE m_id = #{m_id} ORDER BY b_no DESC) b1
+			FROM (SELECT * FROM my_board WHERE m_id = #{m_id} ORDER BY reg_date DESC, b_no DESC) b1
 		) b2
 		WHERE rn BETWEEN #{startRow} and #{endRow}
 	</select>
