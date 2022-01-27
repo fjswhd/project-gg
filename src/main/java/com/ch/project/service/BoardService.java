@@ -20,8 +20,13 @@ public interface BoardService {
 
 	int getSearchBoardCount(Map<String, Object> param);
 
-	List<Board> getMyBoard(String m_id);
-
 	int updateBoard(Board board);
+
+	int getMaxB_no();
+
+	int selectTotalMyBoard(String m_id);
+
+	List<Board> selectMyBoard(Map<String, Object> param);
+
 
 }

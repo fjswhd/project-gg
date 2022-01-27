@@ -23,4 +23,10 @@ public class MemberServiceImpl implements MemberService {
 	public int updateProfile(Member member) {
 		return md.updateProfile(member);
 	}
+	public int updateMember(Member member) {
+		return md.updateMember(member);
+	}
+	public int updateRating(Member member) {
+		return md.updateRating(member);
+	}
 }

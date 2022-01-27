@@ -39,7 +39,6 @@
 					<div class="form-group">
 						<label for="place">주요 출몰지(활동 지역)를 알려주세요.</label>
 						<input type="text" id="place" name="place" class="form-control" placeholder="주요 출몰지">
-						<div class="msg err"></div>
 					</div>				
 					<div class="form-group">
 						<label for="tag">당신의 관심사를 알려주세요.</label>

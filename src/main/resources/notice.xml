@@ -9,7 +9,7 @@
 	</select>
 	
 	<!-- 공지 리스트 -->
-	<select id="selectNotice" parameterType="map" resultMap="noticeResultMap">
+	<select id="selectNoticeList" parameterType="map" resultMap="noticeResultMap">
 		SELECT n2.*
 		FROM (
 			SELECT ROWNUM rn, n1.*
@@ -17,11 +17,42 @@
 				SELECT n.*, m.nickname
 				FROM NOTICE n, MEMBER m
 				WHERE n.m_id = m.m_id
+				AND n.del = 'n'
 				ORDER BY n.reg_date DESC		
 			) n1		
 		) n2
 		WHERE rn BETWEEN #{startRow} AND #{endRow}
 	</select>
+	
+	<select id="selectNoticeNum" resultType="int">
+		SELECT NVL(max(no_no), 0) + 1
+		FROM NOTICE
+	</select>
+	
+	<!-- 공지 입력 -->
+	<insert id="insertNotice" parameterType="notice">
+		INSERT INTO NOTICE
+		VALUES (#{no_no}, #{m_id}, #{subject}, #{content}, #{readcount}, sysdate, 'n')
+	</insert>
+	
+	<!-- 공지 상세 -->
+	<select id="selectNotice" parameterType="int" resultMap="noticeResultMap">
+		SELECT n.*, m.nickname
+		FROM NOTICE n, MEMBER m
+		WHERE n.m_id = m.m_id
+		AND n.no_no = #{no_no}
+	</select>
+	
+	<!-- 공지 업데이트 -->
+	<update id="updateNotice" parameterType="notice">
+		UPDATE NOTICE
+		<set>
+			<if test="subject != null">subject = #{subject},</if>
+			<if test="content != null">content = #{content},</if>
+			<if test="del != null">del = #{del},</if>
+		</set>
+		WHERE no_no = #{no_no}
+	</update>
 	
 	<resultMap type="notice" id="noticeResultMap">
 		<id 	column="no_no" 		property="no_no" />

@@ -125,20 +125,13 @@ public class BoardController {
 		
 		return "board/detail";
 	}
-	@RequestMapping("/request")
-	public String request() {
-		return "board/fragment/request";
-	}
-	@RequestMapping("/parti")
-	public String parti() {
-		return "board/fragment/parti";
-	}
+	
 	
 	@RequestMapping("/insert")
 	public String insert(Board board) {
 		//현재 게시글 개수 구해서 다음 게시글의 글 번호 설정
-		int boardCount = bs.getBoardCount();
-		board.setB_no(boardCount + 1);
+		int nextB_no = bs.getMaxB_no() + 1;
+		board.setB_no(nextB_no);
 		
 		//나중에 json 객체로 만들때 오류나지 않게 "앞에 \넣어주기
 		String content = board.getContent().replace("\"", "\\\"");

@@ -9,7 +9,6 @@
 <body>
 	<script type="text/javascript">
 		var result = '${result}';
-		alert(result);
 		if(result == -1) {
 			alert('잘못된 접근입니다.');
 			location.href = '/project/home.do';

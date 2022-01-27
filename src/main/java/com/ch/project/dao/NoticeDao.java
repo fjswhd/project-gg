@@ -10,6 +10,14 @@ public interface NoticeDao {
 	//총 공지 개수
 	int selectTotalNotice();
 	//공지 리스트
-	List<Notice> selectNotice(Map<String, Object> param);
+	List<Notice> selectNoticeList(Map<String, Object> param);
+	//공지 번호 구하기
+	int selectNoticeNum();
+	//공지사항 입력
+	int insertNotice(Notice notice);
+	//공지 상세
+	Notice selectNotice(int no_no);
+	//공지 수정
+	int updateNotice(Notice notice);
 
 }

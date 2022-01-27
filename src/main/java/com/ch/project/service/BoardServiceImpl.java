@@ -33,10 +33,16 @@ public class BoardServiceImpl implements BoardService {
 	public int getSearchBoardCount(Map<String, Object> param) {
 		return bd.getSearchBoardCount(param);
 	}
-	public List<Board> getMyBoard(String m_id) {
-		return bd.getMyBoard(m_id);
-	}
 	public int updateBoard(Board board) {
 		return bd.updateBoard(board);
+	}
+	public int getMaxB_no() {
+		return bd.getMaxB_no();
+	}
+	public int selectTotalMyBoard(String m_id) {
+		return bd.selectTotalMyBoard(m_id);
+	}
+	public List<Board> selectMyBoard(Map<String, Object> param) {
+		return bd.selectMyBoard(param);
 	}
 }

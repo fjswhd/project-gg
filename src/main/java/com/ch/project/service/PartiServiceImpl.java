@@ -38,7 +38,10 @@ public class PartiServiceImpl implements PartiService {
 	public Parti banned(Map<String, Object> param) {
 		return pd.banned(param);
 	}
-	public List<Parti> getMyParti(String m_id) {
-		return pd.getMyParti(m_id);
+	public int selectTotalMyParti(String m_id) {
+		return pd.selectTotalMyParti(m_id);
+	}
+	public List<Parti> selectMyParti(Map<String, Object> param) {
+		return pd.selectMyParti(param);
 	}
 }

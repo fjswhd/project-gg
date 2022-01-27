@@ -36,7 +36,10 @@ public class PartiDaoImpl implements PartiDao {
 	public Parti banned(Map<String, Object> param) {
 		return sst.selectOne("partins.banned", param);
 	}
-	public List<Parti> getMyParti(String m_id) {
-		return sst.selectList("partins.getMyParti", m_id);
+	public int selectTotalMyParti(String m_id) {
+		return sst.selectOne("partins.selectTotalMyParti", m_id);
+	}
+	public List<Parti> selectMyParti(Map<String, Object> param) {
+		return sst.selectList("partins.selectMyParti", param);
 	}
 }

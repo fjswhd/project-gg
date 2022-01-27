@@ -19,7 +19,29 @@
 	
 	<!-- 회원프로필 수정 -->
 	<update id="updateProfile" parameterType="member">
-		update member set birthday=#{birthday}, place=#{place},tag=#{tag}, picture=#{picture} where m_id=#{m_id} 
+		update member 
+		set nickname=#{nickname}, birthday=#{birthday}, place=#{place},tag=#{tag}, picture=#{picture} where m_id=#{m_id} 
+	</update>
+	
+	<update id="updateMember" parameterType="member">
+		UPDATE MEMBER
+		<set>
+			<if test="password != null">password = #{password},</if>
+			<if test="nickname != null">nickname = #{nickname},</if>
+			<if test="birthday != null">birthday = #{birthday},</if>
+			<if test="place != null">place = #{place},</if>
+			<if test="tag != null">tag = #{tag},</if>
+			<if test="picture != null">picture = #{picture},</if>
+			<!-- <if test="rating != null">rating = #{rating},</if> -->	<!-- rating type이 int라서 0으로 들어오는 경우 있음 -->
+			<if test="del != null">del = #{del},</if>
+		</set>
+		WHERE m_id = #{m_id}
+	</update>
+	
+	<update id="updateRating" parameterType="member">
+		UPDATE MEMBER
+		SET rating = #{rating}
+		WHERE m_id = #{m_id}
 	</update>
 	
 	

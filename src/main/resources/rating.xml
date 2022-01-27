@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ratingns">
+	<select id="selectMyRatings" parameterType="map" resultType="rating">
+		SELECT r.*, m.nickname
+		FROM RATING r, MEMBER m
+		WHERE m_id_eval = #{m_id_eval}
+		AND b_no = #{b_no}
+		AND r.m_id = m.m_id
+	</select>
+	
+	<select id="selectMaxR_no" resultType="int">
+		SELECT NVL(MAX(r_no), 0)
+		FROM RATING
+	</select>
+	
+	<insert id="insertRating" parameterType="rating">
+		INSERT INTO RATING
+		VALUES (#{r_no}, #{m_id}, #{b_no}, #{r_score}, #{m_id_eval})
+	</insert>
+	
+	<update id="updateRating" parameterType="rating">
+		UPDATE RATING
+		SET r_score = #{r_score}
+		WHERE r_no = #{r_no}
+	</update>
+	
+	<select id="selectAvgScore" parameterType="string" resultType="float">
+		SELECT ROUND(AVG(r_score), 2) AS r_score
+		FROM (
+			SELECT b_no, m_id, AVG(r_score) r_score
+			FROM RATING
+			GROUP BY b_no, m_id
+		) 
+		WHERE m_id = #{m_id}
+	</select>
+	
+	<resultMap type="rating" 		id="ratingResultMap">
+		<id 	column="r_no" 		property="r_no" />
+		<result column="m_id" 		property="m_id" />
+		<result column="b_no" 		property="b_no" />
+		<result column="m_id_eval"	property="m_id_eval" />
+		<result column="r_score" 	property="r_score" />
+		<result column="nickname"	property="nickname" />
+	</resultMap>
+	
+</mapper>

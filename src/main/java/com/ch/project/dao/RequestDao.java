@@ -24,10 +24,12 @@ public interface RequestDao {
 	
 	int cancel(Map<String, Object> cancel);
 
-	List<Request> getMyRequest(String m_id);
-
 	Request selectRequest(Map<String, Object> request);
 	
 	void rejectAll(int b_no);
+
+	List<Request> selectMyRequest(Map<String, Object> param);
+
+	int selectTotalMyRequest(String m_id);
 	
 }

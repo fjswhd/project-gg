@@ -12,6 +12,7 @@ public class Board {
 	private String 	subject;
 	private Date	s_date;
 	private Date	e_date;
+	private Date	e_date_after;
 	private String	address;
 	private String 	content;
 	private	int		m_count;

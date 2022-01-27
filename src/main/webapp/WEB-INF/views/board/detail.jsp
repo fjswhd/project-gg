@@ -73,9 +73,6 @@
 					<c:if test="${sessionScope.member.m_id == board.m_id}">
 						<a href="${_board}/updateForm.do?b_no=${board.b_no}" class="btn btn-warning btn-sm">수정<i class="fas fa-undo-alt mg-l-5"></i></a>
 					</c:if>
-					<c:if test="${sessionScope.member.m_id == board.m_id}">
-						<button class="btn btn-danger btn-sm">삭제<i class="fas fa-trash-alt mg-l-5"></i></button>
-					</c:if>
 				</span>
 			</div>
 			
@@ -84,7 +81,7 @@
 				<div class="f-2 mg-r-5 scroll" style="overflow: auto; position: relative;">
 					<div class="flex-column pd-b-5 pd-r-5" style="position: absolute; width: 100%;">
 						<!-- 내용 -->
-						<div id="viewer" class="shadow-bottom mg-b-5 pd-10"></div>
+						<div id="viewer" class="shadow-bottom mg-b-5 pd-10 pd-b-15"></div>
 						
 						<!-- 댓글 -->
 						<div id="reply"></div>
@@ -104,7 +101,7 @@
 						</li>
 						<li class="list-group-item align-center" style="font-size: 16px;">
 							<span class="col-md-1 j-center pd-0"><i class="fas fa-compass fa-lg"></i></span>
-							${place}
+							${place} <a href="#" id="placeLink" title="상세보기" style="color: #000;"><i class="fas fa-link mg-l-5"></i></a>
 						</li>
 						<li class="list-group-item align-center" style="font-size: 16px;">
 							<span class="col-md-1 j-center pd-0"><i class="fas fa-map-marked-alt fa-lg"></i></span>
@@ -120,20 +117,20 @@
 	</div>
 	
 	<div class="modal fade" id="myModal">
-		<div class="modal-dialog ">
+		<div class="modal-dialog" style="font-family: 'Noto Sans KR'">
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header bg-info" style="border-top-left-radius: 5px; border-top-right-radius: 5px;">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 id="profileTitle" class="modal-title"></h4>
 				</div>
 				<div class="modal-body flex-column align-center">
 					<img id="profileImg" class="img-circle mg-b-10" alt="" src="" width="200" height="200" style="box-shadow: 0 0 3px #808080;">
-					<ul id="profileContent" class="list-group" style="width: 80%; box-shadow: 0 0 2px #808080; border-radius: 4px;">
-						<li class="list-group-item"></li>				
-						<li class="list-group-item"></li>				
-						<li class="list-group-item"></li>				
-						<li class="list-group-item"></li>				
-						<li class="list-group-item"></li>				
+					<ul id="profileContent" class="list-group" style="width: 90%; box-shadow: 0 0 2px #808080; border-radius: 4px;">
+						<li class="list-group-item flex"></li>				
+						<li class="list-group-item flex"></li>				
+						<li class="list-group-item flex"></li>				
+						<li class="list-group-item flex"></li>				
+						<li class="list-group-item flex"></li>				
 					</ul>
 				</div>
 			</div><!-- /.modal-content -->
@@ -151,23 +148,90 @@
 		$('#reply').load('${_reply}/list.do', 'b_no=${board.b_no}');
 		
 		var geocoder = new kakao.maps.services.Geocoder(),
-		address = '${address}';
+			address = '${address}',
+			place = '${place}';
 		
+		var map = new kakao.maps.Map(document.querySelector('#map'), {
+		    level: 4,
+		    center: new kakao.maps.LatLng(37.5, 127)
+		});	
+		//마커 정보 보여줄 오버레이
+		var overlay = new kakao.maps.CustomOverlay({
+			clickable: true,
+			map: map,
+			zIndex: 15
+		});
+		
+		//검색 객체?
+		var ps = new kakao.maps.services.Places();	
+			
 		geocoder.addressSearch(address, function(result, status) {
 		    if (status === kakao.maps.services.Status.OK) {
-		        var currCenter = new kakao.maps.LatLng(result[0].y, result[0].x);
 		        
-		        var map = new kakao.maps.Map(document.querySelector('#map'), {
-				    level: 4,
-				    center: currCenter
-				});	
+		    }
+		});
+		
+		
+		searchPlaces();
+		
+		//keyword로 장소 검색
+		function searchPlaces() {
+		    var keyword = address + ' ' + place
+
+			ps.keywordSearch(keyword, placesSearchCB); 
+		    
+		    
+		    
+		}
+		
+		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+		function placesSearchCB(data, status, pagination) {
+		    if (status === kakao.maps.services.Status.OK) {
+		    	var url = data[0].place_url
+		    	document.querySelector('#placeLink').href = url;
+				
+		    	var currCenter = new kakao.maps.LatLng(data[0].y, data[0].x);
+		        
+		        map.setCenter(currCenter);
 			    
 			   	var marker = new kakao.maps.Marker({
 			        map: map,
 			    	position: currCenter
 			    });
+			   	
+			  	//마커 누르면 정보 노출 이벤트 리스너 달아주기
+		        kakao.maps.event.addListener(marker, 'click', function() {
+		        	var	div = document.createElement('div');
+				
+					div.classList.add('wrap');
+		        	
+					var content = 
+						'<ul class="list-group" style="margin: 0;">'+
+						'<li class="list-group-item align-center" style="padding: 3px;">'+
+						'<span class="ellipsis">'+place+'</span>'+
+						'</li>'+
+						'</ul>';
+					
+					div.innerHTML = content;
+					
+					overlay.setPosition(marker.getPosition());
+					overlay.setContent(div);
+					overlay.setMap(map);
+				});
+			  	
+		        kakao.maps.event.addListener(marker, 'mouseout', function() {
+		        	overlay.setMap(null);
+				});
+		    	
+		    	
+		    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+		        return;
+
+		    } else if (status === kakao.maps.services.Status.ERROR) {
+		        
+		        return;
 		    }
-		});
+		}
 		
 		var viewer = toastui.Editor.factory({
 			el: document.querySelector('#viewer'),
@@ -191,7 +255,7 @@
 				img = document.querySelector('#profileImg'),
 				li = document.querySelectorAll('#profileContent > li');
 			
-			$.post('${_member}/getProfile.do', sendData, function() {
+			/* $.post('${_member}/getProfile.do', sendData, function() {
 				title.textContent = data.nickname + '님의 프로필';
 				img.src = '${_profile}/' + data.picture;
 				
@@ -201,7 +265,7 @@
 				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
 				li[4].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
 				
-			})
+			}) */
 			
 			fetch('${_member}/getProfile.do', {
 				method: 'POST',
@@ -216,11 +280,21 @@
 				title.textContent = data.nickname + '님의 프로필';
 				img.src = '${_profile}/' + data.picture;
 				
-				li[0].innerHTML = '<span class="col-md-3 bold">레벨</span>' + data.level;				
-				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span>' + data.reg_date;				
-				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span>' + data.place;				
-				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
-				li[4].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
+				li[0].innerHTML = '<span class="col-md-3 bold">레벨</span><div class="col-md-9 pd-0 wordWrap">' + data.level + '</div>';
+				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span><div class="col-md-9 pd-0 wordWrap">' + data.reg_date + '</div>';			
+				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span><div class="col-md-9 pd-0 wordWrap">' + data.place + '</div>';				
+				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span><div class="col-md-9 pd-0 wordWrap">' + data.tag + '</div>';				
+				
+				var rating = '';
+				if (data.rating.toString().length == 1) {
+					rating = data.rating.toString()+'.00 점'
+				} else if (data.rating.toString().length == 3) {
+					rating = data.rating.toString()+'0 점'
+				} else {
+					rating = data.rating.toString()+' 점'
+				}
+				
+				li[4].innerHTML = '<span class="col-md-3 bold">평점</span><div class="col-md-9 pd-0 wordWrap">' + rating + '</div>';
 				
 			})
 			

@@ -24,33 +24,36 @@
 				<div class="flex-column shadow-bottom pd-b-15">
 					<h2 class="align-center mg-l-15">
 						<strong>마이 프로필</strong>
-						<small><a href="#" class="cursor mg-l-10" style="color: #505050;"><i class="fas fa-user-edit"></i></a></small>
+						<small>
+							<a href="profileUpdateForm.do" class="cursor mg-l-10" style="color: #505050;" title="프로필 변경" onclick="pwChk()"><i class="fas fa-user-edit"></i></a>
+							<a href="pwUpdateForm.do" class="cursor mg-l-5" style="color: #505050;" title="비밀번호 변경" onclick="pwChk()"><i class="fas fa-unlock-alt"></i></a>
+						</small>
 					</h2>
 					<div id="profile" class="align-center">
 						<div id="imgContainer" class="col-md-3 j-center" style="">
-							<img class="img-circle" alt="" src="${_profile}/${sessionScope.member.picture}" height="200" width="200">
+							<img class="img-circle" alt="" src="${_profile}/${member.picture}" height="200" width="200">
 						</div>
 						<div id="profileDetail" class="col-md-9">
 							<ul class="list-group mg-b-5">
-								<li class="list-group-item">
+								<li class="list-group-item flex ellipsis">
 									<span class="col-md-3 bold">별명</span>
-									<span>${sessionScope.member.nickname}</span>
+									<span>${member.nickname}</span>
 								</li>
-								<li class="list-group-item">
+								<li class="list-group-item flex ellipsis">
 									<span class="col-md-3 bold">생일 / 레벨</span>
-									<span>${sessionScope.member.birthday} / lv : ${level}</span>
+									<span>${member.birthday} / lv : ${level}</span>
 								</li>
-								<li class="list-group-item">
+								<li class="list-group-item flex ellipsis">
 									<span class="col-md-3 bold">출몰지</span>
-									<span>${sessionScope.member.place}</span>
+									<span>${member.place}</span>
 								</li>
-								<li class="list-group-item">
+								<li class="list-group-item flex ellipsis">
 									<span class="col-md-3 bold">관심사</span>
-									<span>${sessionScope.member.tag}</span>
+									<span>${member.tag}</span>
 								</li>
-								<li class="list-group-item">
+								<li class="list-group-item flex ellipsis">
 									<span class="col-md-3 bold">평점</span>
-									<span>${sessionScope.member.rating}</span>
+									<span>${member.rating}점</span>
 								</li>
 							</ul>
 						</div>
@@ -62,7 +65,7 @@
 					<h2 class="align-center mg-l-15">
 						<strong>나의 작성 글</strong>
 						<c:if test="${not empty myBoardList && myBoardList.size() > 5}">
-							<small><a href="myPage/myBoard.do" class="cursor mg-l-10" title="더보기" style="color: #505050;"><i class="fas fa-plus-square"></i></a></small>
+							<small><a href="${_myPage}/myBoard.do?page=1" class="cursor mg-l-10" title="더보기" style="color: #505050;"><i class="fas fa-plus-square"></i></a></small>
 						</c:if>
 					</h2>
 					<div id="myBoard">
@@ -75,7 +78,7 @@
 									활동 상태											
 								</span>
 								<span class="col-md-2 bold">
-									별점											
+									나의 별점											
 								</span>
 								<span class="col-md-2 bold">
 									상호평가											
@@ -96,21 +99,30 @@
 											</span>
 											<span class="col-md-2">									
 												<c:if test="${today < board.s_date}">
-													활동 예정											
+													<span class="text-muted">활동 예정</span>									
 												</c:if>
 												<c:if test="${board.s_date <= today && today <= board.e_date}">
-													활동 중											
+													<span class="text-primary bold">활동 중</span>											
 												</c:if>
 												<c:if test="${today > board.e_date}">
-													활동 종료											
+													<span class="text-success bold">활동 종료</span>											
 												</c:if>
 											</span>
 											<span class="col-md-2">
-												<c:if test="${empty board.r_score}">평가받지 않음</c:if>											
-												<c:if test="${not empty board.r_score}">${board.r_score}</c:if>											
+												<c:if test="${empty board.r_score}">
+													<span class="text-muted">받은 별점이 없습니다.</span>
+												</c:if>											
+												<c:if test="${not empty board.r_score}">
+													<span class="bold">${board.r_score}점</span>
+												</c:if>											
 											</span>
 											<span class="col-md-2">
-												<a href="${_board}/detail.do?b_no=${board.b_no}" class="btn btn-primary btn-sm">상호 평가</a>											
+												<c:if test="${today <= board.e_date || today > board.e_date_after}">
+													<a href="${_board}/detail.do?b_no=${board.b_no}" class="btn btn-primary btn-sm disabled">상호 평가</a>											
+												</c:if>										
+												<c:if test="${today > board.e_date && today <= board.e_date_after}">
+													<button class="btn btn-primary btn-sm" onclick="eval('${board.b_no}', '${sessionScope.member.m_id}')">상호 평가</button>											
+												</c:if>	
 											</span>
 										</li>										
 									</c:if>
@@ -125,16 +137,16 @@
 					<h2 class="align-center mg-l-15">
 						<strong>나의 신청</strong>
 						<c:if test="${not empty myRequestList && myRequestList.size() > 5}">
-							<small><a href="#" class="cursor mg-l-10" title="더보기" style="color: #505050;"><i class="fas fa-plus-square"></i></a></small>
+							<small><a href="${_myPage}/myRequest.do?page=1" class="cursor mg-l-10" title="더보기" style="color: #505050;"><i class="fas fa-plus-square"></i></a></small>
 						</c:if>
 					</h2>
 					<div id="myRequest">
 						<ul class="list-group mg-t-10 mg-b-5">
 							<li class="list-group-item align-center">
-								<span class="col-md-8 bold">
+								<span class="col-md-6 bold">
 									활동명											
 								</span>
-								<span class="col-md-4 bold">
+								<span class="col-md-6 bold">
 									신청 상태											
 								</span>
 							</li>
@@ -147,17 +159,17 @@
 								<c:forEach var="request" items="${myRequestList}" varStatus="vs">
 									<c:if test="${vs.index < 5}">
 										<li class="list-group-item align-center">
-											<span class="col-md-8">
+											<span class="col-md-6 ellipsis">
 												<a href="${_board}/detail.do?b_no=${request.b_no}" class="cursor">[${request.board.category.c_name}] ${request.board.subject}</a>
 											</span>
 											<c:if test="${request.accept == 'w' && request.cancel == 'n'}">
-												<span class="col-md-4 text-muted">신청 처리 대기 중입니다.</span>								
+												<span class="col-md-6 text-muted">신청 처리 대기 중입니다.</span>								
 											</c:if>
 											<c:if test="${request.accept == 'n'}">
-												<span class="col-md-4 text-danger"><strong>신청이 거절되었습니다.</strong></span>												
+												<span class="col-md-6 text-danger"><strong>신청이 거절되었습니다.</strong></span>												
 											</c:if>
 											<c:if test="${request.cancel == 'y'}">
-												<span class="col-md-4 text-danger"><strong>신청을 취소했습니다.</strong></span>												
+												<span class="col-md-6 text-danger"><strong>신청을 취소했습니다.</strong></span>												
 											</c:if>
 										</li>										
 									</c:if>
@@ -172,7 +184,7 @@
 					<h2 class="align-center mg-l-15">
 						<strong>나의 활동</strong>
 						<c:if test="${not empty myPartiList && myPartiList.size() > 5}">
-							<small><a href="#" class="cursor mg-l-10" title="더보기" style="color: #505050;"><i class="fas fa-plus-square"></i></a></small>
+							<small><a href="${_myPage}/myParti.do?page=1" class="cursor mg-l-10" title="더보기" style="color: #505050;"><i class="fas fa-plus-square"></i></a></small>
 						</c:if>
 					</h2>
 					<div id="myParti">
@@ -185,7 +197,7 @@
 									활동 상태											
 								</span>
 								<span class="col-md-2 bold">
-									별점											
+									나의 별점											
 								</span>
 								<span class="col-md-2 bold">
 									상호평가											
@@ -206,26 +218,36 @@
 											</span>
 											<span class="col-md-2">
 												<c:if test="${parti.cancel == 'y' }">
-													탈퇴
+													<span class="text-danger bold">탈퇴</span>
 												</c:if>										
 												<c:if test="${parti.ban == 'y' }">
-													강퇴
+													<span class="text-danger bold">강퇴</span>
 												</c:if>										
 												<c:if test="${today < parti.board.s_date && parti.cancel != 'y' && parti.ban != 'y'}">
-													활동 예정											
+													<span class="text-muted">활동 예정</span>									
 												</c:if>
 												<c:if test="${parti.board.s_date <= today && today <= parti.board.e_date && parti.cancel != 'y' && parti.ban != 'y'}">
-													활동 중											
+													<span class="text-primary bold">활동 중</span>											
 												</c:if>
 												<c:if test="${today > parti.board.e_date && parti.cancel != 'y' && parti.ban != 'y'}">
-													활동 종료											
+													<span class="text-success bold">활동 종료</span>											
 												</c:if>
 											</span>
 											<span class="col-md-2">
-												별점											
+												<c:if test="${empty parti.r_score}">
+													<span class="text-muted">받은 별점이 없습니다.</span>
+												</c:if>											
+												<c:if test="${not empty parti.r_score}">
+													<span class="bold">${parti.r_score}점</span>
+												</c:if>			
 											</span>
 											<span class="col-md-2">
-												<a href="${_board}/detail.do?b_no=${board.b_no}" class="btn btn-primary btn-sm">상호 평가</a>											
+												<c:if test="${parti.cancel == 'y' || parti.ban == 'y' || today <= parti.board.e_date || today > parti.board.e_date_after}">
+													<a href="${_board}/detail.do?b_no=${board.b_no}" class="btn btn-primary btn-sm disabled">상호 평가</a>											
+												</c:if>										
+												<c:if test="${today > parti.board.e_date && today <= parti.board.e_date_after && parti.cancel != 'y' && parti.ban != 'y'}">
+													<button class="btn btn-primary btn-sm" onclick="eval('${parti.b_no}', '${sessionScope.member.m_id}')">상호 평가</button>											
+												</c:if>	
 											</span>
 										</li>										
 									</c:if>
@@ -240,10 +262,32 @@
 		</div>
 	</div>
 	
+	<div class="modal fade" id="pwChk"></div>
+	<div class="modal fade" id="eval"></div>
+	
 	<div id="background"></div>
 	<script type="text/javascript" src="${script}"></script>
 	<script type="text/javascript">
+		function pwChk() {
+			event.preventDefault();
+			$('#pwChk').load('${_myPage}/pwChkForm.do', 'next='+event.target.parentNode.href, function() {
+				$('#pwChk').modal({
+					backdrop: 'static'
+				});
+			})
+		}
 		
+		/* 평점 구현
+		1. 서브쿼리문으로 보드, 파티리스트에 r_score값을 구해서 가져온다. 
+		2. mybatis collection을 사용해본다.
+		*/
+		function eval(b_no, m_id_eval) {
+			$('#eval').load('${_myPage}/evalForm.do', 'b_no='+b_no+'&m_id_eval='+m_id_eval, function() {
+				$('#eval').modal({
+					backdrop: 'static'
+				});
+			})
+		}
 		
 	</script>
 </body>

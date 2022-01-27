@@ -7,10 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ch.project.model.Board;
 import com.ch.project.model.Notice;
 import com.ch.project.service.NoticeService;
 
@@ -61,7 +59,7 @@ public class NoticeController {
 		param.put("startRow", startRow);
 		param.put("endRow", endRow);
 		
-		List<Notice> noticeList = ns.selectNotice(param);
+		List<Notice> noticeList = ns.selectNoticeList(param);
 		
 		model.addAttribute("noticeList", noticeList);
 		model.addAttribute("firstPage", firstPage);
@@ -70,4 +68,79 @@ public class NoticeController {
 		
 		return "notice/list";
 	}
+	@RequestMapping("/insertForm")
+	public String insertForm() {
+		return "notice/insertForm";
+	}
+	@RequestMapping("/insert")
+	public String insert(Notice notice) {
+		int no_no = ns.selectNoticeNum();
+		notice.setNo_no(no_no);
+		
+		int result = 0;
+		result = ns.insertNotice(notice);
+		
+		return "redirect:/notice/list";
+	}
+	@RequestMapping("/detail")
+	public String detail(int no_no, Model model) {
+		Notice notice = ns.selectNotice(no_no);
+		
+		model.addAttribute("notice", notice);
+		
+		return "notice/detail";
+	}
+	@RequestMapping("/updateForm")
+	public String updateForm(int no_no, Model model) {
+		Notice notice = ns.selectNotice(no_no);
+		
+		model.addAttribute("notice", notice);
+		
+		return "notice/updateForm";
+	}
+	@RequestMapping("/update")
+	public String update(Notice notice) {
+		int result = 0;
+		result = ns.updateNotice(notice);
+		
+		return "redirect:/notice/detail.do?no_no="+notice.getNo_no();
+	}
+	@RequestMapping("/delete")
+	public String delete(Notice notice, Model model) {
+		int result = 0;
+		notice.setDel("y");
+		result = ns.updateNotice(notice);
+		
+		model.addAttribute("result", result);
+		
+		return "notice/delete";
+	}
+	
+	@RequestMapping("/latest")
+	public String latest(Model model) {
+		//매개변수에 topN을 위한 row 변수 넣고 전달
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("startRow", 1);
+		param.put("endRow", 10);
+		
+		List<Notice> noticeList = ns.selectNoticeList(param);
+		
+		int no_no = noticeList.get(1).getNo_no();
+		
+		return "redirect:/notice/detail.do?no_no="+no_no;
+	}
+	@RequestMapping("/latest2")
+	public String latest2(Model model) {
+		//매개변수에 topN을 위한 row 변수 넣고 전달
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("startRow", 1);
+		param.put("endRow", 10);
+		
+		List<Notice> noticeList = ns.selectNoticeList(param);
+		
+		int no_no = noticeList.get(0).getNo_no();
+		
+		return "redirect:/notice/detail.do?no_no="+no_no;
+	}
+	
 }

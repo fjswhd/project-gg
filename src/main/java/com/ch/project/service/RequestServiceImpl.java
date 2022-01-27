@@ -43,15 +43,19 @@ public class RequestServiceImpl implements RequestService{
 		return rd.cancel(cancel);
 	}
 	
-	//내가 신청한 게시글 리스트
-	public List<Request> getMyRequest(String m_id) {
-		return rd.getMyRequest(m_id);
-	}
 	//신청 이력 확인(신청이 존재하는가)
 	public Request selectRequest(Map<String, Object> request) {
 		return rd.selectRequest(request);
 	}
 	public void rejectAll(int b_no) {
 		rd.rejectAll(b_no);
+	}
+	
+	public int selectTotalMyRequest(String m_id) {
+		return rd.selectTotalMyRequest(m_id);
+	}
+	
+	public List<Request> selectMyRequest(Map<String, Object> param) {
+		return rd.selectMyRequest(param);
 	}
 }

@@ -8,6 +8,14 @@
     <title>같이 가치</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<style type="text/css">
+		@font-face {
+		    font-family: 'CookieRunOTF-Bold';
+		    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/CookieRunOTF-Bold00.woff') format('woff');
+		    font-weight: normal;
+		    font-style: normal;
+		}
+	</style>
 </head>
 <body>
 	<div class="container flex-column">
@@ -37,13 +45,10 @@
 							<!-- Wrapper for slides -->
 							<div class="carousel-inner" role="listbox" style="height: 500px;">
 								<div class="item active">
-									<img src="${logo}" alt="..." height="500">
-									<div class="carousel-caption">
-										...
-									</div>
+									<img src="${images}/main.png" alt="..." height="500" onclick="img1()" style="cursor:pointer;">
 								</div>
 								<div class="item">
-									<img src="${community}" alt="..." height="500">
+									<img src="${images}/main2.png" alt="..." height="500" onclick="img2()" style="cursor:pointer;">
 									<div class="carousel-caption">
 										...
 									</div>
@@ -75,54 +80,62 @@
 			<!-- 하단 -->
 			<div class="flex-column" style="height: 50%;">
 				<!-- 검색 -->
-				<form action="${_board}/searchList.do" method="post" class="col-md-10 mg-auto" name="frm">
+				<form action="${_board}/searchList.do" method="post" class="col-md-10 mg-auto flex-column align-center" name="frm">
 					<input type="hidden" name="pageNum" value="1">
-					<div class="form-group align-center fade-out">
-						<label class="col-md-2">언제 떠나시나요?</label>
-						<span class="col-md-3">
-							<input type="date" name="s_date" class="form-control" min="${today}" max="${lastday}">
-						</span>
-						~
-						<span class="col-md-3">
-							<input type="date" name="e_date" class="form-control"  min="${today}" max="${lastday}">
-						</span>
+					<div class="form-group col-md-12 j-center fade-out pd-0">
+						<div class="col-md-9 pd-0 align-center">
+							<label class="col-md-4 pd-0" style="font-family: CookieRunOTF-Bold; font-size: 32px;">언제가 좋으세요?</label>
+							<span class="col-md-4" style="padding-left: 3px;">
+								<input type="date" name="s_date" class="form-control" min="${today}" max="${lastday}">
+							</span>
+							~
+							<span class="col-md-4" style="padding-right: 0;">
+								<input type="date" name="e_date" class="form-control"  min="${today}" max="${lastday}">
+							</span>
+						</div>
 					</div>
-					<div class="form-group align-center fade-out">
-						<label class="col-md-2">어디로 떠나시나요?</label>
-						<span class="col-md-6">
-							<input type="text" name="address" class="form-control" placeholder="장소를 검색해주세요.">	
-						</span>
+					<div class="form-group col-md-12 j-center fade-out pd-0">
+						<div class="col-md-9 pd-0 align-center">
+							<label class="col-md-4 pd-0" style="font-family: CookieRunOTF-Bold; font-size: 32px;">어디로 가시나요?</label>
+							<span class="col-md-8 pd-0">
+								<input type="text" name="address" class="form-control" placeholder="장소를 검색해주세요.">	
+							</span>
+						</div>
 					</div>
-					<div class="form-group align-center fade-out">
-						<label class="col-md-2">무엇을 하실건가요?</label>
-						<span class="col-md-2">
-							<select name="c_no" class="form-control" required="required">
-								<option value="">카테고리 선택</option>
-								<c:forEach var="category" items="${categoryList}">
-									<option value="${category.c_no}">${category.c_name}</option>
-								</c:forEach>
-							</select>				
-						</span>
-						<span class="col-md-4">
-							<input type="text" name="keyword" class="form-control">
-						</span>					
-						<button class="btn btn-primary">검색하기</button>
+					<div class="form-group col-md-12 j-center fade-out pd-0">
+						<div class="col-md-9 pd-0 align-center">
+							<label class="col-md-4 pd-0" style="font-family: CookieRunOTF-Bold; font-size: 32px;">무엇을 하시나요?</label>
+							<span class="col-md-2 pd-0">
+								<select name="c_no" class="form-control" required="required">
+									<option value="">카테고리 선택</option>
+									<c:forEach var="category" items="${categoryList}">
+										<option value="${category.c_no}">${category.c_name}</option>
+									</c:forEach>
+								</select>				
+							</span>
+							<span class="col-md-6" style="padding-right: 0;">
+								<input type="text" name="keyword" class="form-control">
+							</span>					
+						</div>
+					</div>
+					<div class="col-md-9 j-end form-group fade-out pd-0 shadow-bottom">
+						<button class="btn btn-primary mg-b-15">검색하기</button>
 					</div>
 				</form>
 				
 				<!-- 새글 쓰기, 로그인해야 글 쓰기 가능 -->
 				
-					<div class="col-md-10 mg-auto">
-						<div class="form-group align-center fade-out">
-							<label class="col-md-4">아니면 새로운 만남을 만들어 볼까요?</label>
-							<c:if test="${empty sessionScope.member}">
-								<a href="${_member}/loginForm.do" class="btn btn-default">로그인</a>
-							</c:if>
-							<c:if test="${not empty sessionScope.member}">
-								<a href="${_board}/insertForm.do" class="btn btn-primary">새 글 쓰기</a>
-							</c:if>
-						</div>
+				<div class="col-md-10 mg-auto j-center">
+					<div class="form-group col-md-9 fade-out pd-0 align-center j-between">
+						<label class="col-md-8 pd-0" style="font-family: CookieRunOTF-Bold; font-size: 32px;">아니면 새로운 만남을 만들어 볼까요?</label>
+						<c:if test="${empty sessionScope.member}">
+							<a href="${_member}/loginForm.do" class="btn btn-default">로그인</a>
+						</c:if>
+						<c:if test="${not empty sessionScope.member}">
+							<a href="${_board}/insertForm.do" class="btn btn-primary">새 글 쓰기</a>
+						</c:if>
 					</div>
+				</div>
 				
 				
 			</div>
@@ -192,6 +205,13 @@
 	            position: { my : "right top", at: "right bottom" }    
 	        });
 		})
+		
+		function img1() {
+			location.href = '${_notice}/latest.do';
+		}
+		function img2() {
+			location.href = '${_notice}/latest2.do';
+		}
 	</script>
 </body>
 </html>

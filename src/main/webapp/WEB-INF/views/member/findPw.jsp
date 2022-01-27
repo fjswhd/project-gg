@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ include file="/WEB-INF/views/header.jsp" %>
+	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/header.jsp"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,14 +10,15 @@
 <body>
 	<c:if test="${result > 0 }">
 		<script type="text/javascript">
-			alert("정보가 성공적으로 수정되었습니다");
-			location.href="myMain.do";
+			alert("비밀번호가 변경되었습니다.\r\n이메일을 확인해주세요.")
+			location.href = "${_member}/loginForm.do"; /*  b_no에 board.b_no  */
 		</script>
 	</c:if>
-	<c:if test="${result < 0 }">
+
+	<c:if test="${result == 0 }">
 		<script type="text/javascript">
-			alert("다시 시도해 주세요");
-			history.back();
+			alert("변경 실패")
+			history.go(-1);
 		</script>
 	</c:if>
 </body>
