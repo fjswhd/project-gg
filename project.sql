@@ -155,19 +155,6 @@ where m_id = 'ejm4000@naver.com'
 select * from board order by b_no desc
 delete from board where b_no = 1;
 
-
-update board
-set 
-reg_date = to_date('2022-01-21', 'yyyy-mm-dd')
---s_date = to_date('2022-01-29', 'yyyy-mm-dd')
---e_date = to_date('2022-01-23', 'yyyy-mm-dd')
-where b_no = 2
-
-update parti
-set
-reg_date = to_date('2022-01-20', 'yyyy-mm-dd')
-where b_no = 2
-
 insert into parti values ('22', 'c@c.com', to_date('2022-01-20', 'yyyy-mm-dd'), 'n', 'n');
 insert into parti values ('22', 'd@d.com', to_date('2022-01-20', 'yyyy-mm-dd'), 'n', 'n');
 insert into parti values ('23', 'c@c.com', to_date('2022-01-20', 'yyyy-mm-dd'), 'n', 'n');
