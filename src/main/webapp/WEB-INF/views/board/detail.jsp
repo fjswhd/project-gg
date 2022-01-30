@@ -165,23 +165,12 @@
 		//검색 객체?
 		var ps = new kakao.maps.services.Places();	
 			
-		geocoder.addressSearch(address, function(result, status) {
-		    if (status === kakao.maps.services.Status.OK) {
-		        
-		    }
-		});
-		
-		
 		searchPlaces();
 		
 		//keyword로 장소 검색
 		function searchPlaces() {
 		    var keyword = address + ' ' + place
-
 			ps.keywordSearch(keyword, placesSearchCB); 
-		    
-		    
-		    
 		}
 		
 		// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
@@ -223,12 +212,9 @@
 		        	overlay.setMap(null);
 				});
 		    	
-		    	
 		    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 		        return;
-
 		    } else if (status === kakao.maps.services.Status.ERROR) {
-		        
 		        return;
 		    }
 		}
@@ -244,7 +230,6 @@
 				m_id = '${sessionScope.member.m_id}';
 			
 			if(confirm('활동에 참가 신청하시겠습니까?')) {
-				//alert(b_no+','+m_id);
 				location.href = '${_request}/requestInsert.do?b_no='+b_no+'&m_id='+m_id;
 			} 
 		}
@@ -254,18 +239,6 @@
 			var title = document.querySelector('#profileTitle'),
 				img = document.querySelector('#profileImg'),
 				li = document.querySelectorAll('#profileContent > li');
-			
-			/* $.post('${_member}/getProfile.do', sendData, function() {
-				title.textContent = data.nickname + '님의 프로필';
-				img.src = '${_profile}/' + data.picture;
-				
-				li[0].innerHTML = '<span class="col-md-3 bold">레벨</span>' + data.level;				
-				li[1].innerHTML = '<span class="col-md-3 bold">가입일</span>' + data.reg_date;				
-				li[2].innerHTML = '<span class="col-md-3 bold">출몰지</span>' + data.place;				
-				li[3].innerHTML = '<span class="col-md-3 bold">관심사</span>' + data.tag;				
-				li[4].innerHTML = '<span class="col-md-3 bold">평점</span>' + data.rating;				
-				
-			}) */
 			
 			fetch('${_member}/getProfile.do', {
 				method: 'POST',

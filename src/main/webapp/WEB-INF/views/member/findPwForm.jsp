@@ -10,7 +10,6 @@
 <body>
 	<div class="container flex-column">
 		<!-- header -->
-		
 		<div class="align-end head">
 			<div class="col-md-9">
 				<img id="logo" alt="" src="${logo}" height="100">
