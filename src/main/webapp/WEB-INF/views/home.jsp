@@ -124,7 +124,6 @@
 				</form>
 				
 				<!-- 새글 쓰기, 로그인해야 글 쓰기 가능 -->
-				
 				<div class="col-md-10 mg-auto j-center">
 					<div class="form-group col-md-9 fade-out pd-0 align-center j-between">
 						<label class="col-md-8 pd-0" style="font-family: CookieRunOTF-Bold; font-size: 32px;">아니면 새로운 만남을 만들어 볼까요?</label>
