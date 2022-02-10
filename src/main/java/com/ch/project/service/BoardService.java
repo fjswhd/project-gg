@@ -27,6 +27,12 @@ public interface BoardService {
 	int selectTotalMyBoard(String m_id);
 
 	List<Board> selectMyBoard(Map<String, Object> param);
+	
+	int updateBoardEndY(int b_no);
+
+	int updateBoardEndN(int b_no);
+
+	Map<String, Object> searchBoard2(Map<String, Object> param);
 
 
 }

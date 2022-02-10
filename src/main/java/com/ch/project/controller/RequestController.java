@@ -32,9 +32,8 @@ public class RequestController {
 	private PartiService ps;
 
 	@RequestMapping("/list")
-	public String requestList ( int b_no, Model model ) {
+	public String requestList (int b_no, Model model) {
 		List<Request> requestList = rs.rqList(b_no);
-		
 		Board board = bs.getBoard(b_no);
 		
 		model.addAttribute("board", board);
