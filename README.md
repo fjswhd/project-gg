@@ -1,6 +1,5 @@
 # 같이가치
 
-Demo : <a>https://www.naver.com</a>
 <hr>
 
 ## 개발 목표
@@ -19,5 +18,5 @@ Demo : <a>https://www.naver.com</a>
 <hr>
 
 ## 주요 기능
-1. 카카오맵 API를 활용한 장소검색 및 장소 마킹 기능<br/>
+1. 카카오맵 API를 활용한 장소검색 및 장소 마킹 기능<br/><br/>
 ![카카오맵 활용 화면](/src/main/webapp/resources/images/1.JPG)
